@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "python: pack-js",
+            "type": "shell",
+            "command": "py",
+            "args": [
+                "pack-js.py",
+                "remix.developer.js",
+                "tieba-remix.js"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": false
+            }
+        }
+    ]
+}

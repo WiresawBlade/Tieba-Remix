@@ -1,0 +1,90 @@
+.search_bright .search_btn {
+    /* 搜索相关按钮 */
+    font-weight: bold;
+}
+
+#nameValue {
+    /* 我的用户名 */
+    font-weight: bold;
+}
+
+#onekey_sign .onekey_btn,
+#onekey_sign a.onekey_btn {
+    /* 签到按钮 */
+    font-weight: bold;
+}
+
+.u-f-w .sign:hover,
+.u-f-w .unsign:hover,
+.always-forum-item .sign:hover,
+.always-forum-item .unsign:hover {
+    /* 已签到 */
+    font-weight: bold;
+}
+
+.u-f-w .more-hover {
+    /* “查看更多”按钮文字 */
+    font-weight: bold;
+}
+
+.always-forum-title {
+    /* 展开标题 */
+    font-weight: bold;
+}
+
+.always-forum-item .addnewforumbtn:hover {
+    /* “添加爱逛的吧”按钮 */
+    font-weight: bold;
+}
+
+.rcmd_forum_item .forum_name {
+    /* 热门吧标题 */
+    font-weight: bold;
+}
+
+.sub_nav_list a.cur {
+    /* 当前标签 */
+    font-weight: bold;
+}
+
+.new_list .title {
+    /* 贴子标题 */
+    font-weight: bold;
+}
+
+.list-post-num {
+    /* 贴子回复数 */
+    font-weight: bold;
+}
+
+.new_list .post_author {
+    /* 作者 */
+    font-weight: bold;
+}
+
+/* ////////////////////////////////////////////// */
+
+.card_top_theme2 .card_title_fname {
+    /* 吧名 */
+    font-weight: bold;
+}
+
+.core_title_txt {
+    /* 标题 */
+    font-weight: bold;
+}
+
+.core_title h1 {
+    /* 部分吧标题 */
+    font-weight: bold;
+}
+
+.lzl_cnt .at {
+    /* 用户名 */
+    font-weight: bold;
+}
+
+.d_name .p_author_name {
+    /* 层主名 */
+    font-weight: bold;
+}

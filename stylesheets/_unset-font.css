@@ -1,0 +1,14 @@
+.u_menu_item a {
+    /* 顶部超链接 */
+    font-family: unset;
+}
+
+.new_list .title, .n_name {
+    /* 吧名/标题字体 */
+    font-family: unset;
+}
+
+.d_badge_title {
+    /* 等级头衔 */
+    font-family: unset;
+}
