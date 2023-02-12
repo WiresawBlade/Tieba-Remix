@@ -1,0 +1,84 @@
+/* 全局 */
+:root {
+    --default-background: rgb(255, 255, 255);
+    --trans-default-background: rgba(255, 255, 255, 0.6);
+    --deep-background: rgb(200, 200, 200);
+    --trans-deep-background: rgba(200, 200, 200, 0.6);
+    --light-background: rgb(230, 230, 230);
+    --trans-light-background: rgba(230, 230, 230, 0.6);
+    --very-light-background: rgb(245, 245, 245);
+    --elem-color: rgb(240, 240, 240);
+    --default-fore: rgb(10, 10, 10);
+    --light-fore: rgb(20, 20, 20);
+    --minimal-fore: rgb(60, 60, 60);
+    --highlight-fore: rgb(0, 0, 0);
+    --border-color: rgb(210, 210, 210, 0.6);
+
+    --tieba-theme-color: rgb(97, 78, 194);
+    --trans-tieba-theme-color: rgba(97, 78, 194, 0.6);
+    --tieba-theme-background: rgba(97, 78, 194, 0.3);
+    --tieba-theme-fore: rgb(58, 46, 116);
+
+    --myself-theme-background: rgba(25, 110, 153, 0.3);
+    --myself-theme-fore: rgb(16, 73, 101);
+    --cengzhu-theme-background: rgba(255, 89, 107, 0.3);
+    --cengzhu-theme-fore: rgb(178, 62, 90);
+
+    --level-green-background: rgba(84, 130, 53, 0.3);
+    --level-green-fore: rgb(51, 78, 32);
+    --level-blue-background: rgba(0, 153, 213, 0.3);
+    --level-blue-fore: rgb(0, 81, 111);
+    --level-yellow-background: rgb(164, 139, 63, 0.3);
+    --level-yellow-fore: rgb(124, 105, 46);
+    --level-orange-background: rgba(255, 153, 0, 0.3);
+    --level-orange-fore: rgb(178, 104, 0);
+
+    --svg-accessibility: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/accessibility.svg");
+    --svg-checkmark: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/checkmark.svg");
+    --svg-arrow-up: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/arrow-up-sharp.svg");
+    --svg-message: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/chatbox-ellipses.svg");
+    --svg-infomation: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/information-circle.svg");
+    --svg-infomation-outline: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/information-sharp.svg");
+
+    --img-tieba-icon: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/icon.png");
+
+    color-scheme: light dark;
+}
+
+/* 深色模式 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --default-background: rgb(32, 32, 32);
+        --trans-default-background: rgba(32, 32, 32, 0.6);
+        --deep-background: rgb(26, 26, 26);
+        --trans-deep-background: rgba(20, 20, 20, 0.6);
+        --light-background: rgb(60, 60, 60);
+        --trans-light-background: rgba(60, 60, 60, 0.6);
+        --very-light-background: rgb(60, 60, 60);
+        --elem-color: rgb(26, 26, 26);
+        --default-fore: rgb(230, 230, 230);
+        --light-fore: rgb(200, 200, 200);
+        --minimal-fore: rgb(120, 120, 120);
+        --highlight-fore: rgb(255, 255, 255);
+        --border-color: rgba(96, 96, 96, 0.6);
+
+        --tieba-theme-color: rgb(113, 97, 194);
+        --trans-tieba-theme-color: rgba(113, 97, 194, 0.6);
+        --tieba-theme-background: rgba(113, 97, 194, 0.3);
+        --tieba-theme-fore: rgb(147, 125, 255);
+
+        --myself-theme-background: rgba(34, 135, 204, 0.3);
+        --myself-theme-fore: rgb(40, 160, 242);
+        --cengzhu-theme-background: rgba(204, 71, 103, 0.3);
+        --cengzhu-theme-fore: rgb(255, 89, 118);
+
+        --level-green-background: rgba(96, 153, 59, 0.3);
+        --level-green-fore: rgb(133, 206, 84);
+        --level-blue-background: rgba(0, 165, 227, 0.3);
+        --level-blue-fore: rgb(0, 169, 255);
+        --level-yellow-background: rgb(229, 193, 90, 0.3);
+        --level-yellow-fore: rgb(242, 205, 96);
+        --level-orange-background: rgba(204, 122, 0, 0.3);
+        --level-orange-fore: rgb(255, 170, 0);
+    }
+}

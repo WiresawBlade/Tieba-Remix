@@ -1,0 +1,63 @@
+let __remixedObservers: __obsInterface = {
+    postsObserver: {
+        events: [],
+        observe: function () {
+            const eventFuncs = () => {
+                this.events.forEach(func => {
+                    func();
+                });
+            }
+
+            eventFuncs();
+
+            let observer = new MutationObserver(eventFuncs);
+            observer.observe(document.getElementById("j_p_postlist")!, {
+                childList: true
+            });
+        },
+        addEvent: function (event: Function) {
+            this.events.forEach(func => {
+                if (event == func) return;
+            });
+            this.events.push(event);
+        }
+    },
+
+    commentsObserver: {
+        events: [],
+        observe: function () {
+            const eventFuncs = () => {
+                this.events.forEach(func => {
+                    func();
+                });
+            }
+
+            eventFuncs();
+
+            let observer = new MutationObserver(eventFuncs);
+            observer.observe(document.getElementById("j_p_postlist")!, {
+                childList: true,
+                subtree: true
+            });
+        },
+        addEvent: function (event: Function) {
+            this.events.forEach(func => {
+                if (event == func) return;
+            });
+            this.events.push(event);
+        }
+    }
+};
+
+interface __obsInterface {
+    // 回帖监视器
+    postsObserver: __obsType,
+    // 评论监视器
+    commentsObserver: __obsType
+}
+
+interface __obsType {
+    events: Function[],
+    observe: Function,
+    addEvent: Function
+}

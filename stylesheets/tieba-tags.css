@@ -1,0 +1,28 @@
+.tag-elem {
+    display: inline-block;
+}
+
+.tag-elem::after {
+    padding: 2px 6px;
+    margin: 0 4px;
+    border-radius: 24px;
+    font-size: 4px;
+}
+
+.tieba-tags-me::after {
+    background-color: var(--myself-theme-background);
+    color: var(--myself-theme-fore);
+    content: "我";
+}
+
+.tieba-tags-lz::after {
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+    content: "楼主";
+}
+
+.tieba-tags-cz::after {
+    background-color: var(--cengzhu-theme-background);
+    color: var(--cengzhu-theme-fore);
+    content: "层主";
+}

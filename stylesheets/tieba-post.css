@@ -1,0 +1,735 @@
+a {
+    color: var(--tieba-theme-fore);
+}
+
+.l_reply_num {
+    /* 回帖信息 */
+    color: unset !important;
+}
+
+.nav_list .more-config-navtab {
+    /* 游戏 tab */
+    display: none;
+}
+
+#j_navtab_wanle {
+    /* 玩乐 tab */
+    display: none;
+}
+
+.nav_wrap_add_border {
+    border: none;
+}
+
+#head {
+    /* 背景 */
+    background-color: var(--default-background);
+}
+
+/* 内容 */
+.content {
+    border-radius: 24px;
+    background: unset;
+    box-shadow: 0 0 80px -32px rgba(0, 0, 0, 0.4);
+}
+
+.card_top_wrap {
+    border-radius: 24px 24px 0 0;
+    background: none;
+    background-color: var(--elem-color);
+}
+
+.card_top_theme2 {
+    border: none;
+    margin-right: 0;
+}
+
+/* 去除无关内容 */
+#novel-ranking .novel-ranking-frs-body,
+.novel-award-aside {
+    /* 百度小说人气榜相关 */
+    display: none;
+}
+
+/* 吧图标 */
+.card_head {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 24px !important;
+    padding: unset !important;
+    background: none;
+    border: 4px solid var(--border-color);
+    top: -32px;
+}
+
+.card_head_img {
+    width: 64px !important;
+    height: 64px !important;
+}
+
+/* 吧名 */
+.card_title {
+    margin: 5px 20px 0;
+}
+
+.card_top_theme2 .card_title_fname {
+    color: var(--highlight-fore);
+}
+
+.islike_focus {
+    /* 关注吧按钮 */
+    background: none;
+    background-color: var(--tieba-theme-color);
+    color: var(--elem-color);
+    border-radius: 24px;
+    line-height: 28px;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 4px !important;
+}
+
+.islike_focus::after {
+    content: "关注";
+}
+
+.cancel_focus {
+    /* 取关吧按钮 */
+    background: none;
+    border: 2px solid var(--trans-tieba-theme-color);
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+    border-radius: 24px;
+    line-height: 28px;
+    font-size: 14px;
+    text-align: center;
+    width: 72px;
+}
+
+.cancel_focus::after {
+    content: "已关注";
+}
+
+.card_top_right {
+    /* 签到按钮 container */
+    margin-top: 20px;
+}
+
+.sign_box_bright {
+    /* 签到按钮 */
+    width: 140px;
+    height: 40px;
+    border: 2px solid var(--trans-tieba-theme-color);
+    background: none;
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+    text-align: center;
+    border-radius: 24px;
+    line-height: 40px;
+    font-size: 18px;
+}
+
+.sign_box_bright::before {
+    content: "签到";
+}
+
+.sign_box_bright_signed {
+    /* 签到按钮：已签到 */
+    background-color: var(--tieba-theme-background);
+}
+
+.sign_today_date,
+.sign_month_lack_days {
+    /* 签到日期等 */
+    display: none;
+}
+
+.sign_keep_span {
+    width: 140px !important;
+    height: 40px;
+}
+
+.sign_keep_span,
+.sign_mod_bright .sign_keep_span {
+    /* 已签到按钮文本 */
+    margin: unset;
+    color: var(--tieba-theme-fore);
+    text-align: center;
+    font-size: 12px;
+}
+
+.sign_box_bright_signed::before {
+    content: none !important;
+}
+
+.sign_mod_bright .sign_keep_span::before {
+    content: "已签到 | ";
+}
+
+.sign_box_bright_signed {
+    text-align: unset;
+}
+
+.jump_input_bright {
+    /* 跳页文本框 */
+    border-color: var(--border-color);
+    border-radius: 16px;
+    padding: 0 10px;
+}
+
+/* 标题 */
+.left_section {
+    background: none;
+}
+
+.core_title_wrap_bright {
+    /* 标题栏 */
+    background-color: var(--trans-default-background);
+    border-color: var(--border-color);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+.core_title_theme_bright,
+.core_title_absolute_bright .core_title_theme_bright {
+    /* 部分吧标题栏 */
+    background: none;
+    border-color: var(--border-color);
+}
+
+.left_section .core_title_absolute_bright {
+    background-color: var(--trans-default-background);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+}
+
+.core_title_txt {
+    /* 标题文字 */
+    background: none;
+    margin-left: 24px;
+}
+
+.tittle_fill_dom.filled {
+    background-color: var(--default-background);
+}
+
+.core_title h1 {
+    /* 部分吧标题 */
+    margin-left: 0;
+    color: var(--highlight-fore);
+}
+
+.nav_wrap {
+    /* 导航 */
+    background-image: none;
+    background-color: var(--light-background);
+    border-color: var(--border-color);
+}
+
+.nav_list a.nav_icon,
+.nav_list .tbnav_arrow {
+    /* 部分吧导航栏 */
+    background: unset;
+    padding-left: 22px;
+}
+
+.nav_wrap,
+.nav_list .space,
+.nav_list .focus,
+.nav_list li:hover,
+.nav_list li:hover .tbnav_tab_inner,
+.nav_list .focus .tbnav_tab_inner {
+    background: unset;
+}
+
+.nav_list a {
+    color: var(--default-fore);
+}
+
+span.tP {
+    /* 强调字 */
+    color: var(--highlight-fore) !important;
+}
+
+.thread_theme_5 {
+    /* 跳页 */
+    background-color: var(--light-background);
+    border-color: var(--border-color);
+    border-left: none;
+    border-right: none;
+    width: unset;
+}
+
+.btn_sub,
+.btn-sub,
+.btn-sub-b,
+/* 部分吧 */
+.core_title_btns li a,
+.p_favthr_main {
+    /* 部分按钮 */
+    background: none;
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+    border-radius: 8px;
+    border: none;
+}
+
+.btn_sub:hover,
+.btn-sub:hover,
+.btn-sub-b:hover,
+.btn_sub:active,
+.btn-sub:active,
+.btn-sub-b:active,
+.btn_sub:focus,
+.btn-sub:focus,
+.btn-sub-b:focus {
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+}
+
+.l_lzonly:hover,
+.p_favthr_main:hover {
+    /* 部分吧按钮 hover */
+    background-color: var(--tieba-theme-color) !important;
+    color: var(--default-background) !important;
+}
+
+#quick_reply {
+    /* 回复按钮 */
+    display: none;
+}
+
+.d_lzonly_bdaside,
+.p_favthr_main p,
+.j_quick_reply,
+.j_lzl_p a {
+    /* 部分吧按钮字体 */
+    color: unset;
+}
+
+.j_quick_reply {
+    /* 部分吧额头 */
+    padding-left: unset;
+}
+
+.l_post_bright {
+    /* 左侧用户信息 */
+    background: none;
+    border-color: var(--border-color);
+    width: unset;
+}
+
+.p_author_face {
+    /* 层主头像边框 */
+    background: none;
+    border: none;
+}
+
+.icon_relative img {
+    /* 层主头像 */
+    border-radius: 16px;
+}
+
+.d_name .p_author_name {
+    /* 层主名 */
+    color: var(--tieba-theme-fore);
+}
+
+.d_badge_bright,
+.user_level .badge {
+    /* 等级头衔 */
+    background-color: var(--light-background);
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+}
+
+.user_level .badge_name {
+    /* 等级头衔文本 */
+    color: unset;
+}
+
+.d_badge_bright .d_badge_title {
+    color: var(--default-fore);
+    padding-left: 4px;
+}
+
+.d_badge_bright .d_badge_lv,
+.badge_index {
+    /* 等级图标 */
+    background-image: none !important;
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore) !important;
+}
+
+.d_badge_lv {
+    width: unset !important;
+    height: 8px !important;
+    margin: 12px 4px !important;
+    padding: 0px 4px !important;
+    border-radius: 16px;
+    
+    left: 60px !important;
+    top: unset !important;
+    
+    font-family: unset !important;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 2px !important;
+}
+
+.d_badge_icon1 .d_badge_lv {
+    /* 绿牌 */
+    background-color: var(--level-green-background) !important;
+    color: var(--level-green-fore) !important;
+}
+
+.d_badge_icon2 .d_badge_lv,
+.d_badge_icon2_1 .d_badge_lv,
+.d_badge_icon2_2 .d_badge_lv {
+    /* 蓝牌 */
+    background-color: var(--level-blue-background) !important;
+    color: var(--level-blue-fore) !important;
+}
+
+.d_badge_icon3 .d_badge_lv,
+.d_badge_icon3_1 .d_badge_lv,
+.d_badge_icon3_2 .d_badge_lv {
+    /* 黄牌 */
+    background-color: var(--level-yellow-background) !important;
+    color: var(--level-yellow-fore) !important;
+}
+
+.d_badge_icon4 .d_badge_lv,
+.d_badge_icon4_1 .d_badge_lv,
+.d_badge_icon4_2 .d_badge_lv {
+    /* 橙牌 */
+    background-color: var(--level-orange-background) !important;
+    color: var(--level-orange-fore) !important;
+}
+
+.d_badge_bawu1 .d_badge_lv {
+    /* 吧务 */
+    text-indent: unset !important;
+}
+
+.d_author .d_pb_icons {
+    /* 印记 */
+    display: none;
+}
+
+.icon_book_link_icon {
+    /* 查看我的印记 */
+    display: none;
+}
+
+.region_bright {
+    /* 右侧信息 */
+    background: none;
+    background-color: var(--elem-color);
+    border: none;
+    margin-top: 12px;
+}
+
+.region_bright .region_title {
+    color: var(--default-fore) !important;
+}
+
+.balv_mod .media_left,
+.balv_mod .media-left {
+    /* 我的头像 */
+    border: none;
+}
+
+.right_section .tieba_notice {
+    /* 右侧反馈 */
+    background: none;
+}
+
+.topic_list_box {
+    /* 右侧贴吧热议榜 */
+    background-color: var(--default-background);
+    display: none;
+}
+
+.pb_content {
+    /* 容器：右侧剩余部分 */
+    background: none;
+    background-color: var(--elem-color);
+    border: none;
+}
+
+.notice-icon,
+.right_section .tieba_notice {
+    /* 右侧反馈 */
+    background: none !important;
+    padding-left: unset !important;
+}
+
+.tieba_notice li {
+    background: none;
+}
+
+/* 正文 */
+.p_content {
+    background-color: var(--default-background);
+    border: none;
+}
+
+.BDE_Image {
+    /* 正文图片 */
+    border-radius: 24px;
+}
+
+.share_btn_wrapper {
+    /* 分享控件 */
+    display: none;
+}
+
+.post-tail-wrap .icon-jubao {
+    /* 楼层举报 */
+    display: none;
+}
+
+.post-tail-wrap .tail-info {
+    /* 楼层超链接 */
+    color: var(--minimal-fore);
+}
+
+.j_jb_ele .tail-info {
+    /* 举报超链接 */
+    color: var(--tieba-theme-fore) !important;
+}
+
+.complaint {
+    /* 部分吧楼层举报 */
+    padding-right: 4px;
+    background: none;
+    color: var(--tieba-theme-fore) !important;
+}
+
+.complaint::after {
+    content: "举报";
+}
+
+.post_bubble_top,
+.post_bubble_bottom {
+    /* 特殊气泡 */
+    display: none;
+}
+
+.post_bubble_middle {
+    width: unset;
+    padding: unset;
+    background: none !important;
+}
+
+.save_face_bg_2 {
+    /* 会员右上角标记 */
+    display: none;
+}
+
+.replace_div .replace_tip {
+    /* 展开图片 */
+    background-color: var(--elem-color);
+    border-color: var(--border-color);
+}
+
+/* 回复 */
+.d_post_content_main {
+    background-color: var(--default-background) !important;
+}
+
+.lzl_p_p {
+    /* 回复头像边框 */
+    border: none;
+}
+
+.lzl_p_p img {
+    /* 回复头像 */
+    border-radius: 8px;
+}
+
+.lzl_cnt .at {
+    /* 回复用户名 */
+    color: var(--tieba-theme-fore);
+}
+
+.core_reply_wrapper {
+    /* 回复 */
+    background: none !important;
+    border-radius: 16px !important;
+    /* border-top-right-radius: 0 !important; */
+    background-color: var(--very-light-background) !important;
+    color: var(--default-fore) !important;
+    border: 1px solid var(--border-color) !important;
+    margin-bottom: 16px !important;
+}
+
+.core_reply_content li {
+    border-top: unset;
+}
+
+.core_reply_content li.first_no_border {
+    margin-top: 6px;
+}
+
+.lzl_content_main {
+    /* 回复文字 */
+    color: var(--default-fore);
+}
+
+.l_post_bright .core_reply_wrapper .core_reply_border_top,
+.core_reply_border_bottom,
+.l_post_bright .core_reply_wrapper .core_reply_content {
+    border: none;
+    background: none;
+}
+
+.lzl_link_fold {
+    /* 收起回复 */
+    background-color: var(--very-light-background) !important;
+    color: var(--tieba-theme-fore);
+    border-radius: 8px 8px 0 0;
+    border: 1px solid var(--border-color) !important;
+    border-bottom: none !important;
+    display: none !important;
+}
+
+.core_reply div.hideLzl {
+    /* 加载回复 */
+    background: none;
+    background-color: var(--very-light-background);
+}
+
+.core_reply_wrapper .loading_reply {
+    /* 加载动画 */
+    display: none;
+}
+
+.lzl_cnt .lzl_s_r {
+    /* 回复超链接 */
+    color: var(--tieba-theme-fore);
+}
+
+.lzl_li_pager_s .lzl_more {
+    /* 还有x条回复 */
+    color: unset;
+}
+
+.j_lzl_m {
+    /* 点击查看 */
+    color: var(--tieba-theme-fore);
+}
+
+.lzl_cnt .lzl_time {
+    color: var(--minimal-fore);
+}
+
+.lzl_jb_in {
+    /* 评论举报 */
+    background: none;
+    color: var(--tieba-theme-fore);
+}
+
+.lzl_jb_in::after {
+    content: "举报";
+}
+
+.pager_theme_5 a,
+.pager_theme_5 span {
+    /* 跳页按钮 */
+    background-color: var(--default-background);
+    border-color: var(--default-background);
+    border-radius: 8px;
+    color: var(--minimal-fore);
+}
+
+.pager_theme_5 a:hover,
+.pager_theme_5 span:hover {
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+    border-color: var(--tieba-theme-color);
+}
+
+/* 底部 */
+.thread_theme_7 {
+    /* 顶栏 */
+    background-color: var(--light-background);
+    border-color: var(--border-color);
+    width: unset;
+}
+
+#pb-footer-header {
+    background-color: var(--default-background);
+}
+
+#tb_rich_poster_container {
+    /* 内容 */
+    background-color: var(--default-background);
+    width: unset;
+}
+
+.poster_head_text a.cur {
+    color: var(--highlight-fore) !important;
+}
+
+.edui-editor-body {
+    /* 文本框 */
+    border-radius: 16px;
+    border-color: var(--border-color) !important;
+    background: none;
+}
+
+.edui-container .edui-editor-body.body-container-focus,
+.edui-container .edui-editor-body.body-container-focus .edui-body-container {
+    border-color: var(--tieba-theme-color) !important;
+}
+
+.old_style_wrapper {
+    background-color: var(--elem-color);
+    border-color: var(--border-color);
+    border-radius: 24px;
+}
+
+.edui-editor-body .edui-body-container {
+    /* 全部文本框 */
+    width: unset !important;
+}
+
+.edui-toolbar .edui-btn-toolbar {
+    /* 工具栏 */
+    background-color: var(--elem-color);
+    margin-top: 4px;
+}
+
+.edui-editor-body .edui-body-container {
+    background: var(--default-background);
+    border-radius: 16px;
+}
+
+.pb_footer {
+    background: none;
+    width: unset;
+    border-color: var(--border-color);
+    border: none;
+}
+
+.save-to-quick-reply-btn {
+    /* “保存至快速回贴”按钮 */
+    background: none;
+    color: unset;
+    background-color: var(--light-background);
+    border-color: var(--border-color);
+}
+
+.save-to-quick-reply-btn span {
+    color: var(--tieba-theme-fore);
+}
+
+.footer {
+    display: none;
+}
+
+.skin_normal .wrap2 {
+    background: none;
+    background-color: var(--default-background);
+}
