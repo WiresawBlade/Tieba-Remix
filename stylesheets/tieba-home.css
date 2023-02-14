@@ -158,6 +158,11 @@ body {
     background: none;
 }
 
+.aggregate_entrance_wrap {
+    /* 专题 */
+    display: none;
+}
+
 .u-f-t .gap {
     /* “贴吧分类”分隔符 */
     background: none;
@@ -530,6 +535,11 @@ body {
     /* 时间 */
     background: none;
     padding: 0;
+}
+
+.topic-tag {
+    /* 动态话题 */
+    display: none;
 }
 
 .n_img img {

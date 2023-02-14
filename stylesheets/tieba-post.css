@@ -7,6 +7,7 @@ a {
     color: unset !important;
 }
 
+#j_navtab_game,
 .nav_list .more-config-navtab {
     /* 游戏 tab */
     display: none;
@@ -400,13 +401,15 @@ span.tP {
 
 .d_badge_icon4 .d_badge_lv,
 .d_badge_icon4_1 .d_badge_lv,
-.d_badge_icon4_2 .d_badge_lv {
+.d_badge_icon4_2 .d_badge_lv,
+.d_badge_lv[contain~="17"] {
     /* 橙牌 */
     background-color: var(--level-orange-background) !important;
     color: var(--level-orange-fore) !important;
 }
 
-.d_badge_bawu1 .d_badge_lv {
+.d_badge_bawu1 .d_badge_lv,
+.d_badge_bawu2 .d_badge_lv {
     /* 吧务 */
     text-indent: unset !important;
 }
@@ -489,6 +492,10 @@ span.tP {
     display: none;
 }
 
+.post-tail-wrap .icon-jubao::after {
+    content: "举报";
+}
+
 .post-tail-wrap .tail-info {
     /* 楼层超链接 */
     color: var(--minimal-fore);
@@ -531,6 +538,16 @@ span.tP {
     /* 展开图片 */
     background-color: var(--elem-color);
     border-color: var(--border-color);
+}
+
+.achievement_medal_section {
+    /* 成就徽章 */
+    display: none;
+}
+
+.l_post_bright .d_post_content_main .d_sign_split {
+    /* 签名档分割线 */
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* 回复 */
@@ -624,19 +641,31 @@ span.tP {
     color: var(--minimal-fore);
 }
 
-.lzl_jb_in {
-    /* 评论举报 */
+.lzl_jb_in,
+.user-jubao-button {
+    /* 楼中楼举报 */
     background: none;
     color: var(--tieba-theme-fore);
 }
 
-.lzl_jb_in::after {
+.lzl_jb_in::after,
+.user-jubao-button::after {
     content: "举报";
 }
 
+.d_post_content a:hover,
+.d_post_content a:focus,
+.lzl_cnt .lzl_content_main a:not(.at):hover,
+.lzl_cnt .lzl_content_main a:not(.at):focus {
+    /* 楼与楼中楼超链接 */
+    text-decoration: underline;
+}
+
 .pager_theme_5 a,
-.pager_theme_5 span {
+.pager_theme_5 span,
+.jump_btn_bright {
     /* 跳页按钮 */
+    background: none;
     background-color: var(--default-background);
     border-color: var(--default-background);
     border-radius: 8px;
@@ -644,7 +673,8 @@ span.tP {
 }
 
 .pager_theme_5 a:hover,
-.pager_theme_5 span:hover {
+.pager_theme_5 span:hover,
+.jump_btn_bright:hover {
     background-color: var(--tieba-theme-color);
     color: var(--default-background);
     border-color: var(--tieba-theme-color);

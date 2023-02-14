@@ -16,5 +16,6 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @run-at       document-start
+// @require      https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js
 // ==/UserScript==
 // @WiresawBlade
