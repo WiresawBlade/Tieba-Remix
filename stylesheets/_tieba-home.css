@@ -614,15 +614,15 @@ body {
 
 .tbui_aside_float_bar li a {
     border-radius: 24px;
-    height: 40px;
-    width: 40px;
-    background: none;
+    height: 40px !important;
+    width: 40px !important;
+    background: none !important;
 }
 
 .tbui_aside_float_bar .svg-container {
     /* 功能按钮 svg 容器 */
-    height: 40px;
-    width: 40px;
+    height: 40px !important;
+    width: 40px !important;
     background-size: 20px;
     background-repeat: no-repeat;
     background-position: center;
@@ -636,8 +636,8 @@ body {
 
 .tbui_aside_float_bar .tbui_fbar_auxiliaryCare a {
     /* 无障碍模式 */
-    height: 40px;
-    background: none;
+    height: 40px !important;
+    background: none !important;
 }
 
 .tbui_fbar_auxiliaryCare .svg-container {
@@ -645,7 +645,7 @@ body {
 }
 
 .tbui_aside_float_bar .tbui_fbar_auxiliaryCare a:hover {
-    background: none;
+    background: none !important;
 }
 
 .tbui_fbar_top .svg-container {
@@ -656,11 +656,11 @@ body {
 
 .tbui_aside_float_bar .tbui_fbar_top a,
 .tbui_aside_float_bar .tbui_fbar_top a:hover {
-    background: none;
+    background: none !important;
 }
 
 .tbui_aside_float_bar .tbui_fbar_top a {
-    background-color: var(--tieba-theme-background);
+    background-color: var(--tieba-theme-background) !important;
 }
 
 .tbui_fbar_post .svg-container {
@@ -671,8 +671,8 @@ body {
 
 .tbui_aside_float_bar .tbui_fbar_post a,
 .tbui_aside_float_bar .tbui_fbar_post a:hover {
-    background: none;
-    background-color: var(--tieba-theme-color);
+    background: none !important;
+    background-color: var(--tieba-theme-color) !important;
 }
 
 .tbui_fbar_feedback .svg-container {
@@ -688,14 +688,15 @@ body {
 
 .tbui_aside_float_bar .tbui_fbar_feedback a,
 .tbui_aside_float_bar .tbui_fbar_feedback a:hover {
-    background: none;
+    background: none !important;
 }
 
 .tbui_aside_float_bar .tbui_fbar_down,
 .tbui_aside_float_bar .tbui_fbar_props,
 .tbui_aside_float_bar .tbui_fbar_tsukkomi,
 .tbui_aside_float_bar .tbui_fbar_share,
-.tbui_aside_float_bar .tbui_fbar_favor {
+.tbui_aside_float_bar .tbui_fbar_favor,
+.tbui_aside_float_bar .tbui_fbar_refresh {
     display: none;
 }
 

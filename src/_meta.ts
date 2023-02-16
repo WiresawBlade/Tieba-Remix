@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Tieba Remix
 // @namespace    https://github.com/WiresawBlade/Tieba-Remix
-// @version      0.0.1dev
-// @description  提升贴吧网页端的体验
+// @version      0.0.1-beta
+// @description  提升贴吧网页端的体验：为贴吧添加昼夜主题及功能增强
 // @author       锯刃Blade
 // @license      MIT
 // @updateURL    https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/dist/tieba-remix.js

@@ -36,8 +36,8 @@ a {
 
 .card_top_wrap {
     border-radius: 24px 24px 0 0;
-    background: none;
-    background-color: var(--elem-color);
+    background: none !important;
+    background-color: var(--elem-color) !important;
 }
 
 .card_top_theme2 {
@@ -58,9 +58,9 @@ a {
     height: 64px !important;
     border-radius: 24px !important;
     padding: unset !important;
-    background: none;
-    border: 4px solid var(--border-color);
-    top: -32px;
+    background: none !important;
+    border: 4px solid var(--border-color) !important;
+    top: -32px !important;
 }
 
 .card_head_img {
@@ -117,8 +117,8 @@ a {
 
 .sign_box_bright {
     /* 签到按钮 */
-    width: 140px;
-    height: 40px;
+    width: 140px !important;
+    height: 40px !important;
     border: 2px solid var(--trans-tieba-theme-color);
     background: none;
     background-color: var(--tieba-theme-color);
@@ -129,8 +129,9 @@ a {
     font-size: 18px;
 }
 
-.sign_box_bright::before {
+.sign_btn_bright::before {
     content: "签到";
+    color: var(--elem-color);
 }
 
 .sign_box_bright_signed {
@@ -221,7 +222,7 @@ a {
 
 .nav_wrap {
     /* 导航 */
-    background-image: none;
+    background-image: none !important;
     background-color: var(--light-background);
     border-color: var(--border-color);
 }
@@ -354,14 +355,15 @@ span.tP {
 }
 
 .d_badge_bright .d_badge_lv,
-.badge_index {
+.user_level .badge_index {
     /* 等级图标 */
     background-image: none !important;
     background-color: var(--tieba-theme-background);
-    color: var(--tieba-theme-fore) !important;
+    color: var(--tieba-theme-fore);
 }
 
-.d_badge_lv {
+.d_badge_lv,
+.user_level .badge_index {
     width: unset !important;
     height: 8px !important;
     margin: 12px 4px !important;
@@ -377,7 +379,8 @@ span.tP {
     line-height: 2px !important;
 }
 
-.d_badge_icon1 .d_badge_lv {
+.d_badge_icon1 .d_badge_lv,
+.tieba-lvl-green {
     /* 绿牌 */
     background-color: var(--level-green-background) !important;
     color: var(--level-green-fore) !important;
@@ -385,7 +388,8 @@ span.tP {
 
 .d_badge_icon2 .d_badge_lv,
 .d_badge_icon2_1 .d_badge_lv,
-.d_badge_icon2_2 .d_badge_lv {
+.d_badge_icon2_2 .d_badge_lv,
+.tieba-lvl-blue {
     /* 蓝牌 */
     background-color: var(--level-blue-background) !important;
     color: var(--level-blue-fore) !important;
@@ -393,7 +397,8 @@ span.tP {
 
 .d_badge_icon3 .d_badge_lv,
 .d_badge_icon3_1 .d_badge_lv,
-.d_badge_icon3_2 .d_badge_lv {
+.d_badge_icon3_2 .d_badge_lv,
+.tieba-lvl-yellow {
     /* 黄牌 */
     background-color: var(--level-yellow-background) !important;
     color: var(--level-yellow-fore) !important;
@@ -402,7 +407,7 @@ span.tP {
 .d_badge_icon4 .d_badge_lv,
 .d_badge_icon4_1 .d_badge_lv,
 .d_badge_icon4_2 .d_badge_lv,
-.d_badge_lv[contain~="17"] {
+.tieba-lvl-orange {
     /* 橙牌 */
     background-color: var(--level-orange-background) !important;
     color: var(--level-orange-fore) !important;
@@ -475,6 +480,11 @@ span.tP {
 .p_content {
     background-color: var(--default-background);
     border: none;
+}
+
+.forbid-speech-banner {
+    /* 楼主屏蔽 */
+    border-top: none;
 }
 
 .BDE_Image {
@@ -673,7 +683,6 @@ span.tP {
 }
 
 .pager_theme_5 a:hover,
-.pager_theme_5 span:hover,
 .jump_btn_bright:hover {
     background-color: var(--tieba-theme-color);
     color: var(--default-background);

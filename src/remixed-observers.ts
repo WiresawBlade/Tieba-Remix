@@ -1,7 +1,7 @@
 const __remixedObservers: __obsInterface = {
     postsObserver: {
         events: [],
-        observe: function () {
+        _observe: function () {
             const eventFuncs = () => {
                 this.events.forEach(func => {
                     func();
@@ -11,21 +11,24 @@ const __remixedObservers: __obsInterface = {
             eventFuncs();
 
             const observer = new MutationObserver(eventFuncs);
-            observer.observe(document.getElementById("j_p_postlist")!, {
+            observer.observe($("#j_p_postlist").get(0)!, {
                 childList: true
             });
         },
         addEvent: function (event: () => void) {
-            this.events.forEach(func => {
+            for (let i = 0; i < this.events.length; i++) {
+                const func = this.events[i];
                 if (event === func) return;
-            });
+            }
+
+            event();
             this.events.push(event);
         }
     },
 
     commentsObserver: {
         events: [],
-        observe: function () {
+        _observe: function () {
             const eventFuncs = () => {
                 this.events.forEach(func => {
                     func();
@@ -35,15 +38,18 @@ const __remixedObservers: __obsInterface = {
             eventFuncs();
 
             const observer = new MutationObserver(eventFuncs);
-            observer.observe(document.getElementById("j_p_postlist")!, {
+            observer.observe($("#j_p_postlist").get(0)!, {
                 childList: true,
                 subtree: true
             });
         },
         addEvent: function (event: () => void) {
-            this.events.forEach(func => {
+            for (let i = 0; i < this.events.length; i++) {
+                const func = this.events[i];
                 if (event === func) return;
-            });
+            }
+
+            event();
             this.events.push(event);
         }
     }
@@ -58,6 +64,6 @@ interface __obsInterface {
 
 interface __obsType {
     events: (() => void)[],
-    observe: () => void,
+    _observe: () => void,
     addEvent: (event: () => void) => void
 }

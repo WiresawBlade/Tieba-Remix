@@ -109,3 +109,20 @@
     /* 取关吧按钮 */
     font-weight: bold;
 }
+
+/* ////////////////////////////////////////////// */
+
+.card_title_fname {
+    /* 吧标题 */
+    font-weight: bold;
+}
+
+.j_th_tit  {
+    /* 帖子标题 */
+    font-weight: bold;
+}
+
+.threadlist_rep_num {
+    /* 回贴数 */
+    font-weight: bold;
+}

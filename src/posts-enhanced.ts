@@ -124,11 +124,11 @@
             });
         }
 
-        function findParent(elem: Element, parentClassName: string): Element | undefined {
+        function findParent(elem: Element, parentClassName: string): Element | null {
             while (elem.parentElement?.className.indexOf(parentClassName) === -1) {
-                elem = elem.parentElement!;
+                elem = elem.parentElement;
             }
-            return elem.parentElement!;
+            return elem.parentElement;
         }
     }
 })();
@@ -140,8 +140,8 @@
 
     const LINKED_CLASS = "linked";
 
-    const avRegExp = /av[1-9]\d*/gi;
-    const BVRegExp = /BV[A-Za-z0-9]{10}/g;
+    const avRegExp = /(?<!:\/\/www.bilibili.com\/video\/)av[1-9]\d*/gi;
+    const BVRegExp = /(?<!:\/\/www.bilibili.com\/video\/)BV[A-Za-z0-9]{10}/g;
 
     document.addEventListener("DOMContentLoaded", () => {
         __remixedObservers.commentsObserver.addEvent(biliEnhanced);
@@ -174,7 +174,9 @@
                     array?.forEach(videoID => {
                         if (hadHyperLink.indexOf(videoID) === -1) {
                             hadHyperLink.push(videoID);
-                            const htmlArray = elem.innerHTML.split(videoID);
+                            const htmlArray = elem.innerHTML.split(RegExp(
+                                "(?<!://www.bilibili.com/video/)" + videoID
+                            ));
                             if (lowerCase) videoID = videoID.toLowerCase();
                             const linkedID = "<a href='https://www.bilibili.com/video/"
                                 + videoID + "/'>" + videoID + "</a>";

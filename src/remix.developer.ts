@@ -34,14 +34,40 @@
 
         // 开启监控
         if (location.href.indexOf("tieba.baidu.com/p/") !== -1) {
-            __remixedObservers.postsObserver.observe();
-            __remixedObservers.commentsObserver.observe();
+            __remixedObservers.postsObserver._observe();
+            __remixedObservers.commentsObserver._observe();
         }
 
         // 修改元素
         $(".post-tail-wrap .icon-jubao").toArray().forEach(elem => {
             elem.removeAttribute("src");
             elem.after("举报");
+        });
+
+        // 为吧务和自己的等级染色
+        __remixedObservers.postsObserver.addEvent(() => {
+            const lvlClassHead = "tieba-lvl-";
+            const lvlGreen = lvlClassHead + "green";
+            const lvlBlue = lvlClassHead + "blue";
+            const lvlYellow = lvlClassHead + "yellow";
+            const lvlOrange = lvlClassHead + "orange";
+
+            $(
+                ".d_badge_bawu1 .d_badge_lv, .d_badge_bawu2 .d_badge_lv, .badge_index"
+            ).toArray().forEach(elem => {
+                if (elem.className.indexOf(lvlClassHead) !== -1) return;
+
+                const lvl = parseInt(elem.textContent!);
+                if (lvl >= 1 && lvl <= 3) {
+                    elem.classList.add(lvlGreen);
+                } else if (lvl >= 4 && lvl <= 9) {
+                    elem.classList.add(lvlBlue);
+                } else if (lvl >= 10 && lvl <= 15) {
+                    elem.classList.add(lvlYellow);
+                } else if (lvl >= 16) {
+                    elem.classList.add(lvlOrange);
+                }
+            });
         });
     });
 
@@ -52,7 +78,7 @@
         $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
             // @ts-ignore
             GM_addElement(elem, "div", {
-                class: "svg-container",
+                class: "svg-container"
             });
         });
     });
