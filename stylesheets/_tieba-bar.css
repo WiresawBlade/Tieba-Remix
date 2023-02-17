@@ -215,12 +215,12 @@
 
 .threadlist_bright .threadlist_media li {
     /* 贴子图片 hover */
-    height: unset !important;
     border-radius: 8px !important;
 }
 
 .threadlist_media li:hover .threadlist_pic_highlight {
     border-radius: 8px;
+    display: none;
 }
 
 .vpic_wrap img {
@@ -230,6 +230,11 @@
 .threadlist_bright .media_disp {
     background: none !important;
     border: none !important;
+}
+
+.threadlist_bright .threadlist_video {
+    /* 视频预览 */
+    border-radius: 8px;
 }
 
 .threadlist_rep_num {
