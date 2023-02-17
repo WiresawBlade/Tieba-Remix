@@ -55,7 +55,7 @@
         // });
     }
 
-    async function tiebaTagsMain(docElem: Document) {
+    function tiebaTagsMain(docElem: Document) {
         (() => {
             // 判断信息是否抓取过，避免重复抓取
             if (myUserName !== undefined) return;
@@ -148,7 +148,7 @@
     });
 
     /* av/BV 快速跳转 */
-    async function biliEnhanced() {
+    function biliEnhanced() {
         addBiliLinks(".d_post_content");
         addBiliLinks(".lzl_cnt .lzl_content_main");
 
@@ -158,18 +158,20 @@
                 elem.classList.add(LINKED_CLASS);
 
                 // av号
-                if (elem.innerHTML.toLowerCase().indexOf("av") !== -1) {
-                    const avs = elem.innerHTML.match(avRegExp);
+                if (elem.textContent?.toLowerCase().indexOf("av") !== -1) {
+                    const avs = elem.textContent?.match(avRegExp);
                     bindingLinks(avs, true);
                 }
 
                 // BV号
-                if (elem.innerHTML.indexOf("BV") !== -1) {
-                    const BVs = elem.innerHTML.match(BVRegExp);
+                if (elem.textContent?.indexOf("BV") !== -1) {
+                    const BVs = elem.textContent?.match(BVRegExp);
                     bindingLinks(BVs);
                 }
 
-                function bindingLinks(array: RegExpMatchArray | null, lowerCase = false) {
+                function bindingLinks(array: RegExpMatchArray | null | undefined, lowerCase = false) {
+                    if (array === null || array === undefined) return;
+
                     const hadHyperLink: string[] = [];
                     array?.forEach(videoID => {
                         if (hadHyperLink.indexOf(videoID) === -1) {

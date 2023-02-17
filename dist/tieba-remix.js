@@ -20,15 +20,6 @@
 // ==/UserScript==
 // @WiresawBlade
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 const ENABLE_BOLD_FONT = parseInt(GM_getValue("ENABLE_BOLD_FONT", "1"));
 const EXTREME_PURIF = parseInt(GM_getValue("EXTREME_PURIF", "0"));
 const DEFAULT_FONT_TYPE = parseInt(GM_getValue("DEFAULT_FONT_TYPE", "1"));
@@ -167,65 +158,63 @@ const __remixedObservers = {
         });
     }
     function tiebaTagsMain(docElem) {
-        return __awaiter(this, void 0, void 0, function* () {
-            (() => {
-                var _a, _b;
-                if (myUserName !== undefined)
+        (() => {
+            var _a, _b;
+            if (myUserName !== undefined)
+                return;
+            myUserName = (_a = docElem.getElementById("nameValue")) === null || _a === void 0 ? void 0 : _a.textContent;
+            louzhuCard = docElem.querySelector(".d_name .p_author_name");
+            louzhuObj = JSON.parse((_b = louzhuCard === null || louzhuCard === void 0 ? void 0 : louzhuCard.getAttribute("data-field")) === null || _b === void 0 ? void 0 : _b.split("'").join("\""));
+        })();
+        __remixedObservers.commentsObserver.addEvent(addTiebaTags);
+        function addTiebaTags() {
+            $(".lzl_cnt .at").toArray().forEach(elem => {
+                if (elem.classList.contains(TAGGED))
                     return;
-                myUserName = (_a = docElem.getElementById("nameValue")) === null || _a === void 0 ? void 0 : _a.textContent;
-                louzhuCard = docElem.querySelector(".d_name .p_author_name");
-                louzhuObj = JSON.parse((_b = louzhuCard === null || louzhuCard === void 0 ? void 0 : louzhuCard.getAttribute("data-field")) === null || _b === void 0 ? void 0 : _b.split("'").join("\""));
-            })();
-            __remixedObservers.commentsObserver.addEvent(addTiebaTags);
-            function addTiebaTags() {
-                $(".lzl_cnt .at").toArray().forEach(elem => {
-                    if (elem.classList.contains(TAGGED))
-                        return;
-                    elem.classList.add(TAGGED);
-                    let isMe = false;
-                    let isLZ = false;
-                    if (elem.textContent === myUserName) {
-                        makeTag(MY_TAG);
-                        isMe = true;
-                    }
-                    if (elem.textContent === louzhuCard.textContent ||
-                        elem.getAttribute("username") !== "" &&
-                            elem.getAttribute("username") === decodeURIComponent(louzhuObj.un) ||
-                        elem.getAttribute("portrait") === louzhuObj.id.split("?")[0]) {
-                        isLZ = true;
-                        if (!isMe)
-                            makeTag(LZ_TAG);
-                    }
-                    (() => {
-                        var _a;
-                        if (isLZ)
-                            return;
-                        const floorElem = findParent(elem, "l_post_bright");
-                        const cengzhuCard = floorElem === null || floorElem === void 0 ? void 0 : floorElem.querySelector(".d_name .p_author_name");
-                        const cengzhuObj = JSON.parse((_a = cengzhuCard === null || cengzhuCard === void 0 ? void 0 : cengzhuCard.getAttribute("data-field")) === null || _a === void 0 ? void 0 : _a.split("'").join("\""));
-                        if (elem.textContent === (cengzhuCard === null || cengzhuCard === void 0 ? void 0 : cengzhuCard.textContent) ||
-                            elem.getAttribute("username") !== "" &&
-                                elem.getAttribute("username") === decodeURIComponent(cengzhuObj.un) ||
-                            elem.getAttribute("portrait") === cengzhuObj.id.split("?")[0]) {
-                            makeTag(CZ_TAG);
-                        }
-                    })();
-                    function makeTag(tagClass) {
-                        const tagElem = document.createElement("div");
-                        tagElem.classList.add(TB_TAG);
-                        tagElem.classList.add(tagClass);
-                        elem.appendChild(tagElem);
-                    }
-                });
-            }
-            function findParent(elem, parentClassName) {
-                var _a;
-                while (((_a = elem.parentElement) === null || _a === void 0 ? void 0 : _a.className.indexOf(parentClassName)) === -1) {
-                    elem = elem.parentElement;
+                elem.classList.add(TAGGED);
+                let isMe = false;
+                let isLZ = false;
+                if (elem.textContent === myUserName) {
+                    makeTag(MY_TAG);
+                    isMe = true;
                 }
-                return elem.parentElement;
+                if (elem.textContent === louzhuCard.textContent ||
+                    elem.getAttribute("username") !== "" &&
+                        elem.getAttribute("username") === decodeURIComponent(louzhuObj.un) ||
+                    elem.getAttribute("portrait") === louzhuObj.id.split("?")[0]) {
+                    isLZ = true;
+                    if (!isMe)
+                        makeTag(LZ_TAG);
+                }
+                (() => {
+                    var _a;
+                    if (isLZ)
+                        return;
+                    const floorElem = findParent(elem, "l_post_bright");
+                    const cengzhuCard = floorElem === null || floorElem === void 0 ? void 0 : floorElem.querySelector(".d_name .p_author_name");
+                    const cengzhuObj = JSON.parse((_a = cengzhuCard === null || cengzhuCard === void 0 ? void 0 : cengzhuCard.getAttribute("data-field")) === null || _a === void 0 ? void 0 : _a.split("'").join("\""));
+                    if (elem.textContent === (cengzhuCard === null || cengzhuCard === void 0 ? void 0 : cengzhuCard.textContent) ||
+                        elem.getAttribute("username") !== "" &&
+                            elem.getAttribute("username") === decodeURIComponent(cengzhuObj.un) ||
+                        elem.getAttribute("portrait") === cengzhuObj.id.split("?")[0]) {
+                        makeTag(CZ_TAG);
+                    }
+                })();
+                function makeTag(tagClass) {
+                    const tagElem = document.createElement("div");
+                    tagElem.classList.add(TB_TAG);
+                    tagElem.classList.add(tagClass);
+                    elem.appendChild(tagElem);
+                }
+            });
+        }
+        function findParent(elem, parentClassName) {
+            var _a;
+            while (((_a = elem.parentElement) === null || _a === void 0 ? void 0 : _a.className.indexOf(parentClassName)) === -1) {
+                elem = elem.parentElement;
             }
-        });
+            return elem.parentElement;
+        }
     }
 })();
 (() => {
@@ -239,43 +228,51 @@ const __remixedObservers = {
         __remixedObservers.commentsObserver.addEvent(biliEnhanced);
     });
     function biliEnhanced() {
-        return __awaiter(this, void 0, void 0, function* () {
-            addBiliLinks(".d_post_content");
-            addBiliLinks(".lzl_cnt .lzl_content_main");
-            function addBiliLinks(selector) {
-                $(selector).toArray().forEach(elem => {
-                    if (elem.classList.contains(LINKED_CLASS))
+        addBiliLinks(".d_post_content");
+        addBiliLinks(".lzl_cnt .lzl_content_main");
+        function addBiliLinks(selector) {
+            $(selector).toArray().forEach(elem => {
+                var _a, _b, _c, _d;
+                if (elem.classList.contains(LINKED_CLASS))
+                    return;
+                elem.classList.add(LINKED_CLASS);
+                if (((_a = elem.textContent) === null || _a === void 0 ? void 0 : _a.toLowerCase().indexOf("av")) !== -1) {
+                    const avs = (_b = elem.textContent) === null || _b === void 0 ? void 0 : _b.match(avRegExp);
+                    bindingLinks(avs, true);
+                }
+                if (((_c = elem.textContent) === null || _c === void 0 ? void 0 : _c.indexOf("BV")) !== -1) {
+                    const BVs = (_d = elem.textContent) === null || _d === void 0 ? void 0 : _d.match(BVRegExp);
+                    bindingLinks(BVs);
+                }
+                function bindingLinks(array, lowerCase = false) {
+                    if (array === null || array === undefined)
                         return;
-                    elem.classList.add(LINKED_CLASS);
-                    if (elem.innerHTML.toLowerCase().indexOf("av") !== -1) {
-                        const avs = elem.innerHTML.match(avRegExp);
-                        bindingLinks(avs, true);
-                    }
-                    if (elem.innerHTML.indexOf("BV") !== -1) {
-                        const BVs = elem.innerHTML.match(BVRegExp);
-                        bindingLinks(BVs);
-                    }
-                    function bindingLinks(array, lowerCase = false) {
-                        const hadHyperLink = [];
-                        array === null || array === void 0 ? void 0 : array.forEach(videoID => {
-                            if (hadHyperLink.indexOf(videoID) === -1) {
-                                hadHyperLink.push(videoID);
-                                const htmlArray = elem.innerHTML.split(RegExp("(?<!://www.bilibili.com/video/)" + videoID));
-                                if (lowerCase)
-                                    videoID = videoID.toLowerCase();
-                                const linkedID = "<a href='https://www.bilibili.com/video/"
-                                    + videoID + "/'>" + videoID + "</a>";
-                                elem.innerHTML = htmlArray.join(linkedID);
-                            }
-                        });
-                    }
-                });
-            }
-        });
+                    const hadHyperLink = [];
+                    array === null || array === void 0 ? void 0 : array.forEach(videoID => {
+                        if (hadHyperLink.indexOf(videoID) === -1) {
+                            hadHyperLink.push(videoID);
+                            const htmlArray = elem.innerHTML.split(RegExp("(?<!://www.bilibili.com/video/)" + videoID));
+                            if (lowerCase)
+                                videoID = videoID.toLowerCase();
+                            const linkedID = "<a href='https://www.bilibili.com/video/"
+                                + videoID + "/'>" + videoID + "</a>";
+                            elem.innerHTML = htmlArray.join(linkedID);
+                        }
+                    });
+                }
+            });
+        }
     }
 })();
 (() => {
     "use strict";
+    const REMIXED = "\n" +
+        "██████╗ ███████╗███╗   ███╗██╗██╗  ██╗███████╗██████╗ \n" +
+        "██╔══██╗██╔════╝████╗ ████║██║╚██╗██╔╝██╔════╝██╔══██╗\n" +
+        "██████╔╝█████╗  ██╔████╔██║██║ ╚███╔╝ █████╗  ██║  ██║\n" +
+        "██╔══██╗██╔══╝  ██║╚██╔╝██║██║ ██╔██╗ ██╔══╝  ██║  ██║\n" +
+        "██║  ██║███████╗██║ ╚═╝ ██║██║██╔╝ ██╗███████╗██████╔╝\n" +
+        "╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ \n";
     let darkmode = window.matchMedia("(prefers-color-scheme: dark)").matches;
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", event => {
         if (event.matches) {
@@ -285,50 +282,56 @@ const __remixedObservers = {
             darkmode = false;
         }
     });
-    const favElem = document.createElement("link");
-    favElem.type = "image/icon";
-    favElem.rel = "shortcut icon";
-    favElem.href = giteeResourcesMain() + "images/main/favicon.ico";
-    document.addEventListener("DOMContentLoaded", () => {
-        document.head.appendChild(favElem);
-        if (location.href.indexOf("tieba.baidu.com/p/") !== -1) {
-            __remixedObservers.postsObserver._observe();
-            __remixedObservers.commentsObserver._observe();
-        }
-        $(".post-tail-wrap .icon-jubao").toArray().forEach(elem => {
-            elem.removeAttribute("src");
-            elem.after("举报");
-        });
-        __remixedObservers.postsObserver.addEvent(() => {
-            const lvlClassHead = "tieba-lvl-";
-            const lvlGreen = lvlClassHead + "green";
-            const lvlBlue = lvlClassHead + "blue";
-            const lvlYellow = lvlClassHead + "yellow";
-            const lvlOrange = lvlClassHead + "orange";
-            $(".d_badge_bawu1 .d_badge_lv, .d_badge_bawu2 .d_badge_lv, .badge_index").toArray().forEach(elem => {
-                if (elem.className.indexOf(lvlClassHead) !== -1)
-                    return;
-                const lvl = parseInt(elem.textContent);
-                if (lvl >= 1 && lvl <= 3) {
-                    elem.classList.add(lvlGreen);
-                }
-                else if (lvl >= 4 && lvl <= 9) {
-                    elem.classList.add(lvlBlue);
-                }
-                else if (lvl >= 10 && lvl <= 15) {
-                    elem.classList.add(lvlYellow);
-                }
-                else if (lvl >= 16) {
-                    elem.classList.add(lvlOrange);
-                }
+    try {
+        const favElem = document.createElement("link");
+        favElem.type = "image/icon";
+        favElem.rel = "shortcut icon";
+        favElem.href = giteeResourcesMain() + "images/main/favicon.ico";
+        document.addEventListener("DOMContentLoaded", () => {
+            document.head.appendChild(favElem);
+            if (location.href.indexOf("tieba.baidu.com/p/") !== -1) {
+                __remixedObservers.postsObserver._observe();
+                __remixedObservers.commentsObserver._observe();
+            }
+            $(".post-tail-wrap .icon-jubao").toArray().forEach(elem => {
+                elem.removeAttribute("src");
+                elem.after("举报");
+            });
+            __remixedObservers.postsObserver.addEvent(() => {
+                const lvlClassHead = "tieba-lvl-";
+                const lvlGreen = lvlClassHead + "green";
+                const lvlBlue = lvlClassHead + "blue";
+                const lvlYellow = lvlClassHead + "yellow";
+                const lvlOrange = lvlClassHead + "orange";
+                $(".d_badge_bawu1 .d_badge_lv, .d_badge_bawu2 .d_badge_lv, .badge_index").toArray().forEach(elem => {
+                    if (elem.className.indexOf(lvlClassHead) !== -1)
+                        return;
+                    const lvl = parseInt(elem.textContent);
+                    if (lvl >= 1 && lvl <= 3) {
+                        elem.classList.add(lvlGreen);
+                    }
+                    else if (lvl >= 4 && lvl <= 9) {
+                        elem.classList.add(lvlBlue);
+                    }
+                    else if (lvl >= 10 && lvl <= 15) {
+                        elem.classList.add(lvlYellow);
+                    }
+                    else if (lvl >= 16) {
+                        elem.classList.add(lvlOrange);
+                    }
+                });
             });
         });
-    });
-    window.addEventListener("load", () => {
-        $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
-            GM_addElement(elem, "div", {
-                class: "svg-container"
+        window.addEventListener("load", () => {
+            $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
+                GM_addElement(elem, "div", {
+                    class: "svg-container"
+                });
             });
         });
-    });
+        console.info(REMIXED);
+    }
+    catch (error) {
+        console.error(error);
+    }
 })();
