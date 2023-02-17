@@ -9,6 +9,11 @@
 
 ---
 
+> 推荐从 GitHub/Gitee 安装
+
+| [GitHub 仓库](https://github.com/WiresawBlade/Tieba-Remix) | [Gitee 仓库](https://gitee.com/WiresawBlade/Tieba-Remix) |
+| ----------- | ---------- |
+
 ## ⚠ 注意
 
 + 该项目处于早期开发阶段，仍有大量工作未完成，无法保证当前的使用体验，请谨慎安装
