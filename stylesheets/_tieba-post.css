@@ -705,6 +705,7 @@ span.tP {
     /* 内容 */
     background-color: var(--default-background);
     width: unset;
+    border-radius: 24px;
 }
 
 .poster_head_text a.cur {
@@ -771,4 +772,8 @@ span.tP {
 .skin_normal .wrap2 {
     background: none;
     background-color: var(--default-background);
+}
+
+#lcsas-container {
+    display: none;
 }
