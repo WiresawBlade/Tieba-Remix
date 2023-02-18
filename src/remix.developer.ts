@@ -1,5 +1,5 @@
 /// <reference path="./greasy-init.ts" />
-/// <reference path="./remixed-observers.ts" />
+/// <reference path="./lib/observers.ts" />
 
 (() => {
     "use strict";
@@ -29,6 +29,10 @@
     ///////////////////////////////////////////////////////////////////////////
 
     try {
+        // 加载功能模块
+        tiebaTags();
+        biliBridge();
+
         // favicon
         const favElem = document.createElement("link");
         favElem.type = "image/icon";
@@ -77,6 +81,19 @@
                     }
                 });
             });
+
+            // 远古用户没有等级则隐藏等级标签
+            __remixedObservers.postsObserver.addEvent(() => {
+                $(".d_badge_lv").toArray().forEach(elem => {
+                    if (elem.textContent === "") {
+                        let parent = elem;
+                        while (!parent.classList.contains("l_badge")) {
+                            parent = parent.parentElement!;
+                        }
+                        parent.style.display = "none";
+                    }
+                });
+            });
         });
 
         // 等待网页完全加载完毕
@@ -89,9 +106,11 @@
                     class: "svg-container"
                 });
             });
+
+            $("body").addClass("fade-in-elem");
         });
 
-        // 全部任务执行完毕，打印信息
+        // 全部任务激活完毕，打印信息
         console.info(REMIXED);
     } catch (error) {
         console.error(error);

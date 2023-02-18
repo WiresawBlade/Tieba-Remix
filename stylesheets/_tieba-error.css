@@ -1,0 +1,28 @@
+/* 搜索栏 */
+.search-form {
+    background-color: var(--default-background);
+}
+
+.search-form p {
+    display: none;
+}
+
+.page404 {
+    background-color: var(--default-background);
+}
+
+.main-title {
+    color: var(--default-fore);
+}
+
+.main-title a {
+    color: var(--tieba-theme-fore);
+}
+
+.app_download_box {
+    display: none;
+}
+
+#error_404_iframe {
+    display: none;
+}

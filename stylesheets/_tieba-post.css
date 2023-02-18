@@ -735,7 +735,8 @@ span.tP {
     width: unset !important;
 }
 
-.edui-toolbar .edui-btn-toolbar {
+.edui-toolbar .edui-btn-toolbar,
+.edui-container .edui-toolbar {
     /* 工具栏 */
     background-color: var(--elem-color);
     margin-top: 4px;
