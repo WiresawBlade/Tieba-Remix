@@ -220,7 +220,7 @@
 
 .threadlist_media li:hover .threadlist_pic_highlight {
     border-radius: 8px;
-    display: none;
+    display: none !important;
 }
 
 .vpic_wrap img {
