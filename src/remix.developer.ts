@@ -107,7 +107,12 @@
                 });
             });
 
+            // body 动画处理
             $("body").addClass("fade-in-elem");
+            $("body").one("animationend", () => {
+                $("body").get(0)!.style.opacity = "1";
+                $("body").removeClass("fade-in-elem");
+            });
         });
 
         // 全部任务激活完毕，打印信息
