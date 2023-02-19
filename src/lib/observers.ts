@@ -44,12 +44,11 @@ const __remixedObservers: __obsInterface = {
             });
         },
         addEvent: function (event: () => void) {
+            event();
             for (let i = 0; i < this.events.length; i++) {
                 const func = this.events[i];
                 if (event === func) return;
             }
-
-            event();
             this.events.push(event);
         }
     }
