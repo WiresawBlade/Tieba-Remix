@@ -1,8 +1,8 @@
-# *Tieba Remix*
+# *Tieba Remix*: 贴吧增强脚本
 
 > ### “贴吧网页端重塑”
-+ ~~*更现代的UI设计*~~（未动工）
 
++ ~~*更现代的UI设计*~~（未动工）
 + 贴吧首页、进吧、看贴页面的昼夜主题
 + 贴吧颜色主题随系统设置自动切换
 + 及其有限的 UI 调整
@@ -18,6 +18,8 @@
 
 | [GitHub Releases](https://github.com/WiresawBlade/Tieba-Remix/releases) | [Gitee Releases](https://gitee.com/WiresawBlade/Tieba-Remix/releases) |
 | ----------------------------------------------------------------------- | --------------------------------------------------------------------- |
+
+### `2023/2/24`
 
 ## ⚠ 注意
 
