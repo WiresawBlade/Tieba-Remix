@@ -4,7 +4,7 @@ const meta = require("./meta.json");
 module.exports = {
     entry: "./src/index.ts",
     output: {
-        filename: "tieba-remix.bundle.js"
+        filename: "tieba-remix.user.js"
     },
     resolve: {
         extensions: [".ts"]
