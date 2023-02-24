@@ -3,6 +3,25 @@
     "@types/jquery": "^3.5.16",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
-    "eslint": "^8.34.0"
+    "autoprefixer": "^10.4.13",
+    "cross-env": "^7.0.3",
+    "css-loader": "^6.7.3",
+    "cssnano": "^5.1.15",
+    "eslint": "^8.34.0",
+    "file-loader": "^6.2.0",
+    "postcss": "^8.4.21",
+    "postcss-loader": "^7.0.2",
+    "postcss-preset-env": "^8.0.1",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.6",
+    "to-string-loader": "^1.2.0",
+    "ts-loader": "^9.4.2",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
+  },
+  "scripts": {
+    "dev": "webpack --config ./webpack.dev.js",
+    "prod": "webpack --config ./webpack.prod.js"
   }
 }

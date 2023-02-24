@@ -14,11 +14,6 @@
     animation: animation-fade-in ease 0.3s forwards;
 }
 
-/* body 默认隐藏 */
-body {
-    opacity: 0;
-}
-
 /* 功能按钮 */
 .tbui_aside_float_bar {
     border: none !important;
@@ -58,6 +53,8 @@ body {
     background-position: center;
     filter: drop-shadow(var(--minimal-fore) 0 -9999px);
     transform: translateY(9999px);
+    
+    opacity: 0;
 }
 
 .tbui_aside_float_bar .svg-container:hover {

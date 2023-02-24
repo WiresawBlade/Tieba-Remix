@@ -4,10 +4,13 @@
  * @WiresawBlade
 */
 
-/// <reference path="../lib/observers.ts" />
+import { remixedObservers } from "../lib/observers";
+import { injectCSSList } from "../lib/dom-control";
+import tagCSS from "../stylesheets/tieba-tags.css";
 
-function tiebaTags(): void {
-    "use strict";
+"use strict";
+
+export function tiebaTags(): void {
     if (location.href.indexOf("tieba.baidu.com/p/") === -1) return;
 
     const TAGGED = "is-tagged";
@@ -74,9 +77,12 @@ function tiebaTags(): void {
         //     subtree: true
         // });
 
-        __remixedObservers.commentsObserver.addEvent(addTiebaTags);
+        remixedObservers.commentsObserver.addEvent(addTiebaTags);
 
         function addTiebaTags(): void {
+            // 注入相关 CSS
+            injectCSSList(tagCSS);
+
             $(".lzl_cnt .at").toArray().forEach(elem => {
                 if (elem.classList.contains(TAGGED)) return;
                 elem.classList.add(TAGGED);

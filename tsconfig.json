@@ -2,12 +2,9 @@
     "include": [
         "./src"
     ],
-    "exclude": [
-        "./src/_meta.ts"
-    ],
     "compilerOptions": {
         "target": "ES2016",
-        "module": "AMD",
+        "module": "CommonJS",
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
@@ -15,7 +12,6 @@
         "noUncheckedIndexedAccess": false,
         "skipLibCheck": true,
         "alwaysStrict": false,
-        "removeComments": true,
-        "outFile": "./dist/tieba-remix.nometa.js"
+        "removeComments": true
     }
 }

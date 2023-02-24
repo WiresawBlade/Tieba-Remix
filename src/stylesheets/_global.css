@@ -33,15 +33,16 @@
     --level-orange-background: rgba(255, 153, 0, 0.3);
     --level-orange-fore: rgb(178, 104, 0);
 
-    --svg-accessibility: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/accessibility.svg");
-    --svg-checkmark: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/checkmark.svg");
-    --svg-arrow-up: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/arrow-up-sharp.svg");
-    --svg-message: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/chatbox-ellipses.svg");
-    --svg-infomation: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/information-circle.svg");
-    --svg-infomation-outline: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/information-sharp.svg");
-    --svg-search: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/svg/search.svg");
+    --svg-accessibility: url("../../svg/accessibility.svg");
+    --svg-checkmark: url("../../svg/checkmark.svg");
+    --svg-arrow-up: url("../../svg/arrow-up-sharp.svg");
+    --svg-arrow-down-circle: url("../../svg/arrow-down-circle.svg");
+    --svg-message: url("../../svg/chatbox-ellipses.svg");
+    --svg-infomation: url("../../svg/information-circle.svg");
+    --svg-infomation-outline: url("../../svg/information-sharp.svg");
+    --svg-search: url("../../svg/search.svg");
 
-    --img-tieba-icon: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/icon.png");
+    --img-tieba-icon: url("../../images/main/icon.png");
 
     color-scheme: light dark;
 }

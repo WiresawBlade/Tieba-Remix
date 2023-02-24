@@ -1,4 +1,6 @@
-const __remixedObservers: __obsInterface = {
+"use strict";
+
+export const remixedObservers: RemixedObservers =  {
     postsObserver: {
         events: [],
         _observe: function () {
@@ -54,14 +56,14 @@ const __remixedObservers: __obsInterface = {
     }
 };
 
-interface __obsInterface {
+interface RemixedObservers {
     // 回帖监视器
-    postsObserver: __obsType,
+    postsObserver: ObsType,
     // 评论监视器
-    commentsObserver: __obsType
+    commentsObserver: ObsType
 }
 
-interface __obsType {
+interface ObsType {
     events: (() => void)[],
     _observe: () => void,
     addEvent: (event: () => void) => void

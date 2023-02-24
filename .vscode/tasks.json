@@ -19,6 +19,40 @@
                 "reveal": "always",
                 "showReuseMessage": false
             }
+        },
+
+        {
+            "label": "webpack: development",
+            "type": "shell",
+            "command": "npm run dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": false
+            }
+        },
+
+        {
+            "label": "webpack: production",
+            "type": "shell",
+            "command": "npm run prod",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": false
+            }
         }
     ]
 }

@@ -53,7 +53,8 @@ a {
 }
 
 /* 吧图标 */
-.card_head {
+.card_head,
+.plat_head_theme2 .plat_picbox {
     width: 64px !important;
     height: 64px !important;
     border-radius: 24px !important;
@@ -63,17 +64,29 @@ a {
     top: -32px !important;
 }
 
-.card_head_img {
+.card_head_img,
+.plat_head_theme2 .plat_picbox img {
     width: 64px !important;
     height: 64px !important;
 }
 
+/* 第三方吧图标 */
+.plat_head_theme2 .plat_picbox img {
+    border-radius: 24px;
+}
+
 /* 吧名 */
-.card_title {
+.card_title,
+/* 第三方 */
+.plat_title_h3 {
     margin: 5px 20px 0;
 }
 
-.card_top_theme2 .card_title_fname {
+.card_top_theme2 .card_title_fname,
+/* 第三方 */
+.plat_title_h3,
+.plat_title_h3:hover,
+.plat_title_h3:visited {
     color: var(--highlight-fore);
 }
 
@@ -188,7 +201,6 @@ a {
     background-color: var(--trans-default-background);
     border-color: var(--border-color);
     backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
 }
 
 .core_title_theme_bright,
@@ -201,7 +213,6 @@ a {
 .left_section .core_title_absolute_bright {
     background-color: var(--trans-default-background);
     backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
 }
 
 .core_title_txt {
@@ -336,6 +347,11 @@ span.tP {
     color: var(--tieba-theme-fore);
 }
 
+.novel-level-icon {
+    /* 小说等级图标 */
+    display: none;
+}
+
 .d_badge_bright,
 .user_level .badge {
     /* 等级头衔 */
@@ -360,6 +376,7 @@ span.tP {
     background-image: none !important;
     background-color: var(--tieba-theme-background);
     color: var(--tieba-theme-fore);
+    opacity: 0;
 }
 
 .d_badge_lv,
@@ -369,10 +386,10 @@ span.tP {
     margin: 12px 4px !important;
     padding: 0px 4px !important;
     border-radius: 16px;
-    
+
     left: 60px !important;
     top: unset !important;
-    
+
     font-family: unset !important;
     font-style: italic;
     font-size: 14px;
@@ -637,9 +654,10 @@ span.tP {
     color: var(--tieba-theme-fore);
 }
 
-.lzl_li_pager_s .lzl_more {
+.lzl_li_pager_s .lzl_more,
+.lzl_more span {
     /* 还有x条回复 */
-    color: unset;
+    color: var(--light-fore);
 }
 
 .j_lzl_m {
@@ -777,4 +795,33 @@ span.tP {
 
 #lcsas-container {
     display: none;
+}
+
+/* TODO: 隐藏用户3天 */
+.user-hide-post-down,
+.user-hide-post-up {
+    background-color: var(--light-fore);
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    mask: var(--svg-arrow-down-circle);
+    /* filter: drop-shadow(var(--minimal-fore) 0 -9999px);
+    transform: translateY(9999px); */
+}
+
+/* 选择搜索 */
+#selectsearch-icon {
+    display: none;
+}
+
+/* TODO: 用户卡片 */
+
+/* TODO: 第三方内容吧适配 */
+/* 由第三方提供的吧 */
+
+/* 进吧导航 */
+.plat_head_theme2,
+.plat_header {
+    background-color: unset;
+    border: none;
 }

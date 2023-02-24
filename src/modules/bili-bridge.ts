@@ -4,9 +4,11 @@
  * @WiresawBlade
 */
 
-/// <reference path="../lib/observers.ts" />
+import { remixedObservers } from "../lib/observers";
 
-function biliBridge(): void {
+"use strict";
+
+export function biliBridge(): void {
     "use strict";
     if (location.href.indexOf("tieba.baidu.com/p/") === -1) return;
 
@@ -16,7 +18,7 @@ function biliBridge(): void {
     const BVRegExp = /(?<!:\/\/www.bilibili.com\/video\/)BV[A-Za-z0-9]{10}/g;
 
     document.addEventListener("DOMContentLoaded", () => {
-        __remixedObservers.commentsObserver.addEvent(biliEnhanced);
+        remixedObservers.commentsObserver.addEvent(biliEnhanced);
     });
 
     /* av/BV 快速跳转 */

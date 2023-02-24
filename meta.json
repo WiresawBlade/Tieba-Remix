@@ -1,0 +1,27 @@
+{
+    "name": "Tieba Remix",
+    "namespace": "https://github.com/WiresawBlade/Tieba-Remix",
+    "version": "0.1-beta",
+    "description": "提升贴吧网页端的体验：为贴吧添加昼夜主题及功能增强",
+    "author": "锯刃Blade",
+    "license": "MIT",
+    "updateURL": "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/dist/tieba-remix.bundle.js",
+    "downloadURL": "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/dist/tieba-remix.bundle.js",
+    "icon": "https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/icon16.png",
+    "icon64": "https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/icon64.png",
+    "match": [
+        "*://tieba.baidu.com/*"
+    ],
+    "grant": [
+        "GM_addStyle",
+        "GM_addElement",
+        "GM_registerMenuCommand",
+        "GM_getValue",
+        "GM_setValue",
+        "GM_openInTab"
+    ],
+    "run-at": "document-start",
+    "require": [
+        "https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"
+    ]
+}
