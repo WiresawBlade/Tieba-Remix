@@ -5,9 +5,6 @@ import "./modules/remixed-theme";
 
 import favicon from "../images/main/favicon32.ico";
 
-import svg from "../svg/accessibility.svg";
-alert(svg);
-
 "use strict";
 
 const REMIXED =
