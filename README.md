@@ -24,10 +24,10 @@
 
 **·**
 
-[📙 项目概述](#📙-项目概述)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
-[📦 安装](#📦-安装)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
-[⚠ 需要留意](#⚠-需要留意)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
-[🔧 构建自己的版本](#🔧-构建自己的版本)
+[📙 项目概述](#-项目概述)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+[📦 安装](#-安装)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+[⚠ 需要留意](#-需要留意)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;
+[🔧 构建自己的版本](#-构建自己的版本)
 
 </div>
 
@@ -53,7 +53,7 @@
 
 如果你的浏览器已经成功启用油猴脚本插件，点击下面的链接可以获取 `Tieba Remix` 最新的版本
 
-| [GitHub Main](https://raw.githubusercontent.com/WiresawBlade/Tieba-Remix/main/dist/tieba-remix.js) | [Gitee Main](https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/dist/tieba-remix.js) | [Greasy Fork](https://greasyfork.org/zh-CN/scripts/460113-tieba-remix) |
+| [GitHub Releases](https://github.com/WiresawBlade/Tieba-Remix/releases) | [Gitee Releases](https://gitee.com/WiresawBlade/Tieba-Remix/releases) | [Greasy Fork](https://greasyfork.org/zh-CN/scripts/460113-tieba-remix) |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 
 ### 其他
