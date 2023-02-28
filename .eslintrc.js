@@ -19,11 +19,10 @@ module.exports = {
     "rules": {
         "indent": [2, 4],
         "linebreak-style": [2, "windows"],
-        "quotes": [2, "double"],
         "semi": [2, "always"],
         "@typescript-eslint/triple-slash-reference": 0,               /* ref */
         "no-var": 1,
-        "strict": 0,
+        "strict": 2,
         "spaced-comment": 0,
         "no-undef": 0,
         "radix": 0,                                                   /* praseInt radix */

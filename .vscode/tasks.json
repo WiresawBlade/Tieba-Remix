@@ -2,46 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "python: pack-js",
+            "label": "vite: build",
             "type": "shell",
-            "command": "py",
-            "args": [
-                "pack-js.py"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "clear": true,
-                "focus": true,
-                "panel": "dedicated",
-                "reveal": "always",
-                "showReuseMessage": false
-            }
-        },
-
-        {
-            "label": "webpack: development",
-            "type": "shell",
-            "command": "npm run dev",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "clear": true,
-                "focus": true,
-                "panel": "dedicated",
-                "reveal": "always",
-                "showReuseMessage": false
-            }
-        },
-
-        {
-            "label": "webpack: production",
-            "type": "shell",
-            "command": "npm run prod",
+            "command": "pnpm build",
             "group": {
                 "kind": "build",
                 "isDefault": true
