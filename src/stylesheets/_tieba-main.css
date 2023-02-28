@@ -53,8 +53,6 @@
     background-position: center;
     filter: drop-shadow(var(--minimal-fore) 0 -9999px);
     transform: translateY(9999px);
-    
-    opacity: 0;
 }
 
 .tbui_aside_float_bar .svg-container:hover {

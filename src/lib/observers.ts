@@ -1,5 +1,3 @@
-"use strict";
-
 export const remixedObservers: RemixedObservers =  {
     postsObserver: {
         events: [],
@@ -53,6 +51,33 @@ export const remixedObservers: RemixedObservers =  {
             }
             this.events.push(event);
         }
+    },
+
+    newPostsObserver: {
+        events: [],
+        _observe: function () {
+            const eventFuncs = () => {
+                this.events.forEach(func => {
+                    func();
+                });
+            };
+
+            eventFuncs();
+
+            const observer = new MutationObserver(eventFuncs);
+            observer.observe($("#new_list").get(0)!, {
+                childList: true,
+                subtree: true
+            });
+        },
+        addEvent: function (event: () => void) {
+            event();
+            for (let i = 0; i < this.events.length; i++) {
+                const func = this.events[i];
+                if (event === func) return;
+            }
+            this.events.push(event);
+        }
     }
 };
 
@@ -60,7 +85,9 @@ interface RemixedObservers {
     // 回帖监视器
     postsObserver: ObsType,
     // 评论监视器
-    commentsObserver: ObsType
+    commentsObserver: ObsType,
+    // 首页动态贴监视器
+    newPostsObserver: ObsType
 }
 
 interface ObsType {

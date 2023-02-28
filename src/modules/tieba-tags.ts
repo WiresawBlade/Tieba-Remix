@@ -6,11 +6,22 @@
 
 import { remixedObservers } from "../lib/observers";
 import { injectCSSList } from "../lib/dom-control";
-import tagCSS from "../stylesheets/tieba-tags.css";
+import tagCSS from "../stylesheets/tieba-tags.css?inline";
 
 "use strict";
 
-export function tiebaTags(): void {
+export const Main: ModuleType = {
+    id: "tieba-tags",
+    name: "楼中楼用户标签",
+    author: "锯刃Blade",
+    version: "1.2",
+    description: `贴吧楼中楼为用户添加楼主、层主、自己等标签`,
+    scope: "tieba.baidu.com/p/",
+    runAt: "immediately",
+    entry: main
+};
+
+function main(): void {
     if (location.href.indexOf("tieba.baidu.com/p/") === -1) return;
 
     const TAGGED = "is-tagged";
@@ -34,6 +45,7 @@ export function tiebaTags(): void {
         // 当前不在帖子第一页
         $.ajax({
             url: location.href.split("?")[0],
+            dataType: "html",
             success: (response: string) => {
                 const fPageDoc = new DOMParser().parseFromString(response, "text/html");
                 tiebaTagsMain(fPageDoc);

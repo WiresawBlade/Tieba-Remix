@@ -2,6 +2,11 @@ a {
     color: var(--tieba-theme-fore);
 }
 
+.d_name a:hover,
+.content a.at:hover {
+    text-decoration: none;
+}
+
 .l_reply_num {
     /* 回帖信息 */
     color: unset !important;
@@ -329,7 +334,7 @@ span.tP {
 
 .p_author_face {
     /* 层主头像边框 */
-    background: none;
+    background: none !important;
     border: none;
 }
 
@@ -372,7 +377,6 @@ span.tP {
     background-image: none !important;
     background-color: var(--tieba-theme-background);
     color: var(--tieba-theme-fore);
-    opacity: 0;
 }
 
 .d_badge_lv,
@@ -505,6 +509,10 @@ span.tP {
     border-radius: 24px;
 }
 
+.BDE_Image:first-child {
+    margin-top: 8px;
+}
+
 .share_btn_wrapper {
     /* 分享控件 */
     display: none;
@@ -538,6 +546,14 @@ span.tP {
 
 .complaint::after {
     content: "举报";
+}
+
+.post-tail-wrap .question-image:hover::before {
+    /* IP属地说明 */
+    background-color: var(--light-background);
+    color: var(--default-fore);
+    border-color: var(--border-color);
+    border-radius: 8px;
 }
 
 .post_bubble_top,
@@ -677,12 +693,22 @@ span.tP {
     content: "举报";
 }
 
+/* 贴子内容超链接 */
+.d_post_content a,
+.lzl_cnt .lzl_content_main a:not(.at) {
+    background-color: var(--tieba-theme-background);
+    padding: 1px 6px;
+    margin: auto 2px;
+    border-radius: 24px;
+}
+
 .d_post_content a:hover,
 .d_post_content a:focus,
 .lzl_cnt .lzl_content_main a:not(.at):hover,
 .lzl_cnt .lzl_content_main a:not(.at):focus {
-    /* 楼与楼中楼超链接 */
-    text-decoration: underline;
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+    text-decoration: none;
 }
 
 .pager_theme_5 a,
@@ -803,6 +829,7 @@ span.tP {
     mask: var(--svg-arrow-down-circle);
     /* filter: drop-shadow(var(--minimal-fore) 0 -9999px);
     transform: translateY(9999px); */
+    opacity: 0;
 }
 
 /* 选择搜索 */
@@ -811,6 +838,64 @@ span.tP {
 }
 
 /* TODO: 用户卡片 */
+.ui_card_wrap {
+    background: none;
+}
+
+.ui_card_content {
+    background: none;
+    border-color: var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.card_userinfo_wrap {
+    background: none;
+    background-color: var(--default-background);
+}
+
+.card_userinfo_left .userinfo_head {
+    /* 头像边框 */
+    background: none;
+}
+
+.j_avatar img {
+    border-radius: 24px;
+    border: 4px solid var(--border-color);
+    width: 92px;
+    height: 92px;
+}
+
+.card_userinfo_middle .userinfo_sex {
+    background: none;
+}
+
+.userinfo_sex_male::after {
+    content: "♂";
+}
+.userinfo_sex_female::after {
+    content: "♀";
+}
+
+.ui_card_wrap .ui_white_down,
+.ui_card_wrap .ui_white_up {
+    /* 三角 */
+    display: none;
+}
+
+.card_userinfo_guide {
+    /* 右上角 */
+    display: none;
+}
+
+.user_card_loading {
+    /* 加载 */
+    background-color: var(--default-background);
+}
+
+.user_card_loading img {
+    display: none;
+}
 
 /* TODO: 第三方内容吧适配 */
 /* 由第三方提供的吧 */

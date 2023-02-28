@@ -64,10 +64,10 @@
         --highlight-fore: rgb(255, 255, 255);
         --border-color: rgba(96, 96, 96, 0.6);
 
-        --tieba-theme-color: rgb(113, 97, 194);
-        --trans-tieba-theme-color: rgba(113, 97, 194, 0.6);
-        --tieba-theme-background: rgba(113, 97, 194, 0.2);
-        --tieba-theme-fore: rgb(147, 125, 255);
+        --tieba-theme-color: rgb(113, 97, 193);
+        --trans-tieba-theme-color: rgba(113, 97, 193, 0.6);
+        --tieba-theme-background: rgba(113, 97, 193, 0.2);
+        --tieba-theme-fore: rgb(150, 128, 255);
 
         --myself-theme-background: rgba(34, 135, 204, 0.2);
         --myself-theme-fore: rgb(40, 160, 242);

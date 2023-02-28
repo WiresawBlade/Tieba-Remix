@@ -9,7 +9,8 @@
     color: unset !important;
 }
 
-.card_banner {
+.card_banner,
+.plat_recom_carousel {
     /* 大卡 */
     display: none !important;
 }
@@ -211,6 +212,11 @@
 .threadlist_bright .threadlist_abs {
     /* 帖子摘要 */
     color: var(--default-fore) !important;
+}
+
+/* 隐藏未加载完成的图片 */
+.vpic_wrap img:not([style]) {
+    opacity: 0;
 }
 
 .threadlist_bright .threadlist_media li {

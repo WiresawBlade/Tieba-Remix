@@ -1,16 +1,23 @@
 export {
-    afterHead,
+    afterHead, fadeInLoad,
     injectCSSRule, injectCSSList, injectCSSFile,
-    fadeInLoad
+    defaultStyle, fadeInElems
 };
 
 "use strict";
 
+const defaultStyle = document.createElement("style");  // 默认默认样式
+const fadeInElems: string[] = [];
 const fadeInClass = "fade-in-elem";
 
 class _stringKeyObj {
     [prop: string]: unknown;
 }
+
+// 插入默认样式
+afterHead(() => {
+    document.head.appendChild(defaultStyle);
+});
 
 function injectCSSRule(tag: string, selector: string, cssObject: _stringKeyObj) {
     if (selector === "") return;
