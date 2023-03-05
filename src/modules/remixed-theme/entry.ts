@@ -3,21 +3,20 @@
  * @WiresawBlade
 */
 
-import { defaultStyle, fadeInElems, fadeInLoad, injectCSSList } from "../lib/dom-control";
-import { remixedObservers } from "../lib/observers";
+import { defaultStyle, fadeInElems, fadeInLoad, injectCSSList } from "@/lib/dom-control";
+import { remixedObservers } from "@/lib/observers";
 
-import globalCSS from "../stylesheets/_global.css?inline";
-import mainCSS from "../stylesheets/_tieba-main.css?inline";
-import homeCSS from "../stylesheets/_tieba-home.css?inline";
-import postsCSS from "../stylesheets/_tieba-post.css?inline";
-import barCSS from "../stylesheets/_tieba-bar.css?inline";
-import errorCSS from "../stylesheets/_tieba-error.css?inline";
+import materialIcons from "./material-icons.css?inline";
+import globalCSS from "./_global.css?inline";
+import mainCSS from "./_tieba-main.css?inline";
+import homeCSS from "./_tieba-home.css?inline";
+import postsCSS from "./_tieba-post.css?inline";
+import barCSS from "./_tieba-bar.css?inline";
+import errorCSS from "./_tieba-error.css?inline";
 
-import boldFontCSS from "../stylesheets/bold-font.css?inline";
-import extremeCSS from "../stylesheets/extreme.css?inline";
-import unsetFontCSS from "../stylesheets/unset-font.css?inline";
-
-import { DEFAULT_FONT_TYPE, ENABLE_BOLD_FONT, EXTREME_PURIF } from "../greasy-init";
+import boldFontCSS from "./bold-font.css?inline";
+import extremeCSS from "./extreme.css?inline";
+import unsetFontCSS from "./unset-font.css?inline";
 
 "use strict";
 
@@ -34,6 +33,7 @@ export const Main: ModuleType = {
 
 function main(): void {
     // 全局加载
+    injectCSSList(materialIcons);
     injectCSSList(globalCSS);
     injectCSSList(mainCSS);
     injectCSSList(postsCSS);
@@ -41,9 +41,9 @@ function main(): void {
     injectCSSList(errorCSS);
 
     // 用户配置
-    if (ENABLE_BOLD_FONT) injectCSSList(boldFontCSS);
-    if (EXTREME_PURIF) injectCSSList(extremeCSS);
-    if (DEFAULT_FONT_TYPE) injectCSSList(unsetFontCSS);
+    injectCSSList(boldFontCSS);
+    injectCSSList(extremeCSS);
+    injectCSSList(unsetFontCSS);
 
     // 耗时加载元素
     fadeInElems.push(".tbui_aside_float_bar .svg-container");
@@ -113,12 +113,11 @@ function main(): void {
         });
     });
 
-    window.addEventListener("load", () => {
+    unsafeWindow.addEventListener("load", () => {
         // 为功能按钮注入 svg 容器
         $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
-            // @ts-ignore
             GM_addElement(elem, "div", {
-                class: "svg-container"
+                class: "material-icons svg-container"
             });
         });
 

@@ -4,9 +4,9 @@
  * @WiresawBlade
 */
 
-import { remixedObservers } from "../lib/observers";
-import { injectCSSList } from "../lib/dom-control";
-import tagCSS from "../stylesheets/tieba-tags.css?inline";
+import { remixedObservers } from "../../lib/observers";
+import { injectCSSList } from "../../lib/dom-control";
+import tagCSS from "./stylesheet.css?inline";
 
 "use strict";
 
@@ -37,7 +37,7 @@ function main(): void {
     // 判断当前是否在第一页
     if (location.search === null || location.search.indexOf("pn=") === -1) {
         // 当前在贴子第一页，直接读取当前页面
-        window.addEventListener("load", () => {
+        unsafeWindow.addEventListener("load", () => {
             // 等待网页加载完毕再抓数据
             tiebaTagsMain(document);
         });

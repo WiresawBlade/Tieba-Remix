@@ -138,15 +138,26 @@
 
 .search_internal_btn {
     /* 吧内搜索按钮 */
-    background-image: var(--svg-search) !important;
+    /* background-image: var(--svg-search) !important;
     background-size: 16px !important;
     background-repeat: no-repeat !important;
-    background-position: center !important;
+    background-position: center !important; */
+    background-image: none !important;
     background-color: var(--tieba-theme-color) !important;
 
     vertical-align: middle !important;
     border-radius: 0 8px 8px 0;
     height: 26px !important;
+}
+
+.search_internal_btn::after {
+    font-family: "Material Icons";
+    font-weight: bold;
+    content: "search";
+    color: var(--default-background);
+    font-size: 18px;
+    line-height: 26px;
+    text-align: center;
 }
 
 .aside_region {

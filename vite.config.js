@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import banner from "vite-plugin-banner";
 
@@ -6,17 +7,31 @@ import meta from "./meta.json";
 export default defineConfig({
     build: {
         lib: {
-            entry: "./src/index.ts",
+            entry: "./src/main.ts",
             name: "userscript",
             formats: ["iife"],
-            fileName: _format => `tieba-remix.user.js`
+            fileName: () => `tieba-remix.user.js`
         }
     },
     plugins: [
         banner(() => {
             return toMetaString(meta);
         })
-    ]
+    ],
+    resolve: {
+        alias: [
+            {
+                find: "@",
+                replacement: resolve("./src")
+            }
+        ]
+    },
+    server: {
+        hmr: {
+            protocol: "ws",
+            host: "localhost"
+        }
+    }
 });
 
 function toMetaString(obj) {

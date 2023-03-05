@@ -846,7 +846,7 @@ span.tP {
     background: none;
     border-color: var(--border-color);
     border-radius: 16px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .card_userinfo_wrap {
@@ -864,6 +864,7 @@ span.tP {
     border: 4px solid var(--border-color);
     width: 92px;
     height: 92px;
+    backdrop-filter: blur(24px);
 }
 
 .card_userinfo_middle .userinfo_sex {

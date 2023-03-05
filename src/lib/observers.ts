@@ -1,97 +1,41 @@
-export const remixedObservers: RemixedObservers =  {
-    postsObserver: {
-        events: [],
-        _observe: function () {
-            const eventFuncs = () => {
-                this.events.forEach(func => {
-                    func();
-                });
-            };
-
-            eventFuncs();
-
-            const observer = new MutationObserver(eventFuncs);
-            observer.observe($("#j_p_postlist").get(0)!, {
-                childList: true
-            });
-        },
-        addEvent: function (event: () => void) {
-            for (let i = 0; i < this.events.length; i++) {
-                const func = this.events[i];
-                if (event === func) return;
-            }
-
-            event();
-            this.events.push(event);
-        }
-    },
-
-    commentsObserver: {
-        events: [],
-        _observe: function () {
-            const eventFuncs = () => {
-                this.events.forEach(func => {
-                    func();
-                });
-            };
-
-            eventFuncs();
-
-            const observer = new MutationObserver(eventFuncs);
-            observer.observe($("#j_p_postlist").get(0)!, {
-                childList: true,
-                subtree: true
-            });
-        },
-        addEvent: function (event: () => void) {
-            event();
-            for (let i = 0; i < this.events.length; i++) {
-                const func = this.events[i];
-                if (event === func) return;
-            }
-            this.events.push(event);
-        }
-    },
-
-    newPostsObserver: {
-        events: [],
-        _observe: function () {
-            const eventFuncs = () => {
-                this.events.forEach(func => {
-                    func();
-                });
-            };
-
-            eventFuncs();
-
-            const observer = new MutationObserver(eventFuncs);
-            observer.observe($("#new_list").get(0)!, {
-                childList: true,
-                subtree: true
-            });
-        },
-        addEvent: function (event: () => void) {
-            event();
-            for (let i = 0; i < this.events.length; i++) {
-                const func = this.events[i];
-                if (event === func) return;
-            }
-            this.events.push(event);
-        }
+export class ObsType {
+    constructor(selector: string, options?: MutationObserverInit) {
+        this.selector = selector;
+        this.options = options;
     }
+
+    readonly selector: string;
+    readonly options: MutationObserverInit | undefined;
+
+    readonly events: (() => void)[] = [];
+
+    readonly _observe: () => void = () => {
+        const eventFuncs = () => {
+            this.events.forEach(func => {
+                func();
+            });
+        };
+
+        eventFuncs();
+
+        const observer = new MutationObserver(eventFuncs);
+        const obsElem = $(this.selector).get(0);
+        if (obsElem !== undefined) observer.observe(obsElem, this.options);
+    };
+
+    readonly addEvent: (event: () => void) => void = (event: () => void) => {
+        if (this.events.includes(event)) return;
+        event();
+        this.events.push(event);
+    };
+}
+
+/** 贴吧监控 */
+export const remixedObservers =  {
+    /** 楼层监控 */
+    postsObserver: new ObsType("#j_p_postlist", { childList: true }),
+    /** 楼中楼监控 */
+    commentsObserver: new ObsType("#j_p_postlist", { childList: true, subtree: true }),
+    /** 首页动态监控 */
+    newListObserver: new ObsType("#new_list", { childList: true })
 };
-
-interface RemixedObservers {
-    // 回帖监视器
-    postsObserver: ObsType,
-    // 评论监视器
-    commentsObserver: ObsType,
-    // 首页动态贴监视器
-    newPostsObserver: ObsType
-}
-
-interface ObsType {
-    events: (() => void)[],
-    _observe: () => void,
-    addEvent: (event: () => void) => void
-}

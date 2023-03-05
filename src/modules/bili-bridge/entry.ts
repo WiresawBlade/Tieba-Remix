@@ -4,7 +4,7 @@
  * @WiresawBlade
 */
 
-import { remixedObservers } from "../lib/observers";
+import { remixedObservers } from "@/lib/observers";
 
 "use strict";
 

@@ -17,7 +17,7 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": [2, 4],
+        "indent": [2, 4, { "SwitchCase": 1 }],
         "linebreak-style": [2, "windows"],
         "semi": [2, "always"],
         "@typescript-eslint/triple-slash-reference": 0,               /* ref */

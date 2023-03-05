@@ -1,5 +1,5 @@
-import { defaultStyle } from "../lib/dom-control";
-import { remixedObservers } from "../lib/observers";
+import { defaultStyle } from "@/lib/dom-control";
+import { remixedObservers } from "@/lib/observers";
 
 export const Main: ModuleType = {
     id: "notrans-emojis",
@@ -86,7 +86,7 @@ function main() {
     });
 
     // 首页
-    remixedObservers.newPostsObserver.addEvent(() => {
+    remixedObservers.newListObserver.addEvent(() => {
         $(`
             .new_list .post_author:has(.nicknameEmoji),
             .userinfo_username:has(.nicknameEmoji)

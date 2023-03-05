@@ -632,3 +632,8 @@ body {
 .left-cont-wraper .ufw-gap {
     display: none;
 }
+
+/* 底部加载 gif */
+#data_loading img {
+    display: none;
+}

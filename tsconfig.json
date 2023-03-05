@@ -16,6 +16,10 @@
         "types": [
             "jquery",
             "vite/client"
-        ]
+        ],
+        "baseUrl": "src",
+        "paths": {
+            "@/*": ["./*"]
+        }
     }
 }

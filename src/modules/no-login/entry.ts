@@ -10,5 +10,13 @@ export const Main: ModuleType = {
 };
 
 function main() {
+    if (PageData.user.is_login) return;
+
     PageData.user.is_login = 1;
+    const nameValue = document.createElement("div");
+    nameValue.id = "nameValue";
+    
+    $.ready.then(() => {
+        document.body.appendChild(nameValue);
+    });
 }
