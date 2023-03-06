@@ -70,6 +70,31 @@ function main(): void {
             elem.after("举报");
         });
 
+        // 远古用户没有等级则隐藏等级标签
+        remixedObservers.postsObserver.addEvent(() => {
+            $(".d_badge_lv").toArray().forEach(elem => {
+                if (elem.textContent === "") {
+                    let parent = elem;
+                    while (!parent.classList.contains("l_badge")) {
+                        parent = parent.parentElement!;
+                    }
+                    parent.style.display = "none";
+                }
+            });
+        });
+    });
+
+    unsafeWindow.addEventListener("load", () => {
+        // 为功能按钮注入 svg 容器
+        $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
+            GM_addElement(elem, "div", {
+                class: "material-icons svg-container"
+            });
+        });
+
+        // 功能按钮 svg 延迟
+        fadeInLoad(".tbui_aside_float_bar .svg-container");
+
         // 为吧务和自己的等级染色
         remixedObservers.postsObserver.addEvent(() => {
             const lvlClassHead = "tieba-lvl-";
@@ -98,30 +123,5 @@ function main(): void {
             // 等级图标延迟
             fadeInLoad(".d_badge_bright .d_badge_lv, .user_level .badge_index");
         });
-
-        // 远古用户没有等级则隐藏等级标签
-        remixedObservers.postsObserver.addEvent(() => {
-            $(".d_badge_lv").toArray().forEach(elem => {
-                if (elem.textContent === "") {
-                    let parent = elem;
-                    while (!parent.classList.contains("l_badge")) {
-                        parent = parent.parentElement!;
-                    }
-                    parent.style.display = "none";
-                }
-            });
-        });
-    });
-
-    unsafeWindow.addEventListener("load", () => {
-        // 为功能按钮注入 svg 容器
-        $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
-            GM_addElement(elem, "div", {
-                class: "material-icons svg-container"
-            });
-        });
-
-        // 功能按钮 svg 延迟
-        fadeInLoad(".tbui_aside_float_bar .svg-container");
     });
 }
