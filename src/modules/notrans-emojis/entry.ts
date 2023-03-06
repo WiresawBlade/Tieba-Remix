@@ -95,6 +95,12 @@ function main() {
         });
     });
 
+    remixedObservers.threadListObserver.addEvent(() => {
+        $(".threadlist_author a:has(.nicknameEmoji)").toArray().forEach(elem => {
+            updateEmojis(elem);
+        });
+    });
+
     function updateEmojis(elem: HTMLElement) {
         const arrIndex = elem.innerHTML.match(indexRegExp);
         arrIndex?.forEach(index => {
