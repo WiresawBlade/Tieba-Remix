@@ -1,11 +1,13 @@
 export class ObsType {
-    constructor(selector: string, options?: MutationObserverInit) {
+    constructor(selector: string, options?: MutationObserverInit, initEvent?: keyof WindowEventMap) {
         this.selector = selector;
         this.options = options;
+        this.initEvent = initEvent;
     }
 
     readonly selector: string;
     readonly options: MutationObserverInit | undefined;
+    readonly initEvent: keyof WindowEventMap | undefined;
 
     readonly events: (() => void)[] = [];
 
@@ -16,7 +18,11 @@ export class ObsType {
             });
         };
 
-        eventFuncs();
+        if (typeof this.initEvent === "undefined") {
+            eventFuncs();
+        } else {
+            window.addEventListener(this.initEvent, eventFuncs);
+        }
 
         const observer = new MutationObserver(eventFuncs);
         const obsElem = $(this.selector).get(0);
@@ -25,7 +31,11 @@ export class ObsType {
 
     readonly addEvent: (event: () => void) => void = (event: () => void) => {
         if (this.events.includes(event)) return;
-        event();
+        if (typeof this.initEvent === "undefined") {
+            event();
+        } else {
+            window.addEventListener(this.initEvent, event);
+        }
         this.events.push(event);
     };
 }
@@ -37,5 +47,7 @@ export const remixedObservers =  {
     /** 楼中楼监控 */
     commentsObserver: new ObsType("#j_p_postlist", { childList: true, subtree: true }),
     /** 首页动态监控 */
-    newListObserver: new ObsType("#new_list", { childList: true })
+    newListObserver: new ObsType("#new_list", { childList: true }),
+    /** 进吧页面贴子监控 */
+    threadListObserver: new ObsType("#pagelet_frs-list\\/pagelet\\/thread", { attributes: true }, "load")
 };

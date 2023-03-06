@@ -148,13 +148,17 @@ try {
         document.head.appendChild(secElem);
 
         // 开启监控
-        if (location.href.indexOf("tieba.baidu.com/p/") !== -1) {
+        if (location.href.indexOf("/p/") !== -1) {
             remixedObservers.postsObserver._observe();
             remixedObservers.commentsObserver._observe();
         }
 
         if (location.href === "https://tieba.baidu.com/") {
             remixedObservers.newListObserver._observe();
+        }
+
+        if (location.href.indexOf("/f?kw=") !== -1) {
+            remixedObservers.threadListObserver._observe();
         }
     });
 
