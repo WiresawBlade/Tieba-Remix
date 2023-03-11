@@ -128,3 +128,45 @@
 .tbui_aside_float_bar .tbui_fbar_refresh {
     display: none;
 }
+
+/* 图片缩放控件 */
+.p_tools a {
+    padding: 0 10px;
+    background: none;
+    vertical-align: bottom;
+}
+
+.p_tools span {
+    /* 分隔线 */
+    display: none;
+}
+
+.p_tools .p_putup::before,
+.p_tools .tb_icon_ypic::before,
+.p_tools .tb_icon_turnleft::before,
+.p_tools .tb_icon_turnright::before {
+    font-family: "Material Icons";
+    margin-right: 4px;
+    vertical-align: bottom;
+    font-size: 14px;
+}
+
+.p_tools .p_putup::before {
+    /* 收起 */
+    content: "zoom_out";
+}
+
+.p_tools .tb_icon_ypic::before {
+    /* 查看大图 */
+    content: "zoom_out_map";
+}
+
+.p_tools .tb_icon_turnleft::before {
+    /* 左转 */
+    content: "turn_left";
+}
+
+.p_tools .tb_icon_turnright::before {
+    /* 右转 */
+    content: "turn_right";
+}
