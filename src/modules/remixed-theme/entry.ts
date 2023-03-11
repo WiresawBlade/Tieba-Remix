@@ -3,8 +3,8 @@
  * @WiresawBlade
 */
 
-import { defaultStyle, fadeInElems, fadeInLoad, injectCSSList } from "@/lib/dom-control";
-import { remixedObservers } from "@/lib/observers";
+import { defaultStyle, fadeInElems, fadeInLoad, injectCSSList } from "@lib/dom-control";
+import { remixedObservers } from "@lib/observers";
 
 import materialIcons from "./material-icons.css?inline";
 import globalCSS from "./_global.css?inline";
@@ -20,7 +20,7 @@ import unsetFontCSS from "./unset-font.css?inline";
 
 "use strict";
 
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "remixed-theme",
     name: "Tieba Remix 主题",
     author: "锯刃Blade",
@@ -31,19 +31,21 @@ export const Main: ModuleType = {
     entry: main
 };
 
+const themeSheets: HTMLStyleElement[] = [];
+
 function main(): void {
     // 全局加载
-    injectCSSList(materialIcons);
-    injectCSSList(globalCSS);
-    injectCSSList(mainCSS);
-    injectCSSList(postsCSS);
-    injectCSSList(homeCSS);
-    injectCSSList(errorCSS);
+    themeSheets.push(injectCSSList(materialIcons));
+    themeSheets.push(injectCSSList(globalCSS));
+    themeSheets.push(injectCSSList(mainCSS));
+    themeSheets.push(injectCSSList(postsCSS));
+    themeSheets.push(injectCSSList(homeCSS));
+    themeSheets.push(injectCSSList(errorCSS));
 
     // 用户配置
-    injectCSSList(boldFontCSS);
-    injectCSSList(extremeCSS);
-    injectCSSList(unsetFontCSS);
+    themeSheets.push(injectCSSList(boldFontCSS));
+    themeSheets.push(injectCSSList(extremeCSS));
+    themeSheets.push(injectCSSList(unsetFontCSS));
 
     // 耗时加载元素
     fadeInElems.push(".tbui_aside_float_bar .svg-container");
@@ -60,7 +62,7 @@ function main(): void {
 
     // 进吧页面
     if (location.href.indexOf("kw=") !== -1) {
-        injectCSSList(barCSS);
+        themeSheets.push(injectCSSList(barCSS));
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -122,6 +124,11 @@ function main(): void {
 
             // 等级图标延迟
             fadeInLoad(".d_badge_bright .d_badge_lv, .user_level .badge_index");
+        });
+
+        // 移动所有样式表到head底部，防止自定义样式表提前被加载导致冲突
+        themeSheets.forEach(sheet => {
+            document.head.appendChild(sheet);
         });
     });
 }
