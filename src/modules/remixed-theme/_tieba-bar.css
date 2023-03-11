@@ -332,3 +332,25 @@
 .footer {
     display: none !important;
 }
+
+.icon_author {
+    /* 用户图标 */
+    background-image: none !important;
+}
+
+.icon_author::after {
+    content: "person";
+    font-family: "Material Icons";
+    font-style: normal;
+}
+
+.icon_replyer {
+    /* 回贴图标 */
+    background-image: none !important;
+}
+
+.icon_replyer::after {
+    content: "comment";
+    font-family: "Material Icons";
+    font-style: normal;
+}
