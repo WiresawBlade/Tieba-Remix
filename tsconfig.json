@@ -17,9 +17,12 @@
             "jquery",
             "vite/client"
         ],
+        "isolatedModules": true,
         "baseUrl": "src",
         "paths": {
-            "@/*": ["./*"]
+            "@/*": ["./*"],
+            "@lib/*": ["./lib/*"],
+            "@modules/*": ["./modules/*"]
         }
     }
 }

@@ -16,6 +16,22 @@
                 "reveal": "always",
                 "showReuseMessage": false
             }
+        },
+        {
+            "label": "vite: development",
+            "type": "shell",
+            "command": "pnpm dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": false
+            }
         }
     ]
 }
