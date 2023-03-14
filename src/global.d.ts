@@ -2,8 +2,9 @@ declare module "*.css";
 declare module "*.css?inline";
 declare module "*.svg";
 declare module "*.ico";
+declare module "*.html";
 
-interface ModuleType {
+interface UserModule {
     [prop: string]: unknown;
 
     id: string;
@@ -16,8 +17,29 @@ interface ModuleType {
     switch?: boolean;
     scope: true | string | string[];
     runAt: "immediately" | "afterHead" | "DOMLoaded" | "loaded";
-    entry: () => void;
+    entry: (() => void);
 }
+
+class UserWidget {
+    constructor(parameters);
+    id: string;
+    name: string;
+    author: string;
+    version: string;
+
+    init: (() => void);
+}
+
+// interface UserWidget {
+//     [prop: string]: unknown;
+
+//     id: string;
+//     name: string;
+//     author: string;
+//     version: string;
+
+//     init: (() => void);
+// }
 
 /**
  * 屏蔽规则对象

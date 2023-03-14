@@ -4,11 +4,11 @@
  * @WiresawBlade
 */
 
-import { remixedObservers } from "@/lib/observers";
+import { remixedObservers } from "@lib/observers";
 
 "use strict";
 
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "bili-bridge",
     name: "Bili 番号跳转",
     author: "锯刃Blade",

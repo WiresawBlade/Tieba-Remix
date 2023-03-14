@@ -17,7 +17,7 @@ const REMIXED =
     "██║  ██║███████╗██║ ╚═╝ ██║██║██╔╝ ██╗███████╗██████╔╝\n" +
     "╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ \n";
 
-const MainModules: ModuleType[] = [];
+const MainModules: UserModule[] = [];
 let moduleLoadedFlag = false;
 const beforeModulesLoadedFns: (() => void)[] = [];
 
@@ -42,7 +42,7 @@ try {
         for (const key in remixedModules) {
             remixedModules[key]().then(
                 (value: any) => {
-                    const module = <ModuleType>value.Main;
+                    const module = <UserModule>value.Main;
                     // 先判断模块是否开启
                     const runnable = (() => {
                         if (module.switch === true || module.switch === undefined) {

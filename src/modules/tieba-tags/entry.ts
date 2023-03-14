@@ -10,7 +10,7 @@ import tagCSS from "./stylesheet.css?inline";
 
 "use strict";
 
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "tieba-tags",
     name: "楼中楼用户标签",
     author: "锯刃Blade",

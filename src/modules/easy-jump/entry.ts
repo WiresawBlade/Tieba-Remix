@@ -4,11 +4,11 @@
  * @WiresawBlade
 */
 
-import { defaultStyle } from "@/lib/dom-control";
+import { defaultStyle } from "@lib/dom-control";
 
 "use strict";
 
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "easy-jump",
     name: "直链跳转",
     author: "锯刃Blade",

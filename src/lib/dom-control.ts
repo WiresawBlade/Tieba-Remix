@@ -1,6 +1,7 @@
 export {
     afterHead, fadeInLoad,
     injectCSSRule, injectCSSList, injectCSSFile,
+    injectWidget,
     defaultStyle, fadeInElems
 };
 
@@ -14,10 +15,27 @@ class _stringKeyObj {
     [prop: string]: unknown;
 }
 
-// 插入默认样式
+// 插入默认元素
 afterHead(() => {
     document.head.appendChild(defaultStyle);
 });
+
+/**
+ * 让函数等待 `head` 标签可操作后执行。若当前已可操作 `head` 则会立即执行
+ * @param callbackfn 回调函数
+ */
+function afterHead(callbackfn: () => void) {
+    new Promise<void>((_resolve, reject) => {
+        try {
+            const head = document.getElementsByTagName("head");
+            if (head && head.length) {
+                callbackfn();
+            }
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
 
 function injectCSSRule(tag: string, selector: string, cssObject: _stringKeyObj) {
     if (selector === "") return;
@@ -44,23 +62,6 @@ function injectCSSRule(tag: string, selector: string, cssObject: _stringKeyObj) 
     }
 
     document.styleSheets[0].insertRule(styleString);
-}
-
-/**
- * 让函数等待 `head` 标签可操作后执行。若当前已可操作 `head` 则会立即执行
- * @param callbackfn 回调函数
- */
-function afterHead(callbackfn: () => void) {
-    new Promise<void>((_resolve, reject) => {
-        try {
-            const head = document.getElementsByTagName("head");
-            if (head && head.length) {
-                callbackfn();
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
 }
 
 /**
@@ -104,4 +105,14 @@ function fadeInLoad(selector: string) {
             elem.classList.remove(fadeInClass);
         });
     });
+}
+
+function injectWidget(html: string) {
+    const widget = document.createElement("div");
+    widget.classList.add("user-widget");
+    widget.innerHTML = html;
+    document.addEventListener("DOMContentLoaded", () => {
+        document.body.insertBefore(widget, document.body.firstChild);
+    });
+    return widget;
 }

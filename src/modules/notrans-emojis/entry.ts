@@ -1,7 +1,7 @@
-import { defaultStyle } from "@/lib/dom-control";
-import { remixedObservers } from "@/lib/observers";
+import { defaultStyle } from "@lib/dom-control";
+import { remixedObservers } from "@lib/observers";
 
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "notrans-emojis",
     name: "别动我的 Emoji😠",
     author: "锯刃Blade",

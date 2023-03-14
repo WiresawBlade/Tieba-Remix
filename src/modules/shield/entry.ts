@@ -1,7 +1,7 @@
 import { greasyMenu } from "@/greasy-init";
-import { ObsType, remixedObservers } from "@/lib/observers";
+import { ObsType, remixedObservers } from "@lib/observers";
 
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "shield",
     name: "贴吧屏蔽",
     author: "锯刃Blade",

@@ -18,6 +18,15 @@ import boldFontCSS from "./bold-font.css?inline";
 import extremeCSS from "./extreme.css?inline";
 import unsetFontCSS from "./unset-font.css?inline";
 
+// import accessSVG from "/images/svgs/accessibility.svg?raw";
+// import checkmarkSVG from "/images/svgs/checkmark.svg?raw";
+// import arrowUpSVG from "/images/svgs/arrow-up-sharp.svg?raw";
+// import arrowDnCircleSVG from "/images/svgs/arrow-down-circle.svg?raw";
+// import messageSVG from "/images/svgs/chatbox-ellipses.svg?raw";
+// import infoCircleSVG from "/images/svgs/information-circle.svg?raw";
+// import infoLineSVG from "/images/svgs/information-sharp.svg?raw";
+// import searchSVG from "/images/svgs/search.svg?raw";
+
 "use strict";
 
 export const Main: UserModule = {

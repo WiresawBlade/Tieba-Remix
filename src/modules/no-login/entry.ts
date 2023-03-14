@@ -1,4 +1,4 @@
-export const Main: ModuleType = {
+export const Main: UserModule = {
     id: "nologin-tieba",
     name: "免登录浏览",
     author: "锯刃Blade",

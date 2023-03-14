@@ -34,14 +34,14 @@ export class ObsType {
         if (typeof this.initEvent === "undefined") {
             event();
         } else {
-            window.addEventListener(this.initEvent, event);
+            unsafeWindow.addEventListener(this.initEvent, event);
         }
         this.events.push(event);
     };
 }
 
 /** 贴吧监控 */
-export const remixedObservers =  {
+export const remixedObservers = {
     /** 楼层监控 */
     postsObserver: new ObsType("#j_p_postlist", { childList: true }),
     /** 楼中楼监控 */
@@ -51,3 +51,5 @@ export const remixedObservers =  {
     /** 进吧页面贴子监控 */
     threadListObserver: new ObsType("#pagelet_frs-list\\/pagelet\\/thread", { attributes: true }, "load")
 };
+
+Object.freeze(remixedObservers);
