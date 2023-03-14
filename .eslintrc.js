@@ -33,6 +33,7 @@ module.exports = {
         "comma-dangle": [2, "never"],                                 /* 最后一个逗号 */
         "@typescript-eslint/no-unused-vars": 0,                       /* 从未使用过的变量，不交给 ESLint 处理 */
         "eqeqeq": 2,
-        "@typescript-eslint/no-var-requires": 0
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/no-explicit-any": 0
     }
 };
