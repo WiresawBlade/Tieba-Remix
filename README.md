@@ -60,6 +60,7 @@
 
 ## ⚠ 需要留意
 
+- 脚本优先适配 Edge + Tampermonkey
 - 脚本的部分功能可能会对性能有较大影响，可自行开关，介意者勿用
 - 现阶段，本脚本需要配合 [AdBlock](https://getadblock.com/) 等广告屏蔽插件使用，后续版本会逐渐完善广告屏蔽功能，逐渐脱离对其他插件的依赖
 - 脚本包含内置资源，会造成额外流量消耗。由于大多数国内用户访问 github 存在困难，脚本的部分信息默认指向 gitee，两个平台的源代码会同步更新。[点击访问 gitee 仓库](https://gitee.com/WiresawBlade/Tieba-Remix)
