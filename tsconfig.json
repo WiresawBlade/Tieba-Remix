@@ -6,6 +6,7 @@
         "target": "ES2016",
         "module": "ESNext",
         "esModuleInterop": true,
+        "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitAny": true,
@@ -20,9 +21,7 @@
         "isolatedModules": true,
         "baseUrl": "src",
         "paths": {
-            "@/*": ["./*"],
-            "@lib/*": ["./lib/*"],
-            "@modules/*": ["./modules/*"]
+            "@/*": ["./*"]
         }
     }
 }

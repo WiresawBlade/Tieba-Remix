@@ -63,14 +63,6 @@ const commonConfig =  defineConfig({
             {
                 find: "@",
                 replacement: resolve(__dirname, "./src")
-            },
-            {
-                find: "@lib",
-                replacement: resolve(__dirname, "./src/lib")
-            },
-            {
-                find: "@modules",
-                replacement: resolve(__dirname, "./src/modules")
             }
         ]
     },
@@ -85,10 +77,7 @@ const commonConfig =  defineConfig({
 
 const devConfig = defineConfig({
     build: {
-        minify: "terser",
-        terserOptions: {
-            sourceMap: true
-        }
+        minify: false
     }
 });
 
@@ -108,10 +97,10 @@ const prodConfig = defineConfig({
 });
 
 const viteConfig = {
-    "serve": () => { return deepmerge(commonConfig, devConfig); },
-    "build": () => { return deepmerge(commonConfig, prodConfig); }
+    "dev": () => { return deepmerge(commonConfig, devConfig); },
+    "prod": () => { return deepmerge(commonConfig, prodConfig); }
 };
 
-export default defineConfig(({ command }) => {
-    return viteConfig[command]();
+export default defineConfig(({ mode }) => {
+    return viteConfig[mode]();
 });
