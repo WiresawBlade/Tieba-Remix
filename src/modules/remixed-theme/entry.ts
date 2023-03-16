@@ -3,8 +3,9 @@
  * @WiresawBlade
 */
 
-import { defaultStyle, fadeInElems, fadeInLoad, injectCSSList } from "@lib/dom-control";
-import { remixedObservers } from "@lib/observers";
+import { DOMSelector, fadeInElems, fadeInLoad, injectCSSList, injectCSSRule } from "@/lib/dom-control";
+import { remixedObservers } from "@/lib/observers";
+import { forEach } from "lodash-es";
 
 import materialIcons from "./material-icons.css?inline";
 import globalCSS from "./_global.css?inline";
@@ -62,11 +63,9 @@ function main(): void {
 
     // 让耗时加载元素默认不透明度为0
     fadeInElems.forEach(selector => {
-        defaultStyle.sheet?.insertRule(`
-            ${selector} {
-                opacity: 0;
-            }
-        `);
+        injectCSSRule(selector, {
+            opacity: "0"
+        });
     });
 
     // 进吧页面
@@ -76,14 +75,14 @@ function main(): void {
 
     document.addEventListener("DOMContentLoaded", () => {
         // 修改元素
-        $(".post-tail-wrap .icon-jubao").toArray().forEach(elem => {
+        DOMSelector(".post-tail-wrap .icon-jubao").forEach(elem => {
             elem.removeAttribute("src");
             elem.after("举报");
         });
 
         // 远古用户没有等级则隐藏等级标签
         remixedObservers.postsObserver.addEvent(() => {
-            $(".d_badge_lv").toArray().forEach(elem => {
+            DOMSelector(".d_badge_lv").forEach(elem => {
                 if (elem.textContent === "") {
                     let parent = elem;
                     while (!parent.classList.contains("l_badge")) {
@@ -93,11 +92,21 @@ function main(): void {
                 }
             });
         });
+
+        // 去除楼中楼用户发言的冒号
+        remixedObservers.commentsObserver.addEvent(() => {
+            forEach(DOMSelector(".lzl_cnt"), elem => {
+                if (elem.childNodes.length < 4) return;
+
+                const colon = elem.childNodes[1];
+                if (colon.nodeName === "#text") colon.remove();
+            });
+        });
     });
 
     unsafeWindow.addEventListener("load", () => {
         // 为功能按钮注入 svg 容器
-        $(".tbui_aside_float_bar li a").toArray().forEach(elem => {
+        DOMSelector(".tbui_aside_float_bar li a").forEach(elem => {
             GM_addElement(elem, "div", {
                 class: "material-icons svg-container"
             });
@@ -114,9 +123,9 @@ function main(): void {
             const lvlYellow = lvlClassHead + "yellow";
             const lvlOrange = lvlClassHead + "orange";
 
-            $(
+            DOMSelector(
                 ".d_badge_bawu1 .d_badge_lv, .d_badge_bawu2 .d_badge_lv, .badge_index"
-            ).toArray().forEach(elem => {
+            ).forEach(elem => {
                 if (elem.className.indexOf(lvlClassHead) !== -1) return;
 
                 const lvl = parseInt(elem.textContent!);

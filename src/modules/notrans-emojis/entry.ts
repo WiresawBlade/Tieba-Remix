@@ -1,5 +1,5 @@
-import { defaultStyle } from "@lib/dom-control";
-import { remixedObservers } from "@lib/observers";
+import { DOMSelector, injectCSSRule } from "@/lib/dom-control";
+import { remixedObservers } from "@/lib/observers";
 
 export const Main: UserModule = {
     id: "notrans-emojis",
@@ -14,11 +14,9 @@ export const Main: UserModule = {
 
 function main() {
     // 隐藏旧的 emoji
-    // defaultStyle.sheet?.insertRule(`
-    //     .nicknameEmoji {
-    //         display: none;
-    //     }
-    // `);
+    injectCSSRule(".nicknameEmoji", {
+        display: "none"
+    });
 
     // 从 a标签提取emoji index
     const indexRegExp = /(?<=nickemoji\/).*?(?=.png)/gi;
@@ -76,27 +74,27 @@ function main() {
 
     // 看贴页面
     remixedObservers.commentsObserver.addEvent(() => {
-        $(`
+        DOMSelector(`
             .p_author_name:has(.nicknameEmoji),
             .at:has(.nicknameEmoji),
             .lzl_content_main:has(.nicknameEmoji)
-        `).toArray().forEach(elem => {
+        `).forEach(elem => {
             updateEmojis(elem);
         });
     });
 
     // 首页
     remixedObservers.newListObserver.addEvent(() => {
-        $(`
+        DOMSelector(`
             .new_list .post_author:has(.nicknameEmoji),
             .userinfo_username:has(.nicknameEmoji)
-        `).toArray().forEach(elem => {
+        `).forEach(elem => {
             updateEmojis(elem);
         });
     });
 
     remixedObservers.threadListObserver.addEvent(() => {
-        $(".threadlist_author a:has(.nicknameEmoji)").toArray().forEach(elem => {
+        DOMSelector(".threadlist_author a:has(.nicknameEmoji)").forEach(elem => {
             updateEmojis(elem);
         });
     });

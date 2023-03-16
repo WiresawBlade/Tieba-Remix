@@ -1,5 +1,7 @@
 import { greasyMenu } from "@/greasy-init";
-import { ObsType, remixedObservers } from "@lib/observers";
+import { DOMSelector } from "@/lib/dom-control";
+
+import { ObsType, remixedObservers } from "@/lib/observers";
 
 export const Main: UserModule = {
     id: "shield",
@@ -64,7 +66,7 @@ function matchShield(obj: ShieldObject, str: string): boolean {
  */
 function shieldElementsBySelector(observer: ObsType, parentSelector: string, subSelector: string) {
     observer.addEvent(() => {
-        $(parentSelector).toArray().forEach(elem => {
+        DOMSelector(parentSelector).forEach(elem => {
             let isMatch = false;
             const content = elem.querySelector(subSelector)?.textContent;
             if (content === null || content === undefined) return;

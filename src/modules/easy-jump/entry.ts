@@ -4,7 +4,7 @@
  * @WiresawBlade
 */
 
-import { defaultStyle } from "@lib/dom-control";
+import { DOMSelector, injectCSSRule } from "@/lib/dom-control";
 
 "use strict";
 
@@ -20,14 +20,12 @@ export const Main: UserModule = {
 };
 
 function main(): void {
-    defaultStyle.sheet?.insertRule(`
-        .warning_wrap {
-            display: none;
-        }
-    `);
+    injectCSSRule(".warning_wrap", {
+        display: "none"
+    });
 
-    unsafeWindow.addEventListener("load", () => {
-        const realUrl = $(".link").get(0)?.textContent;
+    document.addEventListener("DOMContentLoaded", () => {
+        const realUrl = DOMSelector(".btn-next", "a")[0].href;
         if (realUrl) location.href = realUrl;
     });
 }

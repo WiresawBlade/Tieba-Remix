@@ -4,8 +4,8 @@
  * @WiresawBlade
 */
 
-import { remixedObservers } from "../../lib/observers";
-import { injectCSSList } from "../../lib/dom-control";
+import { remixedObservers } from "@/lib/observers";
+import { injectCSSList } from "@/lib/dom-control";
 import tagCSS from "./stylesheet.css?inline";
 
 "use strict";

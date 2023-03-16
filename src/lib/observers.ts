@@ -1,3 +1,5 @@
+import { DOMSelector } from "./dom-control";
+
 export class ObsType {
     constructor(selector: string, options?: MutationObserverInit, initEvent?: keyof WindowEventMap) {
         this.selector = selector;
@@ -25,7 +27,7 @@ export class ObsType {
         }
 
         const observer = new MutationObserver(eventFuncs);
-        const obsElem = $(this.selector).get(0);
+        const obsElem = DOMSelector(this.selector)[0];
         if (obsElem !== undefined) observer.observe(obsElem, this.options);
     };
 
