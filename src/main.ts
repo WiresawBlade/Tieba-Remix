@@ -1,6 +1,6 @@
 import "./modules/remixed-theme/entry";
 import { remixedObservers } from "./lib/observers";
-import favicon from "../images/main/favicon32.ico";
+import favicon from "/images/main/favicon32.ico";
 import { afterHead } from "./lib/dom-control";
 import { greasyInit, userSwitches } from "./greasy-init";
 
