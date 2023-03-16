@@ -693,6 +693,20 @@ span.tP {
     content: "举报";
 }
 
+.lzl_cnt .lzl_content_main {
+    display: block;
+}
+
+.core_reply .hideLzl {
+    opacity: 0;
+    height: 0;
+}
+
+.core_reply div:not(.hideLzl) {
+    opacity: 1;
+    height: unset;
+}
+
 /* 贴子内容超链接 */
 .d_post_content a,
 .lzl_cnt .lzl_content_main a:not(.at) {
