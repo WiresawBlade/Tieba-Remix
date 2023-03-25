@@ -3,12 +3,12 @@
  * @WiresawBlade
 */
 
-import { DOMSelector, fadeInElems, fadeInLoad, injectCSSList, injectCSSRule } from "@/lib/dom-control";
+import { DOMS, fadeInElems, fadeInLoad, injectCSSList, injectCSSRule } from "@/lib/domlib";
 import { remixedObservers } from "@/lib/observers";
 import { forEach } from "lodash-es";
 
+import globalCSS from "@/stylesheets/main/_palette.scss?inline";
 import materialIcons from "./material-icons.css?inline";
-import globalCSS from "./_global.css?inline";
 import mainCSS from "./_tieba-main.css?inline";
 import homeCSS from "./_tieba-home.css?inline";
 import postsCSS from "./_tieba-post.css?inline";
@@ -75,14 +75,14 @@ function main(): void {
 
     document.addEventListener("DOMContentLoaded", () => {
         // 修改元素
-        DOMSelector(".post-tail-wrap .icon-jubao").forEach(elem => {
+        DOMS(".post-tail-wrap .icon-jubao").forEach(elem => {
             elem.removeAttribute("src");
             elem.after("举报");
         });
 
         // 远古用户没有等级则隐藏等级标签
         remixedObservers.postsObserver.addEvent(() => {
-            DOMSelector(".d_badge_lv").forEach(elem => {
+            DOMS(".d_badge_lv").forEach(elem => {
                 if (elem.textContent === "") {
                     let parent = elem;
                     while (!parent.classList.contains("l_badge")) {
@@ -95,7 +95,7 @@ function main(): void {
 
         // 去除楼中楼用户发言的冒号
         remixedObservers.commentsObserver.addEvent(() => {
-            forEach(DOMSelector(".lzl_cnt"), elem => {
+            forEach(DOMS(".lzl_cnt"), elem => {
                 if (elem.childNodes.length < 4) return;
 
                 const colon = elem.childNodes[1];
@@ -106,7 +106,7 @@ function main(): void {
 
     unsafeWindow.addEventListener("load", () => {
         // 为功能按钮注入 svg 容器
-        DOMSelector(".tbui_aside_float_bar li a").forEach(elem => {
+        DOMS(".tbui_aside_float_bar li a").forEach(elem => {
             GM_addElement(elem, "div", {
                 class: "material-icons svg-container"
             });
@@ -123,7 +123,7 @@ function main(): void {
             const lvlYellow = lvlClassHead + "yellow";
             const lvlOrange = lvlClassHead + "orange";
 
-            DOMSelector(
+            DOMS(
                 ".d_badge_bawu1 .d_badge_lv, .d_badge_bawu2 .d_badge_lv, .badge_index"
             ).forEach(elem => {
                 if (elem.className.indexOf(lvlClassHead) !== -1) return;

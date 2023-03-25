@@ -1,4 +1,4 @@
-import { DOMSelector } from "./dom-control";
+import { DOMS } from "./domlib";
 
 export class ObsType {
     constructor(selector: string, options?: MutationObserverInit, initEvent?: keyof WindowEventMap) {
@@ -7,9 +7,9 @@ export class ObsType {
         this.initEvent = initEvent;
     }
 
-    readonly selector: string;
-    readonly options: MutationObserverInit | undefined;
-    readonly initEvent: keyof WindowEventMap | undefined;
+    private readonly selector: string;
+    private readonly options: MutationObserverInit | undefined;
+    private readonly initEvent: keyof WindowEventMap | undefined;
 
     readonly events: (() => void)[] = [];
 
@@ -27,7 +27,7 @@ export class ObsType {
         }
 
         const observer = new MutationObserver(eventFuncs);
-        const obsElem = DOMSelector(this.selector)[0];
+        const obsElem = DOMS(this.selector)[0];
         if (obsElem !== undefined) observer.observe(obsElem, this.options);
     };
 

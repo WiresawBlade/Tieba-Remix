@@ -1,4 +1,4 @@
-import { DOMSelector, injectCSSRule } from "@/lib/dom-control";
+import { DOMS } from "@/lib/domlib";
 import { remixedObservers } from "@/lib/observers";
 
 export const Main: UserModule = {
@@ -14,9 +14,9 @@ export const Main: UserModule = {
 
 function main() {
     // 隐藏旧的 emoji
-    injectCSSRule(".nicknameEmoji", {
-        display: "none"
-    });
+    // injectCSSRule(".nicknameEmoji", {
+    //     display: "none"
+    // });
 
     // 从 a标签提取emoji index
     const indexRegExp = /(?<=nickemoji\/).*?(?=.png)/gi;
@@ -74,7 +74,7 @@ function main() {
 
     // 看贴页面
     remixedObservers.commentsObserver.addEvent(() => {
-        DOMSelector(`
+        DOMS(`
             .p_author_name:has(.nicknameEmoji),
             .at:has(.nicknameEmoji),
             .lzl_content_main:has(.nicknameEmoji)
@@ -85,7 +85,7 @@ function main() {
 
     // 首页
     remixedObservers.newListObserver.addEvent(() => {
-        DOMSelector(`
+        DOMS(`
             .new_list .post_author:has(.nicknameEmoji),
             .userinfo_username:has(.nicknameEmoji)
         `).forEach(elem => {
@@ -94,7 +94,7 @@ function main() {
     });
 
     remixedObservers.threadListObserver.addEvent(() => {
-        DOMSelector(".threadlist_author a:has(.nicknameEmoji)").forEach(elem => {
+        DOMS(".threadlist_author a:has(.nicknameEmoji)").forEach(elem => {
             updateEmojis(elem);
         });
     });

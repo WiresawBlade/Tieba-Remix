@@ -4,7 +4,7 @@
  * @WiresawBlade
 */
 
-import { DOMSelector, injectCSSRule } from "@/lib/dom-control";
+import { DOMS, injectCSSRule } from "@/lib/domlib";
 
 "use strict";
 
@@ -25,7 +25,7 @@ function main(): void {
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-        const realUrl = DOMSelector(".btn-next", "a")[0].href;
+        const realUrl = DOMS(".btn-next", "a")[0].href;
         if (realUrl) location.href = realUrl;
     });
 }

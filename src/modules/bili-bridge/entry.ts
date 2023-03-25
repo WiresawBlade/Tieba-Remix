@@ -4,7 +4,7 @@
  * @WiresawBlade
 */
 
-import { DOMSelector } from "@/lib/dom-control";
+import { DOMS } from "@/lib/domlib";
 import { remixedObservers } from "@/lib/observers";
 
 "use strict";
@@ -35,7 +35,7 @@ function main(): void {
         addBiliLinks(".lzl_cnt .lzl_content_main");
 
         function addBiliLinks(selector: string): void {
-            DOMSelector(selector).forEach(elem => {
+            DOMS(selector).forEach(elem => {
                 if (elem.classList.contains(LINKED_CLASS)) return;
                 elem.classList.add(LINKED_CLASS);
 

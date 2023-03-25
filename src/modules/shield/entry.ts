@@ -1,5 +1,5 @@
 import { greasyMenu } from "@/greasy-init";
-import { DOMSelector } from "@/lib/dom-control";
+import { DOMS } from "@/lib/domlib";
 
 import { ObsType, remixedObservers } from "@/lib/observers";
 
@@ -66,7 +66,7 @@ function matchShield(obj: ShieldObject, str: string): boolean {
  */
 function shieldElementsBySelector(observer: ObsType, parentSelector: string, subSelector: string) {
     observer.addEvent(() => {
-        DOMSelector(parentSelector).forEach(elem => {
+        DOMS(parentSelector).forEach(elem => {
             let isMatch = false;
             const content = elem.querySelector(subSelector)?.textContent;
             if (content === null || content === undefined) return;

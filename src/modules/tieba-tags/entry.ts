@@ -5,7 +5,7 @@
 */
 
 import { remixedObservers } from "@/lib/observers";
-import { injectCSSList } from "@/lib/dom-control";
+import { DOMS, injectCSSList } from "@/lib/domlib";
 import tagCSS from "./stylesheet.css?inline";
 
 "use strict";
@@ -31,8 +31,13 @@ function main(): void {
     const CZ_TAG = "tieba-tags-cz";
 
     let myUserName: string;
-    let louzhuCard: any;
-    let louzhuObj: any;
+    let louzhuCard: HTMLElement;
+    let louzhuObj: { [prop:string]: any };
+
+    // 注入相关 CSS
+    document.addEventListener("DOMContentLoaded", () => {
+        injectCSSList(tagCSS);
+    });
 
     // 判断当前是否在第一页
     if (location.search === null || location.search.indexOf("pn=") === -1) {
@@ -75,7 +80,7 @@ function main(): void {
             if (myUserName !== undefined) return;
 
             myUserName = docElem.getElementById("nameValue")?.textContent!;
-            louzhuCard = docElem.querySelector(".d_name .p_author_name");
+            louzhuCard = DOMS(".d_name .p_author_name")[0];
             louzhuObj = JSON.parse(
                 louzhuCard?.getAttribute("data-field")?.split("'").join("\"")!
             );
@@ -92,10 +97,7 @@ function main(): void {
         remixedObservers.commentsObserver.addEvent(addTiebaTags);
 
         function addTiebaTags(): void {
-            // 注入相关 CSS
-            injectCSSList(tagCSS);
-
-            $(".lzl_cnt .at").toArray().forEach(elem => {
+            DOMS(".lzl_cnt .at").forEach(elem => {
                 if (elem.classList.contains(TAGGED)) return;
                 elem.classList.add(TAGGED);
 
@@ -123,7 +125,7 @@ function main(): void {
                     const floorElem = findParent(elem, "l_post_bright");
                     const cengzhuCard = floorElem?.querySelector(".d_name .p_author_name");
                     const cengzhuObj = JSON.parse(cengzhuCard
-                        ?.getAttribute("data-field")?.split("'").join("\"")!);
+                        ?.getAttribute("data-field")?.split("'").join('"')!);
                     if (elem.textContent === cengzhuCard?.textContent ||
                         elem.getAttribute("username") !== "" &&
                         elem.getAttribute("username") === decodeURIComponent(cengzhuObj.un) ||

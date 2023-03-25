@@ -1,9 +1,8 @@
-declare module "*.css";
-declare module "*.css?inline";
-declare module "*.svg";
-declare module "*.ico";
-declare module "*.html";
+interface LiteralObject {
+    [prop: string]: any;
+}
 
+/** 用户模块 */
 interface UserModule {
     [prop: string]: unknown;
 
@@ -20,6 +19,19 @@ interface UserModule {
     entry: (() => void);
 }
 
+/** 用户模块其他信息 */
+interface userModulesInfo {
+    /** 本次被解析的模块数 */
+    length: number;
+    /** 当前被解析的模块信息 */
+    current: {
+        /** 模块是否被允许运行 */
+        runnable: boolean;
+        /** 模块所在位置 */
+        url: string;
+    }
+}
+
 class UserWidget {
     constructor(parameters);
     id: string;
@@ -29,17 +41,6 @@ class UserWidget {
 
     init: (() => void);
 }
-
-// interface UserWidget {
-//     [prop: string]: unknown;
-
-//     id: string;
-//     name: string;
-//     author: string;
-//     version: string;
-
-//     init: (() => void);
-// }
 
 /**
  * 屏蔽规则对象
