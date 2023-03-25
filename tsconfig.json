@@ -3,7 +3,7 @@
         "./src"
     ],
     "compilerOptions": {
-        "target": "ES2016",
+        "target": "ESNext",
         "module": "ESNext",
         "esModuleInterop": true,
         "moduleResolution": "node",

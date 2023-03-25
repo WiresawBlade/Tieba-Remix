@@ -1,8 +1,10 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
-import banner from "vite-plugin-banner";
-import postcssPresetEnv from "postcss-preset-env";
 import deepmerge from "deepmerge";
+import postcssPresetEnv from "postcss-preset-env";
+
+import vue from "@vitejs/plugin-vue";
+import banner from "vite-plugin-banner";
 
 import meta from "./meta.json";
 
@@ -36,7 +38,7 @@ function toMetaString(obj) {
     return metaString;
 }
 
-const commonConfig =  defineConfig({
+const commonConfig = defineConfig({
     build: {
         lib: {
             entry: "./src/main.ts",
@@ -49,7 +51,8 @@ const commonConfig =  defineConfig({
     plugins: [
         banner(() => {
             return toMetaString(meta);
-        })
+        }),
+        vue()
     ],
     css: {
         postcss: {
@@ -65,6 +68,9 @@ const commonConfig =  defineConfig({
                 replacement: resolve(__dirname, "./src")
             }
         ]
+    },
+    define: {
+        "process.env": {}
     },
     server: {
         hmr: {
