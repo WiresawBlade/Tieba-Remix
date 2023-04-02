@@ -3,9 +3,10 @@ import { remixedObservers } from "@/lib/observers";
 
 export const Main: UserModule = {
     id: "notrans-emojis",
-    name: "别动我的 Emoji😠",
+    name: "别动我的 emoji😠",
     author: "锯刃Blade",
     version: "1.0",
+    brief: "拒绝替换我的 emoji",
     description: "原版贴吧会将部分emoji表情替换为旧版，该模块会让这些emoji重新跟随系统样式",
     scope: true,
     runAt: "afterHead",

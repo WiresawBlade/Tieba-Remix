@@ -3,12 +3,10 @@
  * @WiresawBlade
 */
 
-import { DOMS, fadeInElems, fadeInLoad, injectCSSList, injectCSSRule } from "@/lib/domlib";
+import { DOMS, createNewElement, fadeInElems, fadeInLoad, injectCSSList, injectCSSRule } from "@/lib/domlib";
 import { remixedObservers } from "@/lib/observers";
 import { forEach } from "lodash-es";
 
-import globalCSS from "@/stylesheets/main/_palette.scss?inline";
-import materialIcons from "./material-icons.css?inline";
 import mainCSS from "./_tieba-main.css?inline";
 import homeCSS from "./_tieba-home.css?inline";
 import postsCSS from "./_tieba-post.css?inline";
@@ -35,6 +33,7 @@ export const Main: UserModule = {
     name: "Tieba Remix 主题",
     author: "锯刃Blade",
     version: "0.1.1",
+    brief: "更现代的主题样式",
     description: `包含新的样式、昼夜主题及其自动切换等功能`,
     scope: true,
     runAt: "immediately",
@@ -45,8 +44,6 @@ const themeSheets: HTMLStyleElement[] = [];
 
 function main(): void {
     // 全局加载
-    themeSheets.push(injectCSSList(materialIcons));
-    themeSheets.push(injectCSSList(globalCSS));
     themeSheets.push(injectCSSList(mainCSS));
     themeSheets.push(injectCSSList(postsCSS));
     themeSheets.push(injectCSSList(homeCSS));
@@ -107,9 +104,9 @@ function main(): void {
     unsafeWindow.addEventListener("load", () => {
         // 为功能按钮注入 svg 容器
         DOMS(".tbui_aside_float_bar li a").forEach(elem => {
-            GM_addElement(elem, "div", {
+            elem.appendChild(createNewElement("div", {
                 class: "material-icons svg-container"
-            });
+            }));
         });
 
         // 功能按钮 svg 延迟

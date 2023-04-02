@@ -8,6 +8,7 @@ export const Main: UserModule = {
     name: "贴吧屏蔽",
     author: "锯刃Blade",
     version: "1.0",
+    brief: "眼不见为净",
     description: `用户自定义屏蔽规则，符合规则的贴子和楼层将不会显示在首页、看贴页面和进吧页面。支持正则匹配`,
     scope: true,
     runAt: "immediately",

@@ -14,7 +14,8 @@ export const Main: UserModule = {
     name: "Bili 番号跳转",
     author: "锯刃Blade",
     version: "1.1",
-    description: `为贴子中的b站番号添加跳转链接`,
+    brief: "为贴子中的b站番号添加跳转链接",
+    description: `该模块可以识别贴子中的 av/BV 号并将其转换为超链接`,
     scope: "tieba.baidu.com/p/",
     runAt: "immediately",
     entry: main
