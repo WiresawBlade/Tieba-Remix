@@ -1,4 +1,4 @@
-import { kebabCase, merge, trim } from "lodash-es";
+import { kebabCase, merge } from "lodash-es";
 
 const defaultStyle = document.createElement("style");  // 默认默认样式
 export const fadeInElems: string[] = [];
@@ -30,8 +30,7 @@ export function DOMS<T extends keyof HTMLElementTagNameMap>(
 ): HTMLElementTagNameMap[T][];
 
 export function DOMS<T extends keyof HTMLElementTagNameMap>(selector: string, _type?: T): any {
-    const sel = trim(selector);
-    return document.querySelectorAll(sel);
+    return document.querySelectorAll(selector);
 }
 
 /**
@@ -137,17 +136,23 @@ export function mergeNodeAttrsDeeply<T extends HTMLElement>(
  * @param doc 从哪个 `Document` 创建节点
  * @returns 被创建的节点
  */
-export function createNode<T extends keyof HTMLElementTagNameMap>(
-    tag: T, attrs?: LiteralObject, doc?: Document
+export function createNewElement<T extends keyof HTMLElementTagNameMap>(
+    tag: T, attrs?: LiteralObject, children?: HTMLElement[], doc?: Document
 ): HTMLElementTagNameMap[T] {
     const DOC = doc ? doc : document;
-    const node = DOC.createElement(tag);
+    const elem = DOC.createElement(tag);
 
     if (attrs) {
-        mergeNodeAttrs(node, attrs);
+        mergeNodeAttrs(elem, attrs);
     }
 
-    return node;
+    if (children) {
+        for (const child of children) {
+            elem.appendChild(child);
+        }
+    }
+
+    return elem;
 }
 
 // type ChildElementPosition = "first" | "last" | HTMLElement;
@@ -250,6 +255,13 @@ export function injectCSSRule(selector: string, cssObject: Mapped<CSSStyleDeclar
  */
 export function removeCSSRule(index: number) {
     defaultStyle.sheet?.deleteRule(index);
+}
+
+export function findParentByClass(elem: Element, parentClassName: string): Element | null {
+    while (elem.parentElement?.className.indexOf(parentClassName) === -1) {
+        elem = elem.parentElement;
+    }
+    return elem.parentElement;
 }
 
 /**

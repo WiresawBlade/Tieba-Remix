@@ -1,34 +1,35 @@
 interface LiteralObject {
-    [prop: string]: any;
+    [prop: string]: any
 }
 
 /** 用户模块 */
 interface UserModule {
-    [prop: string]: unknown;
+    [prop: string]: unknown
 
-    id: string;
+    id: string
     /** 需要显示给用户的模块名称 */
-    name: string;
-    author: string;
-    version: string;
-    description: string;
+    name: string
+    author: string
+    version: string
+    brief: string
+    description: string
 
-    switch?: boolean;
-    scope: true | string | string[];
-    runAt: "immediately" | "afterHead" | "DOMLoaded" | "loaded";
-    entry: (() => void);
+    switch?: boolean
+    scope: true | string | string[]
+    runAt: "immediately" | "afterHead" | "DOMLoaded" | "loaded"
+    entry: (() => void)
 }
 
 /** 用户模块其他信息 */
-interface userModulesInfo {
+interface UserModulesInfo {
     /** 本次被解析的模块数 */
-    length: number;
+    length: number
     /** 当前被解析的模块信息 */
     current: {
         /** 模块是否被允许运行 */
-        runnable: boolean;
+        runnable: boolean
         /** 模块所在位置 */
-        url: string;
+        url: string
     }
 }
 
@@ -47,17 +48,22 @@ class UserWidget {
  */
 interface ShieldObject {
     /** 匹配规则，它可能是直接的屏蔽词，也可能是正则表达式 */
-    rule: string;
+    rule: string
     /** 描述当前规则的类型 */
-    type: "string" | "RegExp";
+    type: "string" | "RegExp"
     /** 作用域，屏蔽规则作用于贴子或用户 */
-    scope: "posts" | "users";
+    scope: "posts" | "users"
     /** 是否启用该规则 */
-    switch: boolean;
+    switch: boolean
     /** 是否忽略大小写，默认忽略 */
-    ignoreCase?: boolean;
+    ignoreCase?: boolean
     /** 是否匹配 innerHTML？默认匹配 textContent */
-    matchHTML?: boolean;
+    matchHTML?: boolean
+}
+
+interface UserValueNS<T> {
+    invalidTime: number
+    value: T
 }
 
 const unsafeWindow: Window;

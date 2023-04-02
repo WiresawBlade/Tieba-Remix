@@ -1,5 +1,6 @@
-import { userSwitches } from "@/greasy-init";
+import { disabledModules } from "./userlib";
 import { afterHead } from "./domlib";
+import { indexOf } from "lodash-es";
 
 /**
  * 解析用户模块，并根据默认情况按需执行模块
@@ -8,12 +9,12 @@ import { afterHead } from "./domlib";
  * @returns 
  */
 export function parseUserModules(
-    glob: Record<string, () => Promise<unknown>>, callbackfn?: ((info: userModulesInfo, module: UserModule) => void)
+    glob: Record<string, () => Promise<unknown>>, callbackfn?: ((info: UserModulesInfo, module: UserModule) => void)
 ): UserModule[] {
     const modules: UserModule[] = [];
     const moduleList = glob;
 
-    const info: userModulesInfo = {
+    const info: UserModulesInfo = {
         length: Object.keys(moduleList).length,
         current: {
             runnable: false,
@@ -30,18 +31,8 @@ export function parseUserModules(
                 const runnable = (() => {
                     if (m.switch === true || m.switch === undefined) {
                         // 用户配置优先级最高，可以直接否决
-                        if (userSwitches.length > 0) {
-                            let index = -1;
-                            for (let j = 0; j < userSwitches.length; j++) {
-                                if (userSwitches[j].id === m.id) {
-                                    index = j;
-                                }
-                            }
-                            if (index !== -1) {
-                                if (!userSwitches[index].switch) {
-                                    return false;
-                                }
-                            }
+                        if (indexOf(disabledModules, m.id) !== -1) {
+                            return false;
                         }
 
                         // 判断当前模块是否在作用域内
