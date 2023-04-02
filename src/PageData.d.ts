@@ -1,4 +1,4 @@
-const PageData = {
+const PageData: {
     page: string,
     product: string,
     tbs: string,
