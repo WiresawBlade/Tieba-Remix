@@ -3,9 +3,12 @@ import { remixedObservers } from "./lib/observers";
 import { greasyInit } from "./greasy-init";
 import { parseUserModules } from "./lib/unsafe";
 
-import { createApp } from "vue";
-import mainDialogVue from "./widgets/main-dialog/main-dialog.vue";
-import { createNode } from "./lib/domlib";
+import { createApp, ref } from "vue";
+import moduleControlVue from "./components/module-control.vue";
+import { DOMS, afterHead, createNewElement, injectCSSList, injectCSSRule } from "./lib/domlib";
+
+import palette from "@/stylesheets/main/_palette.scss?inline";
+import materialIcons from "@/stylesheets/main/material-icons.css?inline";
 
 export { afterModulesLoaded, MainModules };
 
@@ -24,27 +27,25 @@ const MainModules: UserModule[] = [];
 let moduleLoadedFlag = false;
 const beforeModulesLoadedFns: (() => void)[] = [];
 
-/**
- * 所有模块加载完毕后执行
- * @param callbackfn 回调函数
-*/
-function afterModulesLoaded(callbackfn: () => void) {
-    if (moduleLoadedFlag) {
-        callbackfn();
-    } else {
-        beforeModulesLoadedFns.push(callbackfn);
-    }
-}
+// document.addEventListener("DOMContentLoaded", () => {
+//     if (PageData.page === "index") {
+//         document.body.insertBefore(createNode("div", {
+//             class: "vue-container"
+//         }), document.body.firstChild);
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.body.insertBefore(createNode("div", {
-        class: "vue-container"
-    }), document.body.firstChild);
-
-    createApp(mainDialogVue).mount(".vue-container");
-});
+//         createApp(moduleControlVue, {
+//             modules: MainModules
+//         }).mount(".vue-container");
+//     }
+// });
 
 try {
+    // 加载基本样式表
+    afterHead(() => {
+        injectCSSList(palette);
+        injectCSSList(materialIcons);
+    });
+
     // 加载功能模块
     (() => {
         let i = 0;
@@ -62,99 +63,6 @@ try {
             }
         );
     })();
-    // const remixedModules = import.meta.glob("./modules/**/entry.ts");
-    // (() => {
-    //     const cnt = Object.keys(remixedModules).length;
-    //     let i = 0;
-    //     for (const key in remixedModules) {
-    //         remixedModules[key]().then(
-    //             (value: any) => {
-    //                 const module = <UserModule>value.Main;
-    //                 // 先判断模块是否开启
-    //                 const runnable = (() => {
-    //                     if (module.switch === true || module.switch === undefined) {
-    //                         // 用户配置优先级最高，可以直接否决
-    //                         if (userSwitches.length > 0) {
-    //                             let index = -1;
-    //                             for (let j = 0; j < userSwitches.length; j++) {
-    //                                 if (userSwitches[j].id === module.id) {
-    //                                     index = j;
-    //                                 }
-    //                             }
-    //                             if (index !== -1) {
-    //                                 if (!userSwitches[index].switch) {
-    //                                     return false;
-    //                                 }
-    //                             }
-    //                         }
-
-    //                         // 判断当前模块是否在作用域内
-    //                         // 始终运行
-    //                         if (module.scope === true) {
-    //                             return true;
-    //                         }
-
-    //                         // 字符串
-    //                         if (typeof module.scope === "string") {
-    //                             if (location.href.indexOf(module.scope) !== -1) {
-    //                                 return true;
-    //                             }
-    //                         }
-
-    //                         // 数组
-    //                         if (Array.isArray(module.scope)) {
-    //                             for (const i in module.scope) {
-    //                                 const str = module.scope[i];
-    //                                 if (location.href.indexOf(str) !== -1) {
-    //                                     return true;
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-
-    //                     return false;
-    //                 })();
-
-    //                 // 根据模块 runAt 选择运行模式
-    //                 const runModule = {
-    //                     "immediately": () => { module.entry(); },
-
-    //                     "afterHead": () => {
-    //                         afterHead(() => {
-    //                             module.entry();
-    //                         });
-    //                     },
-
-    //                     "DOMLoaded": () => {
-    //                         document.addEventListener("DOMContentLoaded", () => {
-    //                             module.entry();
-    //                         });
-    //                     },
-
-    //                     "loaded": () => {
-    //                         unsafeWindow.addEventListener("load", () => {
-    //                             module.entry();
-    //                         });
-    //                     }
-    //                 };
-
-    //                 module.runnable = runnable;
-    //                 if (runnable) {
-    //                     runModule[module.runAt]();
-    //                 }
-
-    //                 MainModules.push(module);
-    //                 i++;
-    //                 if (i === cnt) {
-    //                     moduleLoadedFlag = true;
-    //                     for (const fn of beforeModulesLoadedFns) {
-    //                         fn();
-    //                     }
-    //                 }
-    //             }
-    //         );
-    //     }
-    // })();
 
     greasyInit();
 
@@ -187,10 +95,62 @@ try {
         if (location.href.indexOf("/f?kw=") !== -1) {
             remixedObservers.threadListObserver._observe();
         }
+
+        // 临时设置按钮
+        const floatBar = DOMS(".tbui_aside_float_bar")[0];
+
+        floatBar.insertBefore(createNewElement("li", {
+            class: "tbui_aside_fbar_button module-settings"
+        }, [createNewElement("a", {
+            href: "javascript:void"
+        })]), floatBar.firstChild);
+
+        injectCSSRule(".tbui_aside_float_bar .module-settings", {
+            backgroundColor: "rgb(53, 73, 94)"
+        });
+
+        injectCSSRule(".module-settings .svg-container::after", {
+            content: `"settings"`,
+            color: "rgb(240, 240, 240)"
+        });
+
+        document.body.insertBefore(createNewElement("div", {
+            class: "vue-module-control",
+            style: "display: none;"
+        }), document.body.firstChild);
+
+        // 临时绑定 Vue 组件
+        // TODO: 好呃呃的写法，快点把入口写好然后改掉吧
+        const ModuleControl = createApp(moduleControlVue, {
+            modules: MainModules
+        });
+        ModuleControl.mount(".vue-module-control");
+
+        DOMS(".tbui_aside_float_bar .module-settings")[0].addEventListener("click", () => {
+            DOMS(".vue-module-control")[0].style.display = "block";
+        });
+
+        const moduleControlShadow = DOMS(".vue-module-control .dialog-shadow")[0];
+        moduleControlShadow.addEventListener("click", (event) => {
+            if (event.target !== moduleControlShadow) return;
+            DOMS(".vue-module-control")[0].style.display = "none";
+        });
     });
 
     // 全部任务激活完毕，打印信息
     console.info(REMIXED);
 } catch (error) {
     console.error(error);
+}
+
+/**
+ * 所有模块加载完毕后执行
+ * @param callbackfn 回调函数
+*/
+function afterModulesLoaded(callbackfn: () => void) {
+    if (moduleLoadedFlag) {
+        callbackfn();
+    } else {
+        beforeModulesLoadedFns.push(callbackfn);
+    }
 }

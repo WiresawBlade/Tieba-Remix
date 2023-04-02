@@ -1,11 +1,14 @@
-import { afterModulesLoaded, MainModules } from "./main";
-
 export { greasyInit };
 
-// 开启或关闭某些功能
-GM_deleteValue("ENABLE_BOLD_FONT");
-GM_deleteValue("EXTREME_PURIF");
-GM_deleteValue("DEFAULT_FONT_TYPE");
+try {
+    // 开启或关闭某些功能
+    GM_deleteValue("ENABLE_BOLD_FONT");
+    GM_deleteValue("EXTREME_PURIF");
+    GM_deleteValue("DEFAULT_FONT_TYPE");
+    GM_deleteValue("userSwitches");
+} catch (error) {
+    console.warn(error);
+}
 
 interface MenuObject {
     id: string;
@@ -14,8 +17,6 @@ interface MenuObject {
     state?: boolean;
     event?: () => void;
 }
-
-export const userSwitches: { id: string, switch: boolean }[] = GM_getValue("userSwitches", []);
 
 // 插件菜单
 export const greasyMenu: MenuObject[] = [
@@ -126,53 +127,6 @@ function registerMenu() {
 }
 
 function greasyInit() {
-    afterModulesLoaded(() => {
-        MainModules.forEach(module => {
-            greasyMenu.push({
-                id: module.id,
-                title: module.name,
-                type: "switch",
-                state: (() => {
-                    for (const uswitch of userSwitches) {
-                        if (uswitch.id === module.id) {
-                            return uswitch.switch;
-                        }
-                    }
-                    if (module.switch !== undefined) return module.switch;
-                    return true;
-                })(),
-                event: () => {
-                    let flag = module.switch === undefined ? true : module.switch;
-                    if (userSwitches.length > 0) {
-                        for (const uswitch of userSwitches) {
-                            if (uswitch.id === module.id) {
-                                flag = uswitch.switch;
-                            }
-                        }
-                    }
-
-                    let index = -1;
-                    for (let i = 0; i < userSwitches.length; i++) {
-                        if (userSwitches[i].id === module.id) {
-                            index = i;
-                        }
-                    }
-                    
-                    if (index !== -1) {
-                        userSwitches[index].switch = flag ? false : true;
-                    } else {
-                        userSwitches.push({
-                            id: module.id,
-                            switch: flag ? false : true
-                        });
-                    }
-                    GM_setValue("userSwitches", userSwitches);
-                    location.reload();
-                }
-            });
-        });
-    
-        // 油猴相关初始化
-        registerMenu();
-    });
+    // 油猴相关初始化
+    registerMenu();
 }
