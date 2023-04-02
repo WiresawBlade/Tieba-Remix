@@ -1,11 +1,27 @@
+:root {
+    --myself-theme-background: rgb(25 110 153 / 20%);
+    --myself-theme-fore: rgb(16 73 101);
+    --cengzhu-theme-background: rgb(255 89 107 / 20%);
+    --cengzhu-theme-fore: rgb(178 62 90);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --myself-theme-background: rgb(34 135 204 / 20%);
+        --myself-theme-fore: rgb(40 160 242);
+        --cengzhu-theme-background: rgb(204 71 103 / 20%);
+        --cengzhu-theme-fore: rgb(255 89 118);
+    }
+}
+
 .tag-elem {
     display: inline-block;
 }
 
 .tag-elem::after {
     padding: 2px 6px;
-    margin: 0 4px;
     border-radius: 24px;
+    margin: 0 4px;
     font-size: 12px;
 }
 

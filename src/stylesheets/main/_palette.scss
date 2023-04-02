@@ -1,4 +1,32 @@
-/* 全局 */
+// 全局
+$defaultBack: var(--default-background);
+$transDefaultBack: var(--trans-default-background);
+$deepBack: var(--deep-background);
+$transDeepBack: var(--trans-deep-background);
+$minimalBack: var(--very-light-background);
+$elemColor: var(--elem-color);
+$defaultFore: var(--default-fore);
+$lightFore: var(--light-fore);
+$minimalFore: var(--minimal-fore);
+$highlightFore: var(--highlight-fore);
+$borderColor: var(--border-color);
+
+$tiebaThemeColor: var(--tieba-theme-color);
+$transTiebaThemeColor: var(--trans-tieba-theme-color);
+$tiebaThemeBack: var(--tieba-theme-background);
+$tiebaThemeFore: var(--tieba-theme-fore);
+
+$levelGreenBack: var(--level-green-background);
+$levelGreenFore: var(--level-green-fore);
+$levelBlueBack: var(--level-blue-background);
+$levelBlueFore: var(--level-blue-fore);
+$levelYellowBack: var(--level-yellow-background);
+$levelYellowFore: var(--level-yellow-fore);
+$levelOrangeBack: var(--level-orange-background);
+$levelOrangeFore: var(--level-orange-fore);
+
+$iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/icon.png");
+
 :root {
     --default-background: rgb(255 255 255);
     --trans-default-background: rgb(255 255 255 / 60%);
@@ -19,11 +47,6 @@
     --tieba-theme-background: rgb(97 78 194 / 20%);
     --tieba-theme-fore: rgb(58 46 116);
 
-    --myself-theme-background: rgb(25 110 153 / 20%);
-    --myself-theme-fore: rgb(16 73 101);
-    --cengzhu-theme-background: rgb(255 89 107 / 20%);
-    --cengzhu-theme-fore: rgb(178 62 90);
-
     --level-green-background: rgb(84 130 53 / 30%);
     --level-green-fore: rgb(51 78 32);
     --level-blue-background: rgb(0 153 213 / 30%);
@@ -33,21 +56,21 @@
     --level-orange-background: rgb(255 153 0 / 30%);
     --level-orange-fore: rgb(178 104 0);
 
-    --svg-accessibility: url("/images/svgs/accessibility.svg?raw");
-    --svg-checkmark: url("/images/svgs/checkmark.svg");
-    --svg-arrow-up: url("/images/svgs/arrow-up-sharp.svg");
-    --svg-arrow-down-circle: url("/images/svgs/arrow-down-circle.svg");
-    --svg-message: url("/images/svgs/chatbox-ellipses.svg");
-    --svg-infomation: url("/images/svgs/information-circle.svg");
-    --svg-infomation-outline: url("/images/svgs/information-sharp.svg");
-    --svg-search: url("/images/svgs/search.svg");
+    // --svg-accessibility: url("/images/svgs/accessibility.svg?raw");
+    // --svg-checkmark: url("/images/svgs/checkmark.svg");
+    // --svg-arrow-up: url("/images/svgs/arrow-up-sharp.svg");
+    // --svg-arrow-down-circle: url("/images/svgs/arrow-down-circle.svg");
+    // --svg-message: url("/images/svgs/chatbox-ellipses.svg");
+    // --svg-infomation: url("/images/svgs/information-circle.svg");
+    // --svg-infomation-outline: url("/images/svgs/information-sharp.svg");
+    // --svg-search: url("/images/svgs/search.svg");
 
-    --img-tieba-icon: url("/images/main/icon.png");
+    --img-tieba-icon: #{$iconMain};
 
     color-scheme: light dark;
 }
 
-/* 深色模式 */
+// 深色模式
 @media (prefers-color-scheme: dark) {
     :root {
         --default-background: rgb(32 32 32);
@@ -68,11 +91,6 @@
         --trans-tieba-theme-color: rgb(113 97 193 / 60%);
         --tieba-theme-background: rgb(113 97 193 / 20%);
         --tieba-theme-fore: rgb(150 128 255);
-
-        --myself-theme-background: rgb(34 135 204 / 20%);
-        --myself-theme-fore: rgb(40 160 242);
-        --cengzhu-theme-background: rgb(204 71 103 / 20%);
-        --cengzhu-theme-fore: rgb(255 89 118);
 
         --level-green-background: rgb(96 153 59 / 30%);
         --level-green-fore: rgb(133 206 84);

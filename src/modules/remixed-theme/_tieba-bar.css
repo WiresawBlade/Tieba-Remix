@@ -29,16 +29,16 @@
     width: 36px;
     height: 36px;
     margin-left: 56px;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgb(0 0 0 / 0%);
     background-image: var(--img-tieba-icon);
     background-repeat: no-repeat;
 }
 
 .search_main_fixed {
-    background-color: var(--trans-default-background);
-    backdrop-filter: blur(24px);
     border-color: var(--border-color);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(24px);
+    background-color: var(--trans-default-background);
+    box-shadow: 0 0 20px rgb(0 0 0 / 10%);
 }
 
 .card_top_theme {
@@ -66,9 +66,9 @@
 }
 
 .islike_focus {
+    background-color: var(--tieba-theme-color) !important;
     /* 关注吧按钮 */
     background-image: none !important;
-    background-color: var(--tieba-theme-color) !important;
 }
 
 .cancel_focus {
@@ -97,11 +97,11 @@
 }
 
 .forum_content {
+    border-color: var(--border-color) !important;
+    border-right: none !important;
     /* 容器 */
     background: none !important;
     background-color: var(--elem-color) !important;
-    border-color: var(--border-color) !important;
-    border-right: none !important;
 }
 
 .nav_wrap {
@@ -130,32 +130,33 @@
 
 .search_internal_input {
     /* 吧内搜索 */
-    color: var(--default-fore) !important;
+    height: 24px !important;
     border-color: var(--border-color) !important;
     border-radius: 8px 0 0 8px;
-    height: 24px !important;
+    color: var(--default-fore) !important;
 }
 
 .search_internal_btn {
     /* 吧内搜索按钮 */
+    height: 26px !important;
+    border-radius: 0 8px 8px 0;
+    background-color: var(--tieba-theme-color) !important;
     /* background-image: var(--svg-search) !important;
     background-size: 16px !important;
     background-repeat: no-repeat !important;
     background-position: center !important; */
     background-image: none !important;
-    background-color: var(--tieba-theme-color) !important;
 
     vertical-align: middle !important;
-    border-radius: 0 8px 8px 0;
-    height: 26px !important;
 }
 
 .search_internal_btn::after {
-    font-family: "Material Icons";
-    font-weight: bold;
-    content: "search";
     color: var(--default-background);
+    content: "deployed_code";
+    content: "search";
+    font-family: "Material Icons";
     font-size: 18px;
+    font-weight: bold;
     line-height: 26px;
     text-align: center;
 }
@@ -176,10 +177,10 @@
 }
 
 .my_current_forum .badge {
+    border: 1px solid var(--border-color) !important;
     /* 我的等级 */
     background-color: var(--light-background) !important;
     color: var(--default-fore) !important;
-    border: 1px solid var(--border-color) !important;
 }
 
 .my_current_forum .badge_name {
@@ -236,8 +237,8 @@
 }
 
 .threadlist_media li:hover .threadlist_pic_highlight {
-    border-radius: 8px;
     display: none !important;
+    border-radius: 8px;
 }
 
 .vpic_wrap img {
@@ -245,8 +246,8 @@
 }
 
 .threadlist_bright .media_disp {
-    background: none !important;
     border: none !important;
+    background: none !important;
 }
 
 .threadlist_bright .threadlist_video {
@@ -255,49 +256,49 @@
 }
 
 .threadlist_rep_num {
+    height: unset !important;
+    border-radius: 24px;
     /* 回贴数 */
     background: none !important;
     background-color: var(--tieba-theme-background) !important;
     color: var(--tieba-theme-fore);
-    height: unset !important;
-    border-radius: 24px;
 }
 
 .pagination-default .pagination-item {
+    border: none !important;
+    border-radius: 8px;
     /* 跳页按钮 */
     background-color: var(--light-background) !important;
     color: var(--light-fore) !important;
-    border: none !important;
-    border-radius: 8px;
 }
 
 .pagination-default .pagination-current {
+    border: none !important;
     /* 跳页按钮：当前 */
     background-color: var(--tieba-theme-color) !important;
     color: var(--default-background) !important;
-    border: none !important;
 }
 
 .pagination-default .pagination-item:not(.pagination-current):hover {
+    border: none !important;
     /* 跳页按钮：hover */
     background-color: var(--trans-light-background) !important;
-    border: none !important;
 }
 
 /* 底部 */
 #tb_rich_poster_container {
-    background-color: var(--very-light-background) !important;
-    border-radius: 0 0 24px 24px;
     width: 982px !important;
+    border-radius: 0 0 24px 24px;
     margin-left: -1px;
+    background-color: var(--very-light-background) !important;
 }
 
 .tb_rich_poster .poster_body .editor_textfield {
+    border-color: var(--border-color) !important;
+    border-radius: 8px;
     /* 标题文本框 */
     background-color: var(--default-background) !important;
     color: var(--default-fore) !important;
-    border-color: var(--border-color) !important;
-    border-radius: 8px;
 }
 
 .tb_rich_poster .poster_body .editor_textfield:focus {
@@ -305,9 +306,9 @@
 }
 
 .old_style_wrapper {
+    border-color: var(--border-color) !important;
     /* 编辑器容器 */
     background-color: var(--elem-color) !important;
-    border-color: var(--border-color) !important;
 }
 
 .old_style_wrapper .edui-editor-body {
@@ -320,9 +321,9 @@
 }
 
 .edui-editor-body .edui-body-container {
+    border-color: var(--border-color) !important;
     /* 编辑器 */
     background-color: var(--default-background) !important;
-    border-color: var(--border-color) !important;
 }
 
 .frs_content_footer_pagelet {

@@ -36,7 +36,7 @@ a {
 .content {
     border-radius: 24px;
     background: unset;
-    box-shadow: 0 0 80px -32px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 80px -32px rgb(0 0 0 / 40%);
 }
 
 .card_top_wrap {
@@ -60,14 +60,14 @@ a {
 /* 吧图标 */
 .card_head,
 .plat_head_theme2 .plat_picbox {
-    width: 64px !important;
-    height: 64px !important;
-    border-radius: 24px !important;
-    padding: unset !important;
-    background: none !important;
-    border: 4px solid var(--border-color) !important;
     top: -32px !important;
     overflow: hidden;
+    width: 64px !important;
+    height: 64px !important;
+    padding: unset !important;
+    border: 4px solid var(--border-color) !important;
+    border-radius: 24px !important;
+    background: none !important;
 }
 
 .card_head_img,
@@ -93,14 +93,14 @@ a {
 
 .islike_focus {
     /* 关注吧按钮 */
+    border-radius: 24px;
+    margin-top: 4px !important;
     background: none;
     background-color: var(--tieba-theme-color);
     color: var(--elem-color);
-    border-radius: 24px;
-    line-height: 28px;
     font-size: 14px;
+    line-height: 28px;
     text-align: center;
-    margin-top: 4px !important;
 }
 
 .islike_focus::after {
@@ -109,15 +109,15 @@ a {
 
 .cancel_focus {
     /* 取关吧按钮 */
-    background: none;
+    width: 72px;
     border: 2px solid var(--trans-tieba-theme-color);
+    border-radius: 24px;
+    background: none;
     background-color: var(--tieba-theme-background);
     color: var(--tieba-theme-fore);
-    border-radius: 24px;
-    line-height: 28px;
     font-size: 14px;
+    line-height: 28px;
     text-align: center;
-    width: 72px;
 }
 
 .cancel_focus::after {
@@ -134,18 +134,18 @@ a {
     width: 140px !important;
     height: 40px !important;
     border: 2px solid var(--trans-tieba-theme-color);
+    border-radius: 24px;
     background: none;
     background-color: var(--tieba-theme-color);
     color: var(--default-background);
-    text-align: center;
-    border-radius: 24px;
-    line-height: 40px;
     font-size: 18px;
+    line-height: 40px;
+    text-align: center;
 }
 
 .sign_btn_bright::before {
-    content: "签到";
     color: var(--elem-color);
+    content: "签到";
 }
 
 .sign_box_bright_signed {
@@ -169,8 +169,8 @@ a {
     /* 已签到按钮文本 */
     margin: unset;
     color: var(--tieba-theme-fore);
-    text-align: center;
     font-size: 12px;
+    text-align: center;
 }
 
 .sign_box_bright_signed::before {
@@ -186,10 +186,10 @@ a {
 }
 
 .jump_input_bright {
+    padding: 0 10px;
     /* 跳页文本框 */
     border-color: var(--border-color);
     border-radius: 16px;
-    padding: 0 10px;
 }
 
 /* 标题 */
@@ -199,27 +199,27 @@ a {
 
 .core_title_wrap_bright {
     /* 标题栏 */
-    background-color: var(--trans-default-background);
     border-color: var(--border-color);
     backdrop-filter: blur(24px);
+    background-color: var(--trans-default-background);
 }
 
 .core_title_theme_bright,
 .core_title_absolute_bright .core_title_theme_bright {
     /* 部分吧标题栏 */
-    background: none;
     border-color: var(--border-color);
+    background: none;
 }
 
 .left_section .core_title_absolute_bright {
-    background-color: var(--trans-default-background);
     backdrop-filter: blur(24px);
+    background-color: var(--trans-default-background);
 }
 
 .core_title_txt {
     /* 标题文字 */
-    background: none;
     margin-left: 24px;
+    background: none;
 }
 
 .tittle_fill_dom.filled {
@@ -233,17 +233,17 @@ a {
 }
 
 .nav_wrap {
+    border-color: var(--border-color);
+    background-color: var(--light-background);
     /* 导航 */
     background-image: none !important;
-    background-color: var(--light-background);
-    border-color: var(--border-color);
 }
 
 .nav_list a.nav_icon,
 .nav_list .tbnav_arrow {
     /* 部分吧导航栏 */
-    background: unset;
     padding-left: 22px;
+    background: unset;
 }
 
 .nav_wrap,
@@ -266,11 +266,11 @@ span.tP {
 
 .thread_theme_5 {
     /* 跳页 */
-    background-color: var(--light-background);
-    border-color: var(--border-color);
-    border-left: none;
-    border-right: none;
     width: unset;
+    border-color: var(--border-color);
+    border-right: none;
+    border-left: none;
+    background-color: var(--light-background);
 }
 
 .btn_sub,
@@ -279,12 +279,12 @@ span.tP {
 /* 部分吧 */
 .core_title_btns li a,
 .p_favthr_main {
+    border: none;
+    border-radius: 8px;
     /* 部分按钮 */
     background: none;
     background-color: var(--tieba-theme-background);
     color: var(--tieba-theme-fore);
-    border-radius: 8px;
-    border: none;
 }
 
 .btn_sub:hover,
@@ -326,16 +326,16 @@ span.tP {
 }
 
 .l_post_bright {
+    width: unset;
+    border-color: var(--border-color);
     /* 左侧用户信息 */
     background: none;
-    border-color: var(--border-color);
-    width: unset;
 }
 
 .p_author_face {
+    border: none;
     /* 层主头像边框 */
     background: none !important;
-    border: none;
 }
 
 .icon_relative img {
@@ -356,9 +356,9 @@ span.tP {
 .d_badge_bright,
 .user_level .badge {
     /* 等级头衔 */
-    background-color: var(--light-background);
-    border-radius: 24px;
     border: 1px solid var(--border-color);
+    border-radius: 24px;
+    background-color: var(--light-background);
 }
 
 .user_level .badge_name {
@@ -367,32 +367,30 @@ span.tP {
 }
 
 .d_badge_bright .d_badge_title {
-    color: var(--default-fore);
     padding-left: 4px;
+    color: var(--default-fore);
 }
 
 .d_badge_bright .d_badge_lv,
 .user_level .badge_index {
     /* 等级图标 */
-    background-image: none !important;
     background-color: var(--tieba-theme-background);
+    background-image: none !important;
     color: var(--tieba-theme-fore);
 }
 
 .d_badge_lv,
 .user_level .badge_index {
+    top: unset !important;
+    left: 60px !important;
     width: unset !important;
     height: 8px !important;
-    margin: 12px 4px !important;
-    padding: 0px 4px !important;
+    padding: 0 4px !important;
     border-radius: 16px;
-
-    left: 60px !important;
-    top: unset !important;
-
+    margin: 12px 4px !important;
     font-family: unset !important;
-    font-style: italic;
     font-size: 14px;
+    font-style: italic;
     line-height: 2px !important;
 }
 
@@ -448,10 +446,10 @@ span.tP {
 
 .region_bright {
     /* 右侧信息 */
-    background: none;
-    background-color: var(--elem-color);
     border: none;
     margin-top: 12px;
+    background: none;
+    background-color: var(--elem-color);
 }
 
 .region_bright .region_title {
@@ -471,22 +469,22 @@ span.tP {
 
 .topic_list_box {
     /* 右侧贴吧热议榜 */
-    background-color: var(--default-background);
     display: none;
+    background-color: var(--default-background);
 }
 
 .pb_content {
     /* 容器：右侧剩余部分 */
+    border: none;
     background: none;
     background-color: var(--elem-color);
-    border: none;
 }
 
 .notice-icon,
 .right_section .tieba_notice {
+    padding-left: unset !important;
     /* 右侧反馈 */
     background: none !important;
-    padding-left: unset !important;
 }
 
 .tieba_notice li {
@@ -495,8 +493,8 @@ span.tP {
 
 /* 正文 */
 .p_content {
-    background-color: var(--default-background);
     border: none;
+    background-color: var(--default-background);
 }
 
 .forbid-speech-banner {
@@ -550,10 +548,10 @@ span.tP {
 
 .post-tail-wrap .question-image:hover::before {
     /* IP属地说明 */
-    background-color: var(--light-background);
-    color: var(--default-fore);
     border-color: var(--border-color);
     border-radius: 8px;
+    background-color: var(--light-background);
+    color: var(--default-fore);
 }
 
 .post_bubble_top,
@@ -575,8 +573,8 @@ span.tP {
 
 .replace_div .replace_tip {
     /* 展开图片 */
-    background-color: var(--elem-color);
     border-color: var(--border-color);
+    background-color: var(--elem-color);
 }
 
 .achievement_medal_section {
@@ -611,13 +609,13 @@ span.tP {
 
 .core_reply_wrapper {
     /* 回复 */
-    background: none !important;
+    border: 1px solid var(--border-color) !important;
     border-radius: 16px !important;
+    margin-bottom: 16px !important;
+    background: none !important;
     /* border-top-right-radius: 0 !important; */
     background-color: var(--very-light-background) !important;
     color: var(--default-fore) !important;
-    border: 1px solid var(--border-color) !important;
-    margin-bottom: 16px !important;
 }
 
 .core_reply_content li {
@@ -642,12 +640,12 @@ span.tP {
 
 .lzl_link_fold {
     /* 收起回复 */
+    display: none !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 8px 8px 0 0;
+    border-bottom: none !important;
     background-color: var(--very-light-background) !important;
     color: var(--tieba-theme-fore);
-    border-radius: 8px 8px 0 0;
-    border: 1px solid var(--border-color) !important;
-    border-bottom: none !important;
-    display: none !important;
 }
 
 .core_reply div.hideLzl {
@@ -697,7 +695,7 @@ span.tP {
     display: block;
 }
 
-.core_reply .hideLzl {
+/* .core_reply .hideLzl {
     opacity: 0;
     height: 0;
 }
@@ -705,15 +703,15 @@ span.tP {
 .core_reply div:not(.hideLzl) {
     opacity: 1;
     height: unset;
-}
+} */
 
 /* 贴子内容超链接 */
 .d_post_content a,
 .lzl_cnt .lzl_content_main a:not(.at) {
-    background-color: var(--tieba-theme-background);
     padding: 1px 6px;
-    margin: auto 2px;
     border-radius: 24px;
+    margin: auto 2px;
+    background-color: var(--tieba-theme-background);
 }
 
 .d_post_content a:hover,
@@ -729,26 +727,26 @@ span.tP {
 .pager_theme_5 span,
 .jump_btn_bright {
     /* 跳页按钮 */
-    background: none;
-    background-color: var(--default-background);
     border-color: var(--default-background);
     border-radius: 8px;
+    background: none;
+    background-color: var(--default-background);
     color: var(--minimal-fore);
 }
 
 .pager_theme_5 a:hover,
 .jump_btn_bright:hover {
+    border-color: var(--tieba-theme-color);
     background-color: var(--tieba-theme-color);
     color: var(--default-background);
-    border-color: var(--tieba-theme-color);
 }
 
 /* 底部 */
 .thread_theme_7 {
     /* 顶栏 */
-    background-color: var(--light-background);
-    border-color: var(--border-color);
     width: unset;
+    border-color: var(--border-color);
+    background-color: var(--light-background);
 }
 
 #pb-footer-header {
@@ -757,9 +755,9 @@ span.tP {
 
 #tb_rich_poster_container {
     /* 内容 */
-    background-color: var(--default-background);
     width: unset;
     border-radius: 24px;
+    background-color: var(--default-background);
 }
 
 .poster_head_text a.cur {
@@ -768,8 +766,8 @@ span.tP {
 
 .edui-editor-body {
     /* 文本框 */
-    border-radius: 16px;
     border-color: var(--border-color) !important;
+    border-radius: 16px;
     background: none;
 }
 
@@ -779,9 +777,9 @@ span.tP {
 }
 
 .old_style_wrapper {
-    background-color: var(--elem-color);
     border-color: var(--border-color);
     border-radius: 24px;
+    background-color: var(--elem-color);
 }
 
 .edui-editor-body .edui-body-container {
@@ -791,29 +789,29 @@ span.tP {
 
 .edui-toolbar .edui-btn-toolbar,
 .edui-container .edui-toolbar {
+    margin-top: 4px;
     /* 工具栏 */
     background-color: var(--elem-color);
-    margin-top: 4px;
 }
 
 .edui-editor-body .edui-body-container {
-    background: var(--default-background);
     border-radius: 16px;
+    background: var(--default-background);
 }
 
 .pb_footer {
-    background: none;
     width: unset;
-    border-color: var(--border-color);
     border: none;
+    border-color: var(--border-color);
+    background: none;
 }
 
 .save-to-quick-reply-btn {
     /* “保存至快速回贴”按钮 */
-    background: none;
-    color: unset;
-    background-color: var(--light-background);
     border-color: var(--border-color);
+    background: none;
+    background-color: var(--light-background);
+    color: unset;
 }
 
 .save-to-quick-reply-btn span {
@@ -837,9 +835,9 @@ span.tP {
 .user-hide-post-down,
 .user-hide-post-up {
     background-color: var(--light-fore);
-    background-size: 16px;
-    background-repeat: no-repeat;
     background-position: center;
+    background-repeat: no-repeat;
+    background-size: 16px;
     mask: var(--svg-arrow-down-circle);
     /* filter: drop-shadow(var(--minimal-fore) 0 -9999px);
     transform: translateY(9999px); */
@@ -857,10 +855,10 @@ span.tP {
 }
 
 .ui_card_content {
-    background: none;
     border-color: var(--border-color);
     border-radius: 16px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    background: none;
+    box-shadow: 0 0 20px rgb(0 0 0 / 20%);
 }
 
 .card_userinfo_wrap {
@@ -874,10 +872,10 @@ span.tP {
 }
 
 .j_avatar img {
-    border-radius: 24px;
-    border: 4px solid var(--border-color);
     width: 92px;
     height: 92px;
+    border: 4px solid var(--border-color);
+    border-radius: 24px;
     backdrop-filter: blur(24px);
 }
 
@@ -888,6 +886,7 @@ span.tP {
 .userinfo_sex_male::after {
     content: "♂";
 }
+
 .userinfo_sex_female::after {
     content: "♀";
 }
@@ -918,6 +917,6 @@ span.tP {
 /* 进吧导航 */
 .plat_head_theme2,
 .plat_header {
-    background-color: unset;
     border: none;
+    background-color: unset;
 }

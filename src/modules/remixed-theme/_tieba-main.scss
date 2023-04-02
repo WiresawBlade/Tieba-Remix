@@ -41,8 +41,8 @@
 }
 
 .tbui_aside_float_bar .svg-container {
-    /* 功能按钮 svg 容器 */
     width: 40px !important;
+    /* 功能按钮 svg 容器 */
     height: 40px !important;
     color: var(--minimal-fore);
     font-size: 24px;
@@ -88,8 +88,8 @@
 }
 
 .tbui_fbar_post .svg-container::after {
-    /* 回贴 */
     color: var(--default-background);
+    /* 回贴 */
     content: "chat";
     font-size: 22px;
     vertical-align: bottom;
@@ -146,7 +146,7 @@
 .p_tools .tb_icon_turnleft::before,
 .p_tools .tb_icon_turnright::before {
     margin-right: 4px;
-    font-family: "Material Icons", system-ui;
+    font-family: "Material Icons";
     font-size: 14px;
     vertical-align: bottom;
 }
