@@ -5,6 +5,7 @@
     "compilerOptions": {
         "target": "ESNext",
         "module": "ESNext",
+        "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,

@@ -1,20 +1,23 @@
 module.exports = {
+    "root": true,
     "env": {
         "browser": true,
         "es2021": true
     },
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:vue/base"
     ],
     "overrides": [
     ],
-    "parser": "@typescript-eslint/parser",
     "parserOptions": {
+        "parser": "@typescript-eslint/parser",
         "ecmaVersion": "latest"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "eslint-plugin-vue"
     ],
     "rules": {
         "indent": [2, 4, { "SwitchCase": 1 }],

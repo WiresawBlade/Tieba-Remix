@@ -1,6 +1,10 @@
-.vscode/settings.json
 archived/
 backup/
 debug/
 docs/release-notes/
 node_modules/
+
+@deprecated*
+.vscode/settings.json
+deb.ts
+index.html

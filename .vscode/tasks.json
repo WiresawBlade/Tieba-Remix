@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "vite: build",
+            "label": "vite: build prod",
             "type": "shell",
             "command": "pnpm build",
             "group": {
@@ -18,11 +18,27 @@
             }
         },
         {
-            "label": "vite: development",
+            "label": "vite: build dev",
             "type": "shell",
             "command": "pnpm dev",
             "group": {
                 "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "vite: debug",
+            "type": "shell",
+            "command": "pnpm debug",
+            "group": {
+                "kind": "test",
                 "isDefault": true
             },
             "presentation": {

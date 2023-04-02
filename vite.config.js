@@ -10,7 +10,7 @@ import meta from "./meta.json";
 
 /**
  * 通过 meta对象生成 meta字符串
- * @param { {} } obj meta 对象
+ * @param { { [prop: string]: any; } } obj meta 对象
  * @returns { string }
  */
 function toMetaString(obj) {
@@ -46,7 +46,9 @@ const commonConfig = defineConfig({
             formats: ["iife"],
             fileName: () => `tieba-remix.user.js`
         },
-        reportCompressedSize: false
+        reportCompressedSize: false,
+        cssMinify: true,
+        cssCodeSplit: true
     },
     plugins: [
         banner(() => {
@@ -95,7 +97,8 @@ const prodConfig = defineConfig({
             toplevel: true,
             compress: {
                 pure_funcs: [
-                    "console.log"
+                    "console.log",
+                    "deb"
                 ]
             }
         }
@@ -103,10 +106,15 @@ const prodConfig = defineConfig({
 });
 
 const viteConfig = {
-    "dev": () => { return deepmerge(commonConfig, devConfig); },
-    "prod": () => { return deepmerge(commonConfig, prodConfig); }
+    build: {
+        "dev": () => { return deepmerge(commonConfig, devConfig); },
+        "prod": () => { return deepmerge(commonConfig, prodConfig); }
+    },
+    serve: {
+        "dev": () => { return deepmerge(commonConfig, devConfig); }
+    }
 };
 
-export default defineConfig(({ mode }) => {
-    return viteConfig[mode]();
+export default defineConfig(({ command, mode }) => {
+    return viteConfig[command][mode]();
 });
