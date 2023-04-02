@@ -16,7 +16,6 @@
         "alwaysStrict": false,
         "removeComments": true,
         "types": [
-            "jquery",
             "vite/client"
         ],
         "isolatedModules": true,
