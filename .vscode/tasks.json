@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "vite: build prod",
+            "label": "vite: build production",
             "type": "shell",
             "command": "pnpm build",
             "group": {
@@ -18,9 +18,25 @@
             }
         },
         {
-            "label": "vite: build dev",
+            "label": "vite: build development",
             "type": "shell",
             "command": "pnpm dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "clear": true,
+                "focus": true,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "vite: build greasyfork",
+            "type": "shell",
+            "command": "pnpm gf",
             "group": {
                 "kind": "build",
                 "isDefault": true

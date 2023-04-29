@@ -22,6 +22,8 @@ module.exports = {
         "declaration-empty-line-before": null,
         "custom-property-empty-line-before": null,
         "scss/dollar-variable-pattern": null,
-        "scss/dollar-variable-empty-line-before": null
+        "scss/dollar-variable-empty-line-before": null,
+        "no-empty-source": null,
+        "scss/double-slash-comment-empty-line-before": null
     }
-}
+};
