@@ -68,7 +68,7 @@ function main(): void {
     }
 
     function createTagsAll() {
-        forEach(DOMS(".lzl_cnt .at"), elem => {
+        forEach(DOMS(".lzl_cnt .at"), (elem) => {
             if (elem.classList.contains(TAGGED)) return;
             elem.classList.add(TAGGED);
 
@@ -109,7 +109,7 @@ function main(): void {
             }
 
             function userClassify(un: string, portrait?: string): boolean {
-                if (username === un) {
+                if (username === un && un !== "") {
                     return true;
                 } else if (indexOf(["", " "], username) !== -1) {
                     // 无法正常获取到 username 和 dataField
@@ -118,11 +118,18 @@ function main(): void {
                         if (targetPortrait === portrait) {
                             return true;
                         }
+                    } else {
+                        return dataClassify();
                     }
                 } else if (username === null) {
+                    return dataClassify();
+                }
+                return false;
+
+                function dataClassify() {
                     const dataAttr = elem.getAttribute("data-field");
                     if (dataAttr !== null) {
-                        const dataField = JSON.parse(dataAttr);
+                        const dataField = JSON.parse(dataAttr.replace(/'/g, "\""));
                         if (portrait) {
                             if (dataField.id === portrait) {
                                 return true;
@@ -133,15 +140,17 @@ function main(): void {
                             }
                         }
                     }
+                    return false;
                 }
-                return false;
             }
         });
 
         function addTag(elem: HTMLElement, className: string) {
-            elem.appendChild(createNewElement("div", {
-                class: TB_TAG + " " + className
-            }));
+            elem.appendChild(
+                createNewElement("div", {
+                    class: TB_TAG + " " + className
+                })
+            );
         }
     }
 }
