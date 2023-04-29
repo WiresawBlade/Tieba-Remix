@@ -1,8 +1,11 @@
 // 全局
 $defaultBack: var(--default-background);
+$defaultHover: var(--default-hover);
+$pageBack: var(--page-background);
 $transDefaultBack: var(--trans-default-background);
 $deepBack: var(--deep-background);
 $transDeepBack: var(--trans-deep-background);
+$lightBack: var(--trans-light-background);
 $minimalBack: var(--very-light-background);
 $elemColor: var(--elem-color);
 $defaultFore: var(--default-fore);
@@ -10,6 +13,7 @@ $lightFore: var(--light-fore);
 $minimalFore: var(--minimal-fore);
 $highlightFore: var(--highlight-fore);
 $borderColor: var(--border-color);
+$lightBorderColor: var(--light-border-color);
 
 $tiebaThemeColor: var(--tieba-theme-color);
 $transTiebaThemeColor: var(--trans-tieba-theme-color);
@@ -29,6 +33,8 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
 
 :root {
     --default-background: rgb(255 255 255);
+    --default-hover: rgb(235 235 235);
+    --page-background: rgb(245 245 245);
     --trans-default-background: rgb(255 255 255 / 60%);
     --deep-background: rgb(200 200 200);
     --trans-deep-background: rgb(200 200 200 / 60%);
@@ -41,6 +47,7 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
     --minimal-fore: rgb(60 60 60);
     --highlight-fore: rgb(0 0 0);
     --border-color: rgb(210 210 210 / 60%);
+    --light-border-color: rgb(210 210 210 / 20%);
 
     --tieba-theme-color: rgb(97 78 194);
     --trans-tieba-theme-color: rgb(97 78 194 / 60%);
@@ -74,6 +81,8 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
 @media (prefers-color-scheme: dark) {
     :root {
         --default-background: rgb(32 32 32);
+        --default-hover: rgb(42 42 42);
+        --page-background: rgb(26 26 26);
         --trans-default-background: rgb(32 32 32 / 60%);
         --deep-background: rgb(26 26 26);
         --trans-deep-background: rgb(20 20 20 / 60%);
@@ -86,6 +95,7 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
         --minimal-fore: rgb(144 144 144);
         --highlight-fore: rgb(255 255 255);
         --border-color: rgb(96 96 96 / 60%);
+        --light-border-color: rgb(96 96 96 / 20%);
 
         --tieba-theme-color: rgb(113 97 193);
         --trans-tieba-theme-color: rgb(113 97 193 / 60%);

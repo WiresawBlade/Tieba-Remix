@@ -1,5 +1,5 @@
 body {
-    background-color: var(--default-background);
+    background-color: var(--page-background);
     color: var(--default-fore);
 }
 
@@ -376,7 +376,7 @@ body {
     background: none;
 }
 
-.forum_rcmd .class_title>div {
+.forum_rcmd .class_title > div {
     /* 热门吧 icon */
     color: var(--default-fore);
 }
