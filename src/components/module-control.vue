@@ -48,9 +48,9 @@
 
 <script setup lang="ts">
 import { isEqual, pull } from "lodash-es";
-import DialogShadow from "./main/dialog-shadow.vue";
-import UserButton from "./main/user-button.vue";
-import UserTextbox from "./main/user-textbox.vue";
+import DialogShadow from "./utils/dialog-shadow.vue";
+import UserButton from "./utils/user-button.vue";
+import UserTextbox from "./utils/user-textbox.vue";
 import { ref, watch } from "vue";
 import { emptyUserModule, isModuleDisabled, disabledModules } from "@/lib/userlib";
 
@@ -110,7 +110,7 @@ watch(searchText, () => {
 </script>
 
 <style scoped lang="scss">
-@use "@/stylesheets/main/palette" as palette;
+@use "@/stylesheets/main/palette" as _;
 
 $dialog-height: 400px;
 $dialog-radius: 12px;
@@ -127,10 +127,10 @@ $bottom-height: 60px;
     height: 400px;
     border-width: 1px;
     border-style: solid;
-    border-color: palette.$borderColor;
+    border-color: _.$borderColor;
     border-radius: $dialog-radius;
     margin: auto;
-    background-color: palette.$defaultBack;
+    background-color: _.$defaultBack;
     box-shadow: 0 0 40px rgba(0 0 0 / 10%);
     grid-template-columns: 240px 360px;
 
@@ -140,7 +140,7 @@ $bottom-height: 60px;
         width: 240px;
         height: 400px;
         border-radius: $dialog-radius 0 0 $dialog-radius;
-        background-color: palette.$elemColor;
+        background-color: _.$elemColor;
 
         .head-controls {
             position: absolute;
@@ -154,7 +154,7 @@ $bottom-height: 60px;
 
             .title {
                 padding-top: 14px;
-                color: palette.$lightFore;
+                color: _.$lightFore;
             }
 
             .search-box {
@@ -189,19 +189,19 @@ $bottom-height: 60px;
                 .brief {
                     overflow: hidden;
                     margin-top: 2px;
-                    color: palette.$minimalFore;
+                    color: _.$minimalFore;
                     font-size: 12px;
                     text-overflow: ellipsis;
                 }
             }
 
             .module-item:hover {
-                background-color: palette.$transTiebaThemeColor;
+                background-color: _.$transTiebaThemeColor;
             }
 
             .module-item.selected {
-                background-color: palette.$tiebaThemeColor;
-                color: palette.$elemColor;
+                background-color: _.$tiebaThemeColor;
+                color: _.$elemColor;
 
                 .brief {
                     color: inherit;
@@ -245,7 +245,7 @@ $bottom-height: 60px;
 
                     span {
                         margin-left: 8px;
-                        color: palette.$minimalFore;
+                        color: _.$minimalFore;
                         font-family: monospace;
                         font-size: 16px;
                         font-weight: normal;
@@ -253,7 +253,7 @@ $bottom-height: 60px;
                 }
 
                 .brief {
-                    color: palette.$minimalFore;
+                    color: _.$minimalFore;
                     font-size: 14px;
                 }
 
@@ -271,23 +271,23 @@ $bottom-height: 60px;
                 flex-wrap: wrap;
                 padding: 8px;
                 border-radius: $dialog-radius;
-                background-color: palette.$elemColor;
+                background-color: _.$elemColor;
                 gap: 4px;
 
                 .tag {
                     min-width: 36px;
                     padding: 2px 6px;
-                    border: 1px solid palette.$tiebaThemeColor;
+                    border: 1px solid _.$tiebaThemeColor;
                     border-radius: 24px;
-                    background-color: palette.$transTiebaThemeColor;
+                    background-color: _.$transTiebaThemeColor;
                     box-shadow: none;
-                    color: palette.$tiebaThemeFore;
+                    color: _.$tiebaThemeFore;
                 }
 
                 .tag:hover,
                 .tag:focus {
-                    background-color: palette.$tiebaThemeColor;
-                    color: palette.$elemColor;
+                    background-color: _.$tiebaThemeColor;
+                    color: _.$elemColor;
                 }
             }
 
@@ -302,7 +302,7 @@ $bottom-height: 60px;
                 padding: 12px $dialog-margin;
                 border-radius: 0 0 $dialog-radius 0;
                 backdrop-filter: blur(24px);
-                background-color: palette.$transDefaultBack;
+                background-color: _.$transDefaultBack;
 
                 .toggle,
                 .settings {
@@ -320,24 +320,24 @@ $bottom-height: 60px;
                 }
 
                 .toggle.on::after {
-                    color: palette.$tiebaThemeFore;
+                    color: _.$tiebaThemeFore;
                     content: "toggle_on";
                 }
 
                 .toggle.off::after {
-                    color: palette.$minimalFore;
+                    color: _.$minimalFore;
                     content: "toggle_off";
                 }
 
                 .settings::after {
                     padding: 6px;
-                    color: palette.$minimalFore;
+                    color: _.$minimalFore;
                     content: "settings";
                     font-size: 24px;
                 }
 
                 .settings:hover {
-                    background-color: palette.$minimalBack;
+                    background-color: _.$minimalBack;
                 }
             }
         }
@@ -349,7 +349,7 @@ $bottom-height: 60px;
             justify-content: center;
 
             .empty-icon {
-                color: palette.$minimalFore;
+                color: _.$minimalFore;
                 font-family: "Material Icons", monospace;
                 font-size: 64px;
                 font-variation-settings:
