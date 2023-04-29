@@ -1,11 +1,6 @@
-/**
- * Bili Bridge
- * 为贴子中的b站番号添加跳转链接
- * @WiresawBlade
-*/
-
 import { DOMS } from "@/lib/domlib";
 import { remixedObservers } from "@/lib/observers";
+import { forEach } from "lodash-es";
 
 "use strict";
 
@@ -36,7 +31,7 @@ function main(): void {
         addBiliLinks(".lzl_cnt .lzl_content_main");
 
         function addBiliLinks(selector: string): void {
-            DOMS(selector).forEach(elem => {
+            forEach(DOMS(selector), (elem) => {
                 if (elem.classList.contains(LINKED_CLASS)) return;
                 elem.classList.add(LINKED_CLASS);
 
@@ -52,19 +47,26 @@ function main(): void {
                     bindingLinks(BVs);
                 }
 
-                function bindingLinks(array: RegExpMatchArray | null | undefined, lowerCase = false) {
-                    if (array === null || array === undefined) return;
+                function bindingLinks(
+                    array: RegExpMatchArray | null | undefined,
+                    lowerCase = false
+                ) {
+                    if (!array) return;
 
                     const hadHyperLink: string[] = [];
-                    array?.forEach(videoID => {
+                    forEach(array, (videoID) => {
                         if (hadHyperLink.indexOf(videoID) === -1) {
                             hadHyperLink.push(videoID);
-                            const htmlArray = elem.innerHTML.split(RegExp(
-                                "(?<!://www.bilibili.com/video/)" + videoID, "g"
-                            ));
+                            const htmlArray = elem.innerHTML.split(
+                                RegExp("(?<!://www.bilibili.com/video/)" + videoID, "g")
+                            );
                             if (lowerCase) videoID = videoID.toLowerCase();
-                            const linkedID = "<a href='https://www.bilibili.com/video/"
-                                + videoID + "/'>" + videoID + "</a>";
+                            const linkedID =
+                                "<a href='https://www.bilibili.com/video/" +
+                                videoID +
+                                "/'>" +
+                                videoID +
+                                "</a>";
                             elem.innerHTML = htmlArray.join(linkedID);
                         }
                     });
