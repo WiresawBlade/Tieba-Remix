@@ -3,12 +3,14 @@ import { remixedObservers } from "./lib/observers";
 import { greasyInit } from "./greasy-init";
 import { parseUserModules } from "./lib/unsafe";
 
-import { createApp, ref } from "vue";
+import { createApp } from "vue";
 import moduleControlVue from "./components/module-control.vue";
 import { DOMS, afterHead, createNewElement, injectCSSList, injectCSSRule } from "./lib/domlib";
 
 import palette from "@/stylesheets/main/_palette.scss?inline";
 import materialIcons from "@/stylesheets/main/material-icons.css?inline";
+import indexVue from "./components/pages/index.vue";
+import { pageRender } from "./lib/components";
 
 export { afterModulesLoaded, MainModules };
 
@@ -27,17 +29,10 @@ const MainModules: UserModule[] = [];
 let moduleLoadedFlag = false;
 const beforeModulesLoadedFns: (() => void)[] = [];
 
-// document.addEventListener("DOMContentLoaded", () => {
-//     if (PageData.page === "index") {
-//         document.body.insertBefore(createNode("div", {
-//             class: "vue-container"
-//         }), document.body.firstChild);
-
-//         createApp(moduleControlVue, {
-//             modules: MainModules
-//         }).mount(".vue-container");
-//     }
-// });
+unsafeWindow.addEventListener("load", () => {
+    if (PageData.page !== "index") return;
+    pageRender(indexVue);
+});
 
 try {
     // 加载基本样式表
@@ -45,6 +40,9 @@ try {
         injectCSSList(palette);
         injectCSSList(materialIcons);
     });
+
+    // 调试模块
+    // parseUserModules(import.meta.glob("./debug/deb.um.ts"));
 
     // 加载功能模块
     (() => {
@@ -66,22 +64,26 @@ try {
 
     greasyInit();
 
-    // favicon
-    const favElem = document.createElement("link");
-    favElem.type = "image/icon";
-    favElem.rel = "shortcut icon";
-    favElem.href = favicon;
+    afterHead(() => {
+        document.head.appendChild(createNewElement("link", {
+            type: "image/icon",
+            rel: "shortcut icon",
+            href: favicon
+        }));
 
-    const secElem = document.createElement("meta");
-    secElem.httpEquiv = "Content-Security-Policy";
-    secElem.content = "upgrade-insecure-requests";
+        document.head.appendChild(createNewElement("meta", {
+            httpEquiv: "Content-Security-Policy",
+            content: "upgrade-insecure-requests"
+        }));
+
+        document.head.appendChild(createNewElement("meta", {
+            name: "viewport",
+            content: "width=device-width, initial-scale=1.0"
+        }));
+    });
 
     // 元素操作，等待 DOM 加载完毕
     document.addEventListener("DOMContentLoaded", () => {
-        // 添加标签
-        document.head.appendChild(favElem);
-        document.head.appendChild(secElem);
-
         // 开启监控
         if (location.href.indexOf("/p/") !== -1) {
             remixedObservers.postsObserver._observe();
@@ -102,7 +104,7 @@ try {
         floatBar.insertBefore(createNewElement("li", {
             class: "tbui_aside_fbar_button module-settings"
         }, [createNewElement("a", {
-            href: "javascript:void"
+            href: "javascript:;"
         })]), floatBar.firstChild);
 
         injectCSSRule(".tbui_aside_float_bar .module-settings", {

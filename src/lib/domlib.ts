@@ -1,4 +1,4 @@
-import { kebabCase, merge } from "lodash-es";
+import { forOwn, kebabCase, merge } from "lodash-es";
 
 const defaultStyle = document.createElement("style");  // 默认默认样式
 export const fadeInElems: string[] = [];
@@ -18,19 +18,33 @@ afterHead(() => {
 /**
  * 利用 CSS 选择器快速选择 DOM 元素
  * @param selector 选择器字符串
+ * @param parent 从哪个元素开始查找
  */
-export function DOMS(selector: string): HTMLElement[];
+export function DOMS(selector: string, parent?: Element): HTMLElement[];
 /**
  * 该函数会根据 `type` 参数返回对应类型的元素数组，而不是 `NodeList`
  * @param selector 选择器字符串
  * @param type 选择的元素的标签名
+ * @param parent 从哪个元素开始查找
  */
 export function DOMS<T extends keyof HTMLElementTagNameMap>(
-    selector: string, type: T
+    selector: string, type: T, parent?: Element
 ): HTMLElementTagNameMap[T][];
 
-export function DOMS<T extends keyof HTMLElementTagNameMap>(selector: string, _type?: T): any {
-    return document.querySelectorAll(selector);
+export function DOMS<_T extends keyof HTMLElementTagNameMap>(...args: any[]): any {
+    const selector = args[0];
+    switch (args.length) {
+        case 1:
+            return document.querySelectorAll(selector);
+        case 2:
+            if (args[1] instanceof Element) {
+                return (args[1] as Element).querySelectorAll(selector);
+            } else {
+                return document.querySelector(selector);
+            }
+        case 3:
+            return (args[2] as Element).querySelectorAll(selector);
+    }
 }
 
 /**
@@ -79,7 +93,7 @@ export function getNodeAttrsDeeply(node: HTMLElement) {
         if (typeof attr.value === "string") {
             try {
                 const obj = JSON.parse(attr.value);
-                if (({}).toString.call(obj) === "[object Object]" && obj) {
+                if ({}.toString.call(obj) === "[object Object]" && obj) {
                     des[attr.name] = obj;
                 }
             } catch (error) {
@@ -102,17 +116,15 @@ export function getNodeAttrsDeeply(node: HTMLElement) {
 export function mergeNodeAttrs<T extends HTMLElement>(
     node: T, attrs: LiteralObject
 ) {
-    for (const key in attrs) {
-        const value = attrs[key];
-
+    forOwn(attrs, (value, key) => {
         if (value !== node.getAttribute(key)) {
-            if (({}).toString.call(value) === "[object Object]") {
+            if ({}.toString.call(value) === "[object Object]") {
                 node.setAttribute(key, JSON.stringify(attrs[key]));
             } else {
                 node.setAttribute(key, attrs[key]);
             }
         }
-    }
+    });
 }
 
 /**
@@ -155,45 +167,16 @@ export function createNewElement<T extends keyof HTMLElementTagNameMap>(
     return elem;
 }
 
-// type ChildElementPosition = "first" | "last" | HTMLElement;
-
-// /**
-//  * 快速插入元素
-//  * @param parent 被插入元素的父元素
-//  * @param tag 待插入元素的 tag
-//  * @param position 将元素插入到父元素的哪个位置
-//  * @param attrs 被插入元素属性初始化
-//  * @deprecated
-//  */
-// export function injectNode<T extends keyof HTMLElementTagNameMap>(
-//     parent: HTMLElement, tag: T, position?: ChildElementPosition, attrs?: { [prop: string]: any }
-// ): HTMLElementTagNameMap[T] {
-//     const elem = createNode(tag, attrs);
-
-//     switch (position) {
-//         case undefined: {
-//             parent.appendChild(elem);
-//             break;
-//         }
-
-//         case "first": {
-//             parent.prepend(elem);
-//             break;
-//         }
-
-//         case "last": {
-//             parent.appendChild(elem);
-//             break;
-//         }
-
-//         default: {
-//             parent.insertBefore(elem, position);
-//             break;
-//         }
-//     }
-
-//     return elem;
-// }
+export function parseCSSObject(
+    selector: string, cssObject: Mapped<CSSStyleDeclaration>
+): string {
+    let css = selector + "{";
+    forOwn(cssObject, (value, key) => {
+        css += kebabCase(key) + ":" + value + ";";
+    });
+    css += "}";
+    return css;
+}
 
 /**
  * 将 CSS 字符串作为 `style` 标签注入 `head`
@@ -237,15 +220,7 @@ export function injectCSSRule(selector: string, cssObject: Mapped<CSSStyleDeclar
     if (cssObject.length === 0) return;
     if (!defaultStyle.sheet) return;
 
-    let css = selector + "{";
-
-    for (const key in cssObject) {
-        const value = cssObject[key];
-        css += kebabCase(key) + ":" + value + ";";
-    }
-
-    css += "}";
-
+    const css = parseCSSObject(selector, cssObject);
     return defaultStyle.sheet.insertRule(css);
 }
 
@@ -276,15 +251,4 @@ export function fadeInLoad(selector: string) {
             elem.classList.remove(fadeInClass);
         });
     });
-}
-
-/** @deprecated */
-export function injectWidget(html: string) {
-    const widget = document.createElement("div");
-    widget.classList.add("user-widget");
-    widget.innerHTML = html;
-    document.addEventListener("DOMContentLoaded", () => {
-        document.body.insertBefore(widget, document.body.firstChild);
-    });
-    return widget;
 }

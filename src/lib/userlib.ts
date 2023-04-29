@@ -79,3 +79,11 @@ export function isModuleDisabled(module: UserModule) {
         ? true
         : false;
 }
+
+export function carryDefault<T>(val: any, def: T): T {
+    if (val) {
+        return val;
+    } else {
+        return def;
+    }
+}

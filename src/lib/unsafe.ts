@@ -9,7 +9,8 @@ import { indexOf } from "lodash-es";
  * @returns 
  */
 export function parseUserModules(
-    glob: Record<string, () => Promise<unknown>>, callbackfn?: ((info: UserModulesInfo, module: UserModule) => void)
+    glob: Record<string, () => Promise<unknown>>,
+    callbackfn?: ((info: UserModulesInfo, module: UserModule) => void)
 ): UserModule[] {
     const modules: UserModule[] = [];
     const moduleList = glob;
@@ -50,8 +51,8 @@ export function parseUserModules(
 
                         // 数组
                         if (Array.isArray(m.scope)) {
-                            for (const i in m.scope) {
-                                const str = m.scope[i];
+                            for (const scope in m.scope) {
+                                const str = scope;
                                 if (location.href.indexOf(str) !== -1) {
                                     return true;
                                 }
