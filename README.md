@@ -52,8 +52,8 @@
 
 如果你的浏览器已经成功启用油猴脚本插件，点击下面的链接可以获取 `Tieba Remix` 最新的版本
 
-| [GitHub BETA](https://raw.githubusercontent.com/WiresawBlade/Tieba-Remix/beta/dist/tieba-remix.user.js) | [Gitee BETA](https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/dist/tieba-remix.user.js) | [Greasy Fork](https://greasyfork.org/zh-CN/scripts/460113-tieba-remix) |
-| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [GitHub BETA](https://raw.githubusercontent.com/WiresawBlade/Tieba-Remix/beta/build/tieba-remix.user.js) | [Gitee BETA](https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js) | [Greasy Fork](https://greasyfork.org/zh-CN/scripts/460113-tieba-remix) |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 
 ### 其他
 目前你可能需要将此脚本与广告屏蔽插件（如 [AdBlock](https://getadblock.com/) ）配合使用才能有更完整的体验

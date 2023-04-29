@@ -46,6 +46,7 @@ const commonConfig = defineConfig({
             formats: ["iife"],
             fileName: () => `tieba-remix.user.js`
         },
+        outDir: "build",
         reportCompressedSize: false,
         cssMinify: true,
         cssCodeSplit: true
@@ -75,11 +76,20 @@ const commonConfig = defineConfig({
         "process.env": {}
     },
     server: {
-        hmr: {
-            protocol: "ws",
-            host: "localhost"
-        },
-        host: "0.0.0.0"
+        proxy: {
+            "/p": {
+                target: "https://tieba.baidu.com",
+                changeOrigin: true
+            },
+            "/f": {
+                target: "https://tieba.baidu.com",
+                changeOrigin: true
+            },
+            "/suggestion": {
+                target: "https://tieba.baidu.com",
+                changeOrigin: true
+            }
+        }
     }
 });
 
@@ -105,10 +115,18 @@ const prodConfig = defineConfig({
     }
 });
 
+// 适用于 greasy fork 的发布版本
+const gfConfig = defineConfig({
+    build: {
+        terserOptions: {}
+    }
+});
+
 const viteConfig = {
     build: {
         "dev": () => { return deepmerge(commonConfig, devConfig); },
-        "prod": () => { return deepmerge(commonConfig, prodConfig); }
+        "prod": () => { return deepmerge(commonConfig, prodConfig); },
+        "gf": () => { return deepmerge(commonConfig, deepmerge(prodConfig, gfConfig)); }
     },
     serve: {
         "dev": () => { return deepmerge(commonConfig, devConfig); }
@@ -116,5 +134,6 @@ const viteConfig = {
 };
 
 export default defineConfig(({ command, mode }) => {
+    console.log(command, mode);
     return viteConfig[command][mode]();
 });
