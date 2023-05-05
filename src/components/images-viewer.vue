@@ -1,43 +1,50 @@
 <template>
-    <DialogShadow :toggle-elems="[imageViewer!]" @request-close="unload">
-        <div ref="imageViewer" class="images-viewer">
-            <div class="image-container">
-                <img ref="currImage" class="curr-image" :src="imageArray[curr]" alt="" @wheel="imageWheel">
-            </div>
-
-            <div class="control-panel head-controls">
-                <UserButton class="zoom-in head-btn icon" title="zoom_in" @click="zoomImage(0.5)">
-                </UserButton>
-                <UserButton class="zoom-out head-btn icon" title="zoom_out" @click="zoomImage(-0.5)">
-                </UserButton>
-                <span class="zoom-size">{{ round(scale * 100) + "%" }}</span>
-                <span>|</span>
-                <UserButton class="turn-left head-btn icon" title="undo" @click="rotateImage(-90)"></UserButton>
-                <UserButton class=" turn-right head-btn icon" title="redo" @click="rotateImage(90)">
-                </UserButton>
-                <span>|</span>
-                <UserButton class="close head-btn icon" title="close" @click="unload"></UserButton>
-            </div>
-
-            <UserButton v-if="imageArray.length > 1" class="control-panel back icon" title="chevron_left" @click="listBack">
-            </UserButton>
-            <UserButton v-if="imageArray.length > 1" class="control-panel forward icon" title="chevron_right"
-                @click="listForward"></UserButton>
-
-            <div class="control-panel bottom-controls">
-                <UserButton v-for="image, index in imageArray" class="bottom-btn" :class="index === curr ? 'selected' : ''">
-                    <img class="image-list" :src="image" alt="" @click="changeCurr(index)">
-                </UserButton>
-            </div>
+    <div ref="imageViewer" class="images-viewer dialog-toggle" @wheel="imageWheel">
+        <div class="image-container dialog-toggle">
+            <img ref="currImage" class="curr-image" :src="imageArray[curr]" alt="">
         </div>
-    </DialogShadow>
+
+        <div class="control-panel head-controls">
+            <UserButton class="zoom-in head-btn icon" title="缩小" @click="zoomImage(0.5)">
+                zoom_in
+            </UserButton>
+            <UserButton class="zoom-out head-btn icon" title="放大" @click="zoomImage(-0.5)">
+                zoom_out
+            </UserButton>
+            <span class="zoom-size">{{ round(scale * 100) + "%" }}</span>
+            <span>|</span>
+            <UserButton class="turn-left head-btn icon" title="逆时针旋转" @click="rotateImage(-90)">
+                undo
+            </UserButton>
+            <UserButton class=" turn-right head-btn icon" title="顺时针旋转" @click="rotateImage(90)">
+                redo
+            </UserButton>
+            <span>|</span>
+            <UserButton class="close head-btn icon" title="关闭" @click="unload">
+                close
+            </UserButton>
+        </div>
+
+        <UserButton v-if="imageArray.length > 1" class="control-panel back icon" title="上一张" @click="listBack">
+            chevron_left
+        </UserButton>
+        <UserButton v-if="imageArray.length > 1" class="control-panel forward icon" title="下一张" @click="listForward">
+            chevron_right
+        </UserButton>
+
+        <div class="control-panel bottom-controls">
+            <UserButton v-for="image, index in imageArray" class="bottom-btn" :class="index === curr ? 'selected' : ''">
+                <img class="image-list" :src="image" alt="" @click="changeCurr(index)">
+            </UserButton>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DialogShadow from './utils/dialog-shadow.vue';
 import UserButton from './utils/user-button.vue';
 import { map, round } from 'lodash-es';
+import { unloadDialog } from '@/lib/render';
 
 interface Props {
     content: string | string[] | TiebaPost
@@ -67,9 +74,14 @@ const curr = ref(props.defaultIndex);
 const scale = ref(1.0);
 const deg = ref(0);
 
+// 状态
+const minSize = 0.2;
+const maxSize = 4.0;
+
 /** 卸载组件 */
 function unload() {
     emit("RequestClose");
+    unloadDialog();
 }
 
 /** 切换当前显示的图片 */
@@ -105,10 +117,10 @@ function transformDefault() {
 /** 缩放图片 */
 function zoomImage(delta: number) {
     scale.value += delta;
-    scale.value < 0.5
-        ? scale.value = 0.5
-        : scale.value > 4.0
-            ? scale.value = 4.0
+    scale.value < minSize
+        ? scale.value = minSize
+        : scale.value > maxSize
+            ? scale.value = maxSize
             : true;
     transformImage();
 }
@@ -131,6 +143,7 @@ function imageWheel(event: WheelEvent) {
 
 <style scoped lang="scss">
 @use "@/stylesheets/main/palette" as _;
+@use "@/stylesheets/main/remixed-main" as _main;
 
 $panel-margin: 16px;
 $panel-radius: 12px;
@@ -223,6 +236,8 @@ $panel-radius: 12px;
 
         .curr-image {
             object-fit: contain;
+
+            @include _main.default-transition(all ease);
         }
     }
 
@@ -240,6 +255,8 @@ $panel-radius: 12px;
             border: none;
             border-radius: $panel-radius - 6;
             background-color: _.$transDefaultBack;
+
+            @include _main.transition-prototype(all linear, 0.1s);
 
             .image-list {
                 width: 100%;

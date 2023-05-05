@@ -2,7 +2,8 @@
     <a ref="postContainer" class="post-container" :href="'/p/' + props.post.id" target="_blank">
         <div class="main-content">
             <a :href="props.post.forum.href" target="_blank">
-                <UserButton class="forum" :title="props.post.forum.name + ' 吧'">
+                <UserButton class="forum">
+                    {{ props.post.forum.name + " 吧" }}
                 </UserButton>
             </a>
             <p class="title">{{ props.post.title }}</p>
@@ -11,14 +12,15 @@
 
         <div class="img-container">
             <a v-for="image, index in props.post.images" href="javascript:;" @click="showImage(index)">
-                <img class="post-img" :src="image.original">
+                <img class="post-img" :src="isIntersecting ? image.original : ''">
             </a>
         </div>
 
         <div class="bottom-controls">
             <a :href="props.post.author.href" target="_blank">
                 <UserButton class="author">
-                    <img class="author-portrait" :src="tiebaAPI.profile(props.post.author.portrait)">
+                    <img class="author-portrait" :src="tiebaAPI.URL_profile(props.post.author.portrait)"
+                        onerror="this.onerror=null; this.style.backgroundColor='red';">
                     <div class="author-info">
                         <div class="author-name">{{ props.post.author.name }}</div>
                         <div class="post-time">{{ props.post.time }}</div>
@@ -33,7 +35,7 @@
 <script setup lang="ts">
 import { tiebaAPI } from "@/lib/api.tieba";
 import UserButton from "./utils/user-button.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { map } from "lodash-es";
 
 interface Props {
@@ -47,6 +49,24 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(["ClickImage"]);
 
 const postContainer = ref<HTMLAnchorElement>();
+const isIntersecting = ref(false);
+
+onMounted(() => {
+    if (!props.asyncLoad) return;
+    if (!postContainer.value) return;
+
+    // 进入视图后再加载图片
+    const iObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                isIntersecting.value = true;
+                iObs.disconnect();
+            }
+        });
+    });
+
+    iObs.observe(postContainer.value);
+});
 
 function showImage(index: number) {
     emit("ClickImage", (() => {
@@ -67,6 +87,15 @@ a {
     text-decoration: none;
 }
 
+img::before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: _.$lightBack;
+    content: "";
+}
+
 .post-container {
     display: flex;
     width: 360px;
@@ -77,6 +106,7 @@ a {
     background-color: _.$defaultBack;
     cursor: pointer;
     text-align: justify;
+    transition: 0.4s ease;
 
     .main-content {
         .forum {
@@ -172,5 +202,9 @@ a {
 
 .post-container:hover {
     background-color: _.$defaultHover;
+}
+
+.post-container:active {
+    background-color: _.$defaultActive;
 }
 </style>

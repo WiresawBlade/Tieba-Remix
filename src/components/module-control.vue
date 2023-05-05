@@ -1,58 +1,55 @@
 <template>
-    <DialogShadow>
-        <div class="dialog-warp">
-            <div class="left-container">
-                <div class="module-list-container">
-                    <UserButton v-for="module in filteredModules" :key="module.id" class="module-item"
-                        :class="selectedModule.id === module.id ? 'selected' : false" @click="moduleItemClick(module)">
-                        <p class="title">{{ module.name }}</p>
-                        <p class="brief">{{ module.brief }}</p>
-                    </UserButton>
-                </div>
-
-                <div class="head-controls">
-                    <p class="title">{{ headTitle }}</p>
-                    <UserTextbox v-model="searchText" class="search-box" :placeholder="searchPH" autocomplete="none">
-                    </UserTextbox>
-                </div>
+    <div class="mdoule-control-wrapper">
+        <div class="left-container">
+            <div class="module-list-container">
+                <UserButton v-for="module in filteredModules" :key="module.id" class="module-item"
+                    :class="selectedModule.id === module.id ? 'selected' : ''" @click="moduleItemClick(module)">
+                    <p class="title">{{ module.name }}</p>
+                    <p class="brief">{{ module.brief }}</p>
+                </UserButton>
             </div>
 
-            <div class="right-container">
-                <div v-show="selectedModule.id === '' ? false : true" class="module-container">
-                    <div class="module-info">
-                        <p class="title">{{ selectedModule.name }} <span>{{ selectedModule.id }} {{ selectedModule.version
-                        }}</span></p>
-                        <p class="brief">{{ selectedModule.brief }}</p>
-                        <p class="desc">{{ selectedModule.description }}</p>
-                    </div>
-
-                    <!-- TODO: 模块标签 -->
-                    <div v-if="false" class="module-tags">
-                    </div>
-
-                    <div class="bottom-controls">
-                        <UserButton class="toggle" :class="bottomToggle ? 'on' : 'off'"
-                            @click="toggleClick(selectedModule)">
-                        </UserButton>
-                        <UserButton class="settings"></UserButton>
-                    </div>
-                </div>
-
-                <div v-show="selectedModule.id === '' ? true : false" class="empty-container">
-                    <p class="empty-icon"></p>
-                </div>
+            <div class="head-controls">
+                <p class="title">{{ headTitle }}</p>
+                <UserTextbox v-model="searchText" class="search-box" :placeholder="searchPH" autocomplete="none">
+                </UserTextbox>
             </div>
         </div>
-    </DialogShadow>
+
+        <div class="right-container">
+            <div v-show="selectedModule.id ? true : false" class="module-container">
+                <div class="module-info">
+                    <p class="title">{{ selectedModule.name }} <span>{{ selectedModule.id }} {{ selectedModule.version
+                    }}</span></p>
+                    <p class="brief">{{ selectedModule.brief }}</p>
+                    <p class="desc">{{ selectedModule.description }}</p>
+                </div>
+
+                <!-- TODO: 模块标签 -->
+                <div v-if="false" class="module-tags">
+                </div>
+
+                <div class="bottom-controls">
+                    <UserButton class="toggle" :class="bottomToggle ? 'on' : 'off'" @click="toggleClick(selectedModule)">
+                    </UserButton>
+                    <UserButton class="settings"></UserButton>
+                </div>
+            </div>
+
+            <div v-show="selectedModule.id ? false : true" class="empty-container">
+                <p class="empty-icon"></p>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { isEqual, pull } from "lodash-es";
-import DialogShadow from "./utils/dialog-shadow.vue";
 import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 import { ref, watch } from "vue";
-import { emptyUserModule, isModuleDisabled, disabledModules } from "@/lib/userlib";
+import { isModuleDisabled } from "@/lib/userlib";
+import { disabledModules } from "@/lib/user-config";
 
 interface Props {
     modules: UserModule[]
@@ -60,7 +57,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const filteredModules = ref(props.modules);
-const selectedModule = ref(emptyUserModule());
+const selectedModule = ref(<UserModule>{});
 
 const headTitle = ref("搜索 用户模块");
 
@@ -68,22 +65,6 @@ const searchPH = ref("搜索模块关键字");
 const searchText = ref("");
 
 const bottomToggle = ref(true);
-
-function moduleItemClick(module: UserModule) {
-    selectedModule.value = module;
-    bottomToggle.value = !isModuleDisabled(module);
-}
-
-function toggleClick(module: UserModule) {
-    if (bottomToggle.value) {
-        disabledModules.push(module.id);
-        GM_setValue("disabledModules", [...new Set(disabledModules)]);
-    } else {
-        pull(disabledModules, module.id);
-        GM_setValue("disabledModules", [...new Set(disabledModules)]);
-    }
-    bottomToggle.value = !bottomToggle.value;
-}
 
 // 监听搜索框输入
 watch(searchText, () => {
@@ -107,6 +88,22 @@ watch(searchText, () => {
         });
     }
 });
+
+function moduleItemClick(module: UserModule) {
+    selectedModule.value = module;
+    bottomToggle.value = !isModuleDisabled(module);
+}
+
+function toggleClick(module: UserModule) {
+    if (bottomToggle.value) {
+        disabledModules.push(module.id);
+        GM_setValue("disabledModules", [...new Set(disabledModules)]);
+    } else {
+        pull(disabledModules, module.id);
+        GM_setValue("disabledModules", [...new Set(disabledModules)]);
+    }
+    bottomToggle.value = !bottomToggle.value;
+}
 </script>
 
 <style scoped lang="scss">
@@ -121,7 +118,7 @@ $right-width: 360px;
 $item-margin: 4px;
 $bottom-height: 60px;
 
-.dialog-warp {
+.mdoule-control-wrapper {
     display: grid;
     width: 600px;
     height: 400px;
@@ -131,7 +128,7 @@ $bottom-height: 60px;
     border-radius: $dialog-radius;
     margin: auto;
     background-color: _.$defaultBack;
-    box-shadow: 0 0 40px rgba(0 0 0 / 10%);
+    box-shadow: 0 0 40px rgba(0 0 0 / 20%);
     grid-template-columns: 240px 360px;
 
     .left-container {
@@ -154,6 +151,7 @@ $bottom-height: 60px;
 
             .title {
                 padding-top: 14px;
+                margin: 0;
                 color: _.$lightFore;
             }
 
@@ -171,24 +169,27 @@ $bottom-height: 60px;
             border-radius: $dialog-radius 0 0 $dialog-radius;
 
             .module-item {
-                overflow: hidden;
+                display: flex;
                 width: 240px;
                 box-sizing: border-box;
+                flex-direction: column;
                 padding: 12px $dialog-margin;
+                border: none;
                 border-radius: 0;
                 background-color: unset;
-                box-shadow: none;
+                gap: 4px;
                 text-align: justify;
                 white-space: nowrap;
 
                 .title {
+                    margin: 0;
                     font-size: 16px;
                     font-weight: bold;
                 }
 
                 .brief {
                     overflow: hidden;
-                    margin-top: 2px;
+                    margin: 0;
                     color: _.$minimalFore;
                     font-size: 12px;
                     text-overflow: ellipsis;
@@ -196,7 +197,7 @@ $bottom-height: 60px;
             }
 
             .module-item:hover {
-                background-color: _.$transTiebaThemeColor;
+                background-color: _.$defaultHover;
             }
 
             .module-item.selected {
@@ -240,6 +241,7 @@ $bottom-height: 60px;
 
                 .title {
                     padding-bottom: 8px;
+                    margin: 0;
                     font-size: 20px;
                     font-weight: bold;
 
@@ -253,6 +255,7 @@ $bottom-height: 60px;
                 }
 
                 .brief {
+                    margin: 0;
                     color: _.$minimalFore;
                     font-size: 14px;
                 }
@@ -278,9 +281,9 @@ $bottom-height: 60px;
                     min-width: 36px;
                     padding: 2px 6px;
                     border: 1px solid _.$tiebaThemeColor;
+                    border: none;
                     border-radius: 24px;
                     background-color: _.$transTiebaThemeColor;
-                    box-shadow: none;
                     color: _.$tiebaThemeFore;
                 }
 
@@ -307,9 +310,9 @@ $bottom-height: 60px;
                 .toggle,
                 .settings {
                     padding: 0;
+                    border: none;
                     border-radius: 24px;
                     background-color: unset;
-                    box-shadow: none;
                     font-family: "Material Icons", monospace;
                 }
 
