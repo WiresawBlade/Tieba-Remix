@@ -45,7 +45,7 @@
     border: none !important;
 }
 
-.content {
+#content {
     /* 容器 */
     width: 982px;
 }
@@ -152,7 +152,6 @@
 
 .search_internal_btn::after {
     color: var(--default-background);
-    content: "deployed_code";
     content: "search";
     font-family: "Material Icons";
     font-size: 18px;
@@ -205,13 +204,13 @@
     background-color: var(--very-light-background) !important;
 }
 
-.threadlist_bright>li {
+.threadlist_bright > li {
     /* 贴子 */
     border: none !important;
     background-color: var(--default-background) !important;
 }
 
-.threadlist_bright>li:hover {
+.threadlist_bright > li:hover {
     background-color: var(--trans-light-background) !important;
 }
 
