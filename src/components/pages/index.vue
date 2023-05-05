@@ -1,90 +1,170 @@
 <template>
     <div class="index-wrapper">
-        <div class="head-controls">
-            <div class="main-title">
-                <img src="/images/main/icon.png" alt="icon" class="main-icon">
-                <div class="title">百度贴吧</div>
+        <div class="grid-container">
+            <div class="head-controls">
+                <div class="main-title">
+                    <img src="/images/main/icon.png" alt="icon" class="main-icon">
+                    <div class="title">百度贴吧</div>
+                </div>
+
+                <!-- 用户按钮 -->
+                <div class="profile-menu-container" @click="profileToggle = !profileToggle">
+                    <UserButton class="curr-user">
+                        <img :src="userInfo ? tiebaAPI.URL_profile(userInfo.user_portrait) : tiebaAPI.URL_profile('un')"
+                            alt="用户头像" class="user-profile">
+                    </UserButton>
+
+                    <DropdownMenu v-if="profileToggle" :menu-items="profileMenu!" class="profile-menu" :blur-effect="true"
+                        @request-close="profileToggle = false">
+                    </DropdownMenu>
+                </div>
+
+                <!-- 配置按钮 -->
+                <div class="config-menu-container" @click="configToggle = !configToggle">
+                    <UserButton class="config-menu-btn" :unset-background="true">menu</UserButton>
+
+                    <DropdownMenu v-if="configToggle" :menu-items="configMenu!" class="config-menu" :blur-effect="true"
+                        @request-close="configToggle = false">
+                    </DropdownMenu>
+                </div>
+
+                <!-- 搜索组件 -->
+                <div class="search-controls">
+                    <UserTextbox v-model="searchText" class="search-box" placeholder="搜索 百度贴吧" autocomplete="none"
+                        @focus="searchBoxFocus" @input="searchMatch">
+                    </UserTextbox>
+
+                    <UserButton class="search-button">搜索</UserButton>
+
+                    <!-- 搜索建议组件 -->
+                    <div v-show="suggToggle && suggestions.length > 0" class="search-suggestions">
+                        <UserButton class="search-elem" v-for="sugg in suggestions">
+                            <a :href="sugg.href" target="_blank">
+                                <img class="sugg-img" :src="sugg.image" alt="">
+                                <div class="sugg-content">
+                                    <p class="sugg-title">{{ sugg.title }}</p>
+                                    <p class="sugg-desc">{{ sugg.desc }}</p>
+                                </div>
+                            </a>
+                        </UserButton>
+                    </div>
+                </div>
             </div>
 
-            <div class="search-controls">
-                <UserTextbox v-model="searchText" class="search-box" placeholder="搜索 百度贴吧" autocomplete="none"
-                    @focus="searchBoxFocus" @input="searchMatch">
-                </UserTextbox>
-                <UserButton class="search-button" title="搜索"></UserButton>
-                <div v-show="suggToggle" class="search-suggestions">
-                    <a v-for="sugg in suggestions" class="search-elem" :href="sugg.href" target="_blank" tabindex="0">
-                        <img class="sugg-img" :src="sugg.image" alt="">
-                        <div class="sugg-content">
-                            <p class="sugg-title">{{ sugg.title }}</p>
-                            <p class="sugg-desc">{{ sugg.desc }}</p>
-                        </div>
+            <!-- 关注的吧 -->
+            <div v-if="followed" class="block-wrapper followed-container">
+                <div class="block-controls followed">
+                    <p class="block-title">关注的吧</p>
+                    <div class="block-panel signed-count left-align">{{ signedForums }} / {{ followed?.like_forum.length }}
+                    </div>
+
+                    <div class="block-panel followed">
+                        <UserButton class="panel-btn icon sign-btn" :unset-background="true">task_alt</UserButton>
+                        <UserButton class="panel-btn icon settings" :unset-background="true">settings</UserButton>
+                    </div>
+                </div>
+
+                <div class="block-container followed-list">
+                    <a v-for=" forum  in  followed?.like_forum " :href="tiebaAPI.URL_forum(forum.forum_name)"
+                        target="_blank">
+                        <UserButton class="followed-btn" :shadow-border="true">
+                            <div v-if="forum.is_sign === 1" class="icon signed">check</div>
+                            <div class="forum-title">{{ forum.forum_name }}</div>
+                            <div class="forum-level" :class="'level-' + levelToClass(forum.user_level)">
+                                {{ forum.user_level }}
+                            </div>
+                        </UserButton>
                     </a>
                 </div>
             </div>
+
+            <!-- 贴吧热议 -->
+            <div v-if="topicList.length > 0" class="block-wrapper topic-container">
+                <div class="block-controls topics">
+                    <p class="block-title">贴吧热议</p>
+
+                    <div class="block-panel topics">
+                        <UserButton class="panel-btn icon switch" :unset-background="true">tune</UserButton>
+                        <UserButton class="panel-btn icon more" :unset-background="true">more_horiz</UserButton>
+                        <UserButton class="panel-btn icon settings" :unset-background="true">settings</UserButton>
+                    </div>
+                </div>
+
+                <div class="block-container topic-list">
+                    <a v-for=" topic  in  take(topicList, 10) " :href="topic.topic_url" target="_blank">
+                        <UserButton class="topic-btn" :shadow-border="true">
+                            <img class="topic-img" :src="topic.topic_pic">
+                            <div class="topic-content">
+                                <div class="topic-title">
+                                    <div :class="'topic-rank-' + topic.idx_num">{{ topic.idx_num }}</div>
+                                    <div class="topic-name">{{ topic.topic_name }}</div>
+                                </div>
+                                <div class="topic-desc">{{ topic.topic_desc }}</div>
+                            </div>
+                        </UserButton>
+                    </a>
+                </div>
+            </div>
+
+            <div id="carousel_wrap"></div>
         </div>
 
-        <a class="curr-user" :href="tiebaAPI.userHome(userInfo?.user_portrait!)" target="_blank">
-            <img :src="tiebaAPI.profile(userInfo!.user_portrait)" alt="用户头像" class="user-profile">
-        </a>
+        <div class="masonry-container">
+            <!-- 推送 -->
+            <div v-if="feeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
+                <div class="block-panel feeds">
+                    <UserButton class="panel-btn icon refresh" :unset-background="true" @click="refreshFeeds">refresh
+                    </UserButton>
+                    <UserButton class="panel-btn icon settings" :unset-background="true">settings</UserButton>
+                </div>
+            </div>
 
-        <div class="menu-container">
-            <UserButton class="main-menu">menu</UserButton>
+            <div ref="feedsContainer" class="feeds-container">
+                <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :async-load="true"
+                    @click-image="showImages">
+                </PostContainer>
+            </div>
 
-            <div class="menu-content">
-                <template v-for="menuItem in menuArray">
-                    <template v-if="typeof menuItem === 'string'">
-                        <div class="menu-separator"></div>
-                    </template>
-
-                    <template v-else>
-                        <a class="menu-item" :href="menuItem.href ? menuItem.href : 'javascript:;'" @click="menuItem.click">
-                            <div v-if="menuItem.icon" class="icon">{{ menuItem.icon }}</div>
-                            <div>{{ menuItem.title }}</div>
-                        </a>
-                    </template>
-                </template>
+            <div v-if="feeds.length === 0" class="empty-container">
+                <p class="no-feed-content">没有更多了</p>
             </div>
         </div>
-
-        <ImagesViewer v-if="viewerToggle" class="main-imgviewer" :content="postImages" :default-index="defaultIndex"
-            @request-close="closeViewer">
-        </ImagesViewer>
-
-        <div ref="postContainer" class="posts-container">
-            <PostContainer ref="components" v-for="post in posts" :key="post.id" :post="post" class="post-elem"
-                @click-image="showImages">
-            </PostContainer>
-        </div>
-
-        <div v-if="posts.length === 0" class="empty-container">
-            <p class="no-feed-content">没有更多了</p>
-        </div>
-
-        <div id="carousel_wrap"></div>
     </div>
 </template>
 
 <script setup lang="ts">
 import {
+    tiebaAPI,
     FeedListResponse,
     SuggestionResponse, UserInfoResponse,
-    parsePostsFromString, tiebaAPI
+    FollowedForumsResponse,
+    levelToClass, parsePostsFromString,
+    TopicListResponse, TopicList
 } from "@/lib/api.tieba";
+
+import { getCurrentInstance, nextTick, onMounted, ref, watch } from "vue";
+import { debounce, forEach, map, take } from "lodash-es";
+import { findParentByClass } from "@/lib/domlib";
+import { renderDialog } from "@/lib/render";
+import { MainModules } from "@/main";
+import { getUserValueTS, setUserValueTS } from "@/lib/userlib";
+import { BaiduPassport, GiteeRepo, GithubRepo, spawnOffsetTS } from "@/lib/utils";
+
 import PostContainer from "../post-container.vue";
 import ImagesViewer from "../images-viewer.vue";
 import UserTextbox from "../utils/user-textbox.vue";
 import UserButton from "../utils/user-button.vue";
-import { onMounted, ref, watch } from "vue";
 import Masonry from "masonry-layout";
-import { debounce, map } from "lodash-es";
-import { findParentByClass } from "@/lib/domlib";
+import DropdownMenu from "../utils/dropdown-menu.vue";
+import ModuleControl from "../module-control.vue";
 
-const posts = ref<TiebaPost[]>([]);
+const feeds = ref<TiebaPost[]>([]);
 const userInfo = ref<UserInfoResponse["data"]>();
-const viewerToggle = ref(false);
+const followed = ref<FollowedForumsResponse["data"]>();
+
 const postImages = ref<string[]>([]);
 const defaultIndex = ref(0);
-const postContainer = ref<HTMLAnchorElement>();
+const feedsContainer = ref<HTMLAnchorElement>();
 const searchText = ref<string>("");
 const suggToggle = ref(false);
 const suggestions = ref<{
@@ -93,75 +173,145 @@ const suggestions = ref<{
     desc: string
     href: string
 }[]>([]);
-const menuArray = ref<({
-    title: string
-    href?: string
-    click?: (() => void)
-    icon?: string
-} | "separator")[]>();
+const configToggle = ref(false);
+const configMenu = ref<DropdownMenu[]>();
+const profileToggle = ref(false);
+const profileMenu = ref<DropdownMenu[]>();
+
+const topicList = ref<TopicList[]>([]);
 
 // 状态
 let isFetchingFeeds = false;
+let signedForums = 0;
 
 let msnry: Masonry;
 
 // 初始化
-// 用户信息
-if (!userInfo.value) {
-    userInfo.value = <UserInfoResponse["data"]>{};
-}
-fetch(tiebaAPI.userInfo()).then((response) => {
-    if (response.ok) {
-        response.json().then((value?: UserInfoResponse) => {
-            if (value) userInfo.value = value.data;
-        });
-    }
-});
-
-// 配置菜单
-menuArray.value = [
-    {
-        title: "设置",
-        click() {
-            alert("settings");
-        },
-        icon: "settings"
-    },
-    {
-        title: "模块管理",
-        click() {
-            alert("module control");
+onMounted(async () => {
+    // 用户信息
+    userInfo.value = await (async () => {
+        try {
+            const userInfoResp = (await (await tiebaAPI.userInfo()).json() as UserInfoResponse);
+            if (userInfoResp) {
+                return userInfoResp.data;
+            }
+        } catch (error) {
+            console.warn(error);
         }
-    },
-    "separator",
-    {
-        title: "检查更新..."
+    })();
+    console.log("user info", userInfo.value);
+
+    // 配置菜单
+    configMenu.value = [
+        {
+            title: "设置"
+        },
+        {
+            title: "模块管理",
+            click() {
+                renderDialog(ModuleControl, {
+                    modules: MainModules
+                });
+            }
+        },
+        "separator",
+        {
+            title: "源代码 (Github)",
+            href: GithubRepo
+        },
+        {
+            title: "源代码 (Gitee)",
+            href: GiteeRepo
+        }
+    ];
+
+    // 用户菜单
+    profileMenu.value = [
+        {
+            title: "登录",
+            icon: "login",
+            href: BaiduPassport
+        }
+    ];
+
+    if (userInfo.value) {
+        profileMenu.value = [
+            {
+                title: "我的收藏",
+                icon: "star"
+            },
+            "separator",
+            {
+                title: "主页",
+                icon: "home",
+                href: tiebaAPI.URL_userHome(userInfo.value.user_portrait)
+            },
+            {
+                title: "修改",
+                icon: "settings"
+            },
+            "separator",
+            {
+                title: "退出登录",
+                icon: "logout"
+            }
+        ];
     }
-];
 
-onMounted(() => {
-    if (!postContainer.value) return;
+    // 获取关注的吧
+    if (userInfo.value) {
+        tiebaAPI.followedForums().then((response) => {
+            if (response.ok) {
+                response.json().then((value: FollowedForumsResponse) => {
+                    if (value) {
+                        followed.value = value.data;
 
-    // 第一次加载首页时异步加载推荐并计算布局
-    addFeedList().then(() => {
-        if (!postContainer.value) return;
-
-        msnry = new Masonry(postContainer.value, {
-            itemSelector: ".post-elem",
-            gutter: 12,
-            fitWidth: true,
-            transitionDuration: 0
+                        // 已签到计数
+                        forEach(followed.value.like_forum, forum => {
+                            if (forum.is_sign === 1) signedForums++;
+                        });
+                        // 排序关注吧
+                        followed.value.like_forum.sort((a, b) =>
+                            parseInt(b.user_exp) - parseInt(a.user_exp));
+                    }
+                });
+            }
         });
+    }
 
-        window.addEventListener("resize", () => {
-            if (typeof msnry.layout === "function") msnry.layout();
-        });
-
-        watch(posts.value, () => {
-            if (msnry.layout) msnry.layout();
-        });
+    // 贴吧热议
+    tiebaAPI.topicList().then((response) => {
+        if (response.ok) {
+            response.json().then((value: TopicListResponse) => {
+                if (value) {
+                    topicList.value.push(...value.data.bang_topic.topic_list);
+                }
+            });
+        }
     });
 
+    // 页面
+    if (!feedsContainer.value) return;
+
+    const unread = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
+    if (userInfo.value) {
+        if (unread.length > 0) {
+            // 有未读推送则直接使用
+            addFeedList(unread);
+        } else {
+            // 异步加载推荐并计算布局
+            addFeedList();
+        }
+    } else {
+        unread.length = 0;
+        console.log(unread);
+    }
+
+    const fetchFeeds = debounce(() => {
+        addFeedList();
+    }, 1000, { leading: true });
+
+    // 页面滚动到底部加载新的推送
     window.addEventListener("scroll", () => {
         if (isFetchingFeeds) return;
 
@@ -170,30 +320,13 @@ onMounted(() => {
         const clientHeight = document.documentElement.clientHeight;
 
         if (scrollTop + clientHeight >= scrollHeight - 1) {
-            isFetchingFeeds = true;
-            addFeedList().then(() => {
-                rerender();
-                isFetchingFeeds = false;
-            });
+            fetchFeeds();
         }
     });
 });
 
 window.addEventListener("focusin", (ev) => toggleSuggControls(ev));
 window.addEventListener("mousedown", (ev) => toggleSuggControls(ev));
-
-// window.addEventListener("mousedown", (ev) => {
-//     const el = ev.target as HTMLElement;
-//     const pt = findParentByClass(el, "search-controls");
-//     if (pt) {
-//         console.log(pt);
-//         (pt as HTMLElement).focus();
-//         suggToggle.value = true;
-//         console.log(suggToggle.value, pt);
-//     } else {
-//         // suggToggle.value = false;
-//     }
-// });
 
 function toggleSuggControls(payload: Event) {
     const el = payload.target as HTMLElement;
@@ -206,23 +339,55 @@ function toggleSuggControls(payload: Event) {
 }
 
 /**
- * 将一次推荐请求获取到的贴子加入 `posts`
+ * 将一次推荐请求获取到的贴子加入 `feeds`
  */
-async function addFeedList() {
-    const response = await fetch(tiebaAPI.feedlist());
-    if (response.ok) {
-        await response.json().then((value: FeedListResponse) => {
-            posts.value.push(...parsePostsFromString(value.data.html));
-        });
+async function addFeedList(newFeeds?: TiebaPost[]) {
+    if (!newFeeds) {
+        isFetchingFeeds = true;
+        const response = await tiebaAPI.feedlist();
+        if (response.ok) {
+            await response.json().then((value: FeedListResponse) => {
+                const newFeeds = parsePostsFromString(value.data.html);
+                feeds.value.push(...newFeeds);
+                isFetchingFeeds = false;
+
+                renderFeeds();
+                // 将新的推送设置为未读推送，失效时间为2小时后
+                setUserValueTS("unreadFeeds", newFeeds, spawnOffsetTS(0, 0, 0, 2));
+            });
+        }
+    } else {
+        feeds.value.push(...newFeeds);
+        renderFeeds();
     }
 }
 
-/**
- * 重新渲染布局
- */
-function rerender() {
-    if (msnry.reloadItems) msnry.reloadItems();
-    if (msnry.layout) msnry.layout();
+function renderFeeds() {
+    nextTick(() => {
+        if (!feedsContainer.value) return;
+
+        msnry = new Masonry(feedsContainer.value, {
+            itemSelector: ".post-elem",
+            gutter: 12,
+            fitWidth: true,
+            transitionDuration: 0
+        });
+
+        window.addEventListener("resize", () => {
+            if (typeof msnry.layout === "function") msnry.layout();
+        });
+
+        watch(feeds.value, () => {
+            if (msnry.layout) msnry.layout();
+        });
+    });
+}
+
+function refreshFeeds() {
+    feeds.value = [];
+    addFeedList().then(() => {
+        renderFeeds();
+    });
 }
 
 /**
@@ -230,7 +395,7 @@ function rerender() {
  * @param query 搜索关键字
  */
 async function loadSuggestions(query?: string) {
-    const response = await fetch(tiebaAPI.suggestions(query));
+    const response = await tiebaAPI.suggestions(query);
     if (response.ok) {
         response.json().then((value: SuggestionResponse) => {
             // 没有输入搜索内容则获取热门搜索
@@ -250,7 +415,7 @@ async function loadSuggestions(query?: string) {
                         image: match.fpic,
                         title: match.fname,
                         desc: match.forum_desc,
-                        href: tiebaAPI.forum(match.fname)
+                        href: tiebaAPI.URL_forum(match.fname)
                     }));
             }
         });
@@ -277,11 +442,11 @@ const searchMatch = debounce(searchTextChange, 500);
 function showImages(images: string[], index: number) {
     postImages.value = images;
     defaultIndex.value = index;
-    viewerToggle.value = true;
-}
 
-function closeViewer() {
-    viewerToggle.value = false;
+    renderDialog(ImagesViewer, {
+        content: postImages.value,
+        defaultIndex: defaultIndex.value
+    });
 }
 </script>
 
@@ -291,219 +456,379 @@ function closeViewer() {
 $menu-margin: 24px;
 $menu-button-size: 32px;
 
-.icon {
-    font-family: "Material Icons", monospace;
-}
-
 a {
     color: unset;
     text-decoration: none;
 }
 
-.index-wrapper {
-    display: grid;
-    margin: 0;
-    gap: 12px;
-    grid-template-rows: repeat(1, 1fr);
+.block-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-    .head-controls {
+    .block-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .block-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    }
+
+    .block-container {
+        padding: 8px;
+        border-radius: 12px;
+        background-color: _.$lightBack;
+    }
+}
+
+.block-panel {
+    display: flex;
+    min-width: 30px;
+    height: 26px;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 8px;
+    border-radius: 24px;
+    margin-left: auto;
+    background-color: _.$lightBack;
+    font-size: 14px;
+    gap: 4px;
+    text-align: center;
+
+    .icon {
+        color: _.$lightFore;
+        font-size: 18px;
+    }
+
+    .panel-btn {
+        padding: 4px;
+        border: none;
+        border-radius: 48px;
+    }
+
+    // .panel-btn:hover {
+    //     background-color: _.$defaultHover;
+    // }
+}
+
+.block-panel.left-align {
+    margin-left: 0;
+}
+
+.index-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .grid-container {
+        display: grid;
+        margin: 16px;
+        gap: 36px;
+        grid-template-rows: repeat(1, 1fr);
+
+        .head-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+            gap: 24px;
+
+            .main-title {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+
+                .main-icon {
+                    height: 64px;
+                }
+
+                .title {
+                    font-size: 36px;
+                    font-style: italic;
+                    font-weight: bold;
+                }
+            }
+
+            .search-controls {
+                position: relative;
+                display: grid;
+                width: 100%;
+                max-width: 420px;
+                justify-content: center;
+                grid-template-columns: 1fr 72px;
+
+                .search-box {
+                    width: 100%;
+                    padding: 8px;
+                    border-bottom-right-radius: 0;
+                    border-top-right-radius: 0;
+                    font-size: 16px;
+                }
+
+                .search-button {
+                    border: none;
+                    background-color: _.$lightBack;
+                    border-bottom-left-radius: 0;
+                    border-top-left-radius: 0;
+                    font-size: 16px;
+                }
+
+                .search-button:hover {
+                    background-color: _.$defaultBack;
+                }
+
+                .search-suggestions {
+                    position: absolute;
+                    z-index: 1;
+                    top: 100%;
+                    display: flex;
+                    overflow: hidden;
+                    width: 100%;
+                    box-sizing: border-box;
+                    flex-direction: column;
+                    border: 1px solid _.$borderColor;
+                    border-radius: 6px;
+                    margin-top: 4px;
+                    background-color: _.$defaultBack;
+                    box-shadow: 0 0 20px rgb(0 0 0 / 20%);
+
+                    .search-elem {
+                        $img-size: 42px;
+                        $gap: 8px;
+
+                        overflow: hidden;
+                        box-sizing: border-box;
+                        padding: 0;
+                        border: none;
+                        border-radius: 0;
+                        text-align: justify;
+
+                        a {
+                            display: flex;
+                            padding: $gap;
+                            gap: $gap;
+
+                            .sugg-img {
+                                width: $img-size;
+                                height: $img-size;
+                                border-radius: 8px;
+                            }
+
+                            .sugg-content {
+                                position: relative;
+                                display: flex;
+                                width: calc(100% - $img-size - $gap);
+                                flex-direction: column;
+                                justify-content: center;
+                                gap: 4px;
+
+                                .sugg-title {
+                                    overflow: hidden;
+                                    margin: 0;
+                                    font-size: 14px;
+                                    font-weight: bold;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                }
+
+                                .sugg-desc {
+                                    overflow: hidden;
+                                    margin: 0;
+                                    color: _.$lightFore;
+                                    font-size: 12px;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                }
+                            }
+                        }
+                    }
+
+                    .search-elem:hover {
+                        background-color: _.$defaultHover;
+                    }
+                }
+            }
+        }
+
+        .profile-menu-container {
+            position: absolute;
+            z-index: 1;
+
+            .curr-user {
+                position: fixed;
+                top: $menu-margin;
+                left: $menu-margin;
+                overflow: hidden;
+                width: 36px;
+                height: 36px;
+                padding: 0;
+                border: 3px solid _.$borderColor;
+                border-radius: 36px;
+
+                .user-profile {
+                    width: 100%;
+                    object-fit: fill;
+                }
+            }
+
+            .profile-menu {
+                top: 64px;
+                left: 24px;
+            }
+        }
+
+        .config-menu-container {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+
+            .config-menu-btn {
+                position: fixed;
+                top: $menu-margin;
+                right: $menu-margin;
+                height: 32px;
+                border: none;
+                border-radius: 36px;
+                background-color: _.$pageBack;
+                font-family: "Material Icons", monospace;
+                font-size: 24px;
+            }
+
+            .config-menu-btn:hover {
+                background-color: _.$defaultBack;
+            }
+
+            .config-menu-btn:active {
+                background-color: _.$defaultHover;
+            }
+
+            .config-menu {
+                top: 64px;
+                right: 24px;
+            }
+        }
+
+        .signed-count {
+            font-weight: bold;
+        }
+
+        .block-panel.followed {
+            margin-left: auto;
+        }
+
+        .followed-container {
+            margin-top: -16px;
+
+            .followed-list {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 8px;
+                border-radius: 12px;
+                background-color: _.$lightBack;
+                gap: 4px;
+
+                .followed-btn {
+                    display: flex;
+                    align-items: center;
+                    padding: 6px;
+                    border-radius: 12px;
+                    gap: 6px;
+
+                    .signed {
+                        color: green;
+                        font-weight: bold;
+                    }
+
+                    .forum-level {
+                        min-width: 24px;
+                        padding: 0 2px;
+                        border-radius: 24px;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+
+        .topic-list {
+            display: grid;
+            gap: 4px;
+            grid-auto-rows: max-content;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(auto-fill, minmax(1px, 1fr));
+
+            .topic-btn {
+                display: flex;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                padding: 12px;
+                border-radius: 12px;
+                gap: 8px;
+
+                .topic-img {
+                    width: 72px;
+                    border-radius: 12px;
+                }
+
+                .topic-content {
+                    display: flex;
+                    flex-flow: column wrap;
+                    gap: 4px;
+                    text-align: justify;
+
+                    .topic-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+
+                        [class^="topic-rank"] {
+                            padding: 0 4px;
+                            border-radius: 4px;
+                            background-color: orange;
+                            color: _.$defaultBack;
+                            font-weight: bold;
+                            text-align: center;
+                        }
+
+                        .topic-name {
+                            font-size: 16px;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .topic-desc {
+                        color: _.$lightFore;
+                    }
+                }
+            }
+        }
+    }
+
+    .masonry-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 24px;
-        gap: 24px;
+        gap: 8px;
 
-        .main-title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+        .feeds-container {
+            margin: auto;
 
-            .main-icon {
-                height: 64px;
-            }
-
-            .title {
-                font-size: 36px;
-                font-style: italic;
-                font-weight: bold;
+            .post-elem {
+                margin-bottom: 12px;
             }
         }
 
-        .search-controls {
-            position: relative;
-            display: grid;
-            width: 100%;
-            max-width: 420px;
-            justify-content: center;
-            grid-template-columns: 1fr 72px;
-
-            .search-box {
-                width: 100%;
-                padding: 8px;
-                border-bottom-right-radius: 0;
-                border-top-right-radius: 0;
-                font-size: 16px;
+        .empty-container {
+            .no-feed-content {
+                color: _.$minimalFore;
+                font-size: small;
+                text-align: center;
             }
-
-            .search-button {
-                border: none;
-                background-color: _.$lightBack;
-                border-bottom-left-radius: 0;
-                border-top-left-radius: 0;
-                font-size: 16px;
-            }
-
-            .search-button:hover {
-                background-color: _.$defaultBack;
-            }
-
-            .search-suggestions {
-                position: absolute;
-                z-index: 1;
-                top: 100%;
-                display: flex;
-                overflow: hidden;
-                width: 100%;
-                box-sizing: border-box;
-                flex-direction: column;
-                border: 1px solid _.$borderColor;
-                border-radius: 8px;
-                margin-top: 4px;
-                background-color: _.$defaultBack;
-                box-shadow: 0 0 20px rgb(0 0 0 / 20%);
-
-                .search-elem {
-                    $img-size: 42px;
-                    $gap: 8px;
-
-                    display: flex;
-                    overflow: hidden;
-                    box-sizing: border-box;
-                    padding: $gap;
-                    gap: $gap;
-
-                    .sugg-img {
-                        width: $img-size;
-                        height: $img-size;
-                        border-radius: 8px;
-                    }
-
-                    .sugg-content {
-                        position: relative;
-                        display: flex;
-                        width: calc(100% - $img-size - $gap);
-                        flex-direction: column;
-                        justify-content: center;
-                        gap: 8px;
-
-                        .sugg-title {
-                            overflow: hidden;
-                            max-height: 14px;
-                            margin: 0;
-                            font-size: 14px;
-                            font-weight: bold;
-                            line-height: 14px;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-
-                        .sugg-desc {
-                            overflow: hidden;
-                            max-height: 12px;
-                            margin: 0;
-                            color: _.$lightFore;
-                            font-size: 12px;
-                            line-height: 12px;
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                        }
-                    }
-                }
-
-                .search-elem:hover {
-                    background-color: _.$lightBack;
-                }
-            }
-        }
-    }
-
-    .curr-user {
-        position: fixed;
-        top: $menu-margin;
-        left: $menu-margin;
-        overflow: hidden;
-        width: $menu-button-size;
-        height: $menu-button-size;
-        border: 3px solid _.$borderColor;
-        border-radius: 36px;
-
-        .user-profile {
-            width: 100%;
-        }
-    }
-
-    .menu-container {
-        position: relative;
-        display: flex;
-
-        .main-menu {
-            position: fixed;
-            top: $menu-margin;
-            right: $menu-margin;
-            height: $menu-button-size;
-            border: none;
-            border-radius: 36px;
-            background-color: unset;
-            font-family: "Material Icons", monospace;
-            font-size: 24px;
-        }
-
-        .main-menu:hover {
-            background-color: _.$defaultBack;
-        }
-
-        .menu-content {
-            position: fixed;
-            display: flex;
-            overflow: hidden;
-            min-width: 120px;
-            flex-direction: column;
-            border: 1px solid _.$borderColor;
-            border-radius: 8px;
-            background-color: _.$defaultBack;
-
-            .menu-item {
-                display: flex;
-                align-items: center;
-                padding: 6px 10px;
-                gap: 4px;
-            }
-
-            .menu-item:hover {
-                background-color: _.$lightBack;
-            }
-
-            .menu-separator {
-                height: 1px;
-                background-color: _.$borderColor;
-            }
-        }
-    }
-
-    .posts-container {
-        margin: auto;
-
-        .post-elem {
-            margin-bottom: 12px;
-        }
-    }
-
-    .empty-container {
-        .no-feed-content {
-            color: _.$minimalFore;
-            font-size: small;
-            text-align: center;
         }
     }
 }
