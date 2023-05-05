@@ -1,52 +1,140 @@
 import { forEach, join, split } from "lodash-es";
 import { DOMS } from "./domlib";
-import { carryDefault } from "./userlib";
+import { fetchWithBody, carryDefault } from "./utils";
 
-/** 贴吧 API 请求链接 */
+/** 贴吧 API */
 export const tiebaAPI = {
     /** 首页推荐 */
     feedlist: () =>
-        `/f/index/feedlist?is_new=1&tag_id=like`,
+        fetchWithBody("/f/index/feedlist", {
+            "is_new": 1,
+            "tag_id": "like"
+        }),
 
     /** 用户头像 */
-    profile: (portrait: string) =>
+    URL_profile: (portrait: string) =>
         `https://gss0.baidu.com/7Ls0a8Sm2Q5IlBGlnYG/sys/portrait/item/${portrait}`,
 
     /** 当前登录用户信息 */
-    userInfo: (serverTime?: string) =>
-        `/f/user/json_userinfo${serverTime ? "?_=" + serverTime : ""}`,
+    userInfo: (serverTime?: number) =>
+        fetchWithBody("/f/user/json_userinfo", {
+            "_": serverTime
+        }),
 
     /** 用户主页 */
-    userHome: (portrait: string) =>
-        `https://tieba.baidu.com/home/main?id=${portrait}&fr=index`,
+    URL_userHome: (portrait: string) =>
+        `/home/main?id=${portrait}&fr=index`,
 
     /** 搜索建议 */
-    suggestions: (query?: string, encoding = "UTF-8", serverTime?: string) =>
-        `/suggestion?query=${query ? query : ""}&ie=${encoding}${serverTime
-            ? "&_=" + serverTime : ""}`,
+    suggestions: (query?: string, encoding = "UTF-8", serverTime?: number) =>
+        fetchWithBody("/suggestion", {
+            "query": query,
+            "ie": encoding,
+            "_": serverTime
+        }),
 
     /** 贴吧热议 */
     topicList: () =>
-        `/hottopic/browse/topicList`,
+        fetch("/hottopic/browse/topicList"),
 
     /** 吧跳转 */
-    forum: (keywords: string, encoding = "utf-8") =>
+    URL_forum: (keywords: string, encoding = "utf-8") =>
         `/f?ie=${encoding}&kw=${keywords}`,
 
     /** 未读消息 */
-    unreadMessages: (serverTime?: string) =>
-        `/im/pcmsg/query/getAllUnread?_=${serverTime ? serverTime : ""}`
+    unreadMessages: (serverTime?: number) =>
+        fetchWithBody("/im/pcmsg/query/getAllUnread", {
+            "_": serverTime
+        }),
+
+    /** 收藏更新 */
+    favUpdateNum: () =>
+        fetch("/sysmsg/userpost/queryStoreUpdateNum"),
+
+    /** 获取 tbs */
+    tbs: () =>
+        fetch("/dc/common/tbs"),
+
+    /** 获取已关注的吧 */
+    followedForums: () =>
+        fetch("/mo/q/newmoindex"),
+
+    /** 更详细的用户信息 */
+    userInfoAll: (un: string, encoding = "UTF-8") =>
+        fetchWithBody("/home/get/panel", {
+            "ie": encoding,
+            "un": un
+        }),
+
+    /** 关注吧 */
+    followForum: (tbs: string, forumId: number, forumName: string) =>
+        fetchWithBody("/mo/q/favolike", {
+            "itb_tbs": tbs,
+            "fid": forumId,
+            "kw": forumName
+        }),
+
+    /** 取消关注吧 */
+    unfollowForum: (tbs: string, forumName: string) =>
+        fetchWithBody("/mo/q/delmylike", {
+            "itb_tbs": tbs,
+            "forum_name": forumName
+        }),
+
+    /** 通过 `uid` 查找用户 */
+    getUserFromUID: (uid: string) =>
+        fetchWithBody("/im/pcmsg/query/getUserInfo", {
+            "chatUid": uid
+        }),
+
+    /** 一键签到（Web 端） */
+    oneKeySign: () =>
+        fetch("https://tieba.baidu.com/tbmall/onekeySignin1"),
+
+    /** 热门动态 */
+    hotFeeds: (un: string, pn: number, encoding = "utf-8", serverTime?: number) =>
+        fetchWithBody("/mo/q/newmoindex", {
+            "un": un,
+            "pn": pn,
+            "ie": encoding,
+            "_": serverTime
+        }),
+
+    /** 获取当前页所有楼中楼数据 */
+    totalComments: (timeStamp: number, tid: number, fid: number, pn: number, lzOnly = false) =>
+        fetchWithBody("/p/totalComment", {
+            "t": timeStamp,
+            "tid": tid,
+            "fid": fid,
+            "pn": pn,
+            "see_lz": Number(lzOnly)
+        }),
+
+    /** 获取热门话题相关贴 */
+    topicRelatedThreads: (topicName: string, page: number, lastId: number, topicId: number, sortType = 1) =>
+        fetchWithBody("/hottopic/browse/getTopicRelateThread", {
+            "topic_name": topicName,
+            "page_no": page,
+            "last_id": lastId,
+            "topic_id": topicId,
+            "sort_type": sortType
+        })
 };
 
 /** 贴吧请求收到的响应 */
-export interface TiebaResponse {
+export interface TiebaResponse1 {
     no: number
     error: string
-    data: LiteralObject
+}
+
+/** 贴吧请求收到的响应 */
+export interface TiebaResponse2 {
+    errmsg: string
+    errno: number
 }
 
 /** 推荐贴子请求收到的响应 */
-export interface FeedListResponse extends TiebaResponse {
+export interface FeedListResponse extends TiebaResponse1 {
     data: {
         total: number
         has_more: number
@@ -56,7 +144,7 @@ export interface FeedListResponse extends TiebaResponse {
 }
 
 /** 请求用户信息收到的响应 */
-export interface UserInfoResponse extends TiebaResponse {
+export interface UserInfoResponse extends TiebaResponse1 {
     data: {
         emial: string
         is_half_user: number
@@ -104,7 +192,7 @@ export interface SearchData2 {
 }
 
 export interface SuggestionResponse {
-    error: string
+    error: number
     query_match: {
         search_data: SearchData2[] | null
     }
@@ -122,6 +210,127 @@ export interface SuggestionResponse {
     },
     hottopic_list: {
         search_data: SearchData1[] | null
+    }
+}
+
+export interface TopicList {
+    /** 概述 */
+    abstract: string
+    content_num: number
+    create_time: number
+    discuss_num: number
+    idx_num: number
+    /** "0" / "1" */
+    is_video_topic: string
+    tag: number
+    /** 话题缩略图 */
+    topic_avatar: string
+    /** 缺省话题图 */
+    topic_default_avatar: string
+    topic_desc: string
+    topic_id: number
+    /** 话题简略标题 */
+    topic_name: string
+    /** 话题图（全尺寸） */
+    topic_pic: string
+    topic_url: string
+}
+
+interface Topic {
+    module_title: string
+    topic_list: TopicList[]
+}
+
+export interface TopicListResponse extends TiebaResponse2 {
+    data: {
+        bang_head_pic: string
+        /** 热议话题 */
+        bang_topic: Topic
+        /** 热门趋势 */
+        manual_topic: Topic
+        /** 推荐话题 */
+        sug_topic: Topic
+        /** 常用话题 */
+        user_his_topic: Topic
+        timestamp: number
+    }
+}
+
+export interface UserUnreadResponse extends TiebaResponse2 {
+    /**
+     * | id | name | type |
+     * | :- | :- | :- |
+     * | 1 | 系统通知 | `sys` |
+     * | 2 | 吧主通知 | `barowner` |
+     * | 3 | T豆通知 | `beans` |
+     * | 4 | 活动通知 | `activity` |
+     */
+    data: {
+        category_id: number
+        category_name: string
+        category_type: string
+        unread_count: number
+    }[]
+}
+
+export interface FavUpdateNumResponse extends TiebaResponse2 {
+    num: number
+}
+
+export interface TBSResponse {
+    tbs: string
+    is_login: number
+}
+
+interface LikeForum {
+    forum_name: string
+    user_level: number
+    user_exp: string
+    forum_id: number
+    is_like: boolean
+    favo_type: number
+    is_sign: number
+}
+
+export interface FollowedForumsResponse extends TiebaResponse1 {
+    error: "success" | "not logined!"
+    data: {
+        uid: number
+        tbs: string
+        itb_tbs: string
+        like_forum: LikeForum[]
+        ubs_sample_ids: string
+        ubs_abtest_config: Array<{ sid: string }>
+    }
+}
+
+export interface OneKeySignResponse extends TiebaResponse1 {
+    error: "success" | "there is no forum",
+    data: {
+        /** 已签到数量 */
+        signedForumAmount: number
+        /** 签到失败数量 */
+        signedForumAmountFail: number
+        /** 未签到数量 */
+        unsignedForumAmount: number
+        /** VIP 额外签到数量 */
+        vipExtraSignedForumAmount: number
+        /** 本次签到成功的吧 */
+        forum_list: {
+            cont_sign_num: number
+            forum_id: number
+            forum_name: string
+            is_sign_in: number
+            level_id: number
+            loyalty_score: {
+                high_score: number
+                normal_score: number
+            }
+        }[]
+        /** 本次签到增加的经验 */
+        gradeNoVip: number
+        /** VIP 本次签到增加的经验 */
+        gradeVip: number
     }
 }
 
@@ -205,10 +414,7 @@ export async function getFeedList(
 ): Promise<TiebaPost[]> {
     const feedList: TiebaPost[] = [];
     // const undesired = "home-place-item";
-    const response = await fetch(tiebaAPI.feedlist(), {
-        mode: "cors",
-        credentials: "include"
-    });
+    const response = await tiebaAPI.feedlist();
 
     if (response.ok) {
         await response.json().then((value: FeedListResponse) => {
@@ -304,4 +510,12 @@ export function transEmojiFromDOMString(str: string) {
         str = join(arrInner, decodeURIComponent(emoji));
     });
     return str;
+}
+
+export function levelToClass(level: number) {
+    if (level < 0) return;
+    if (level >= 1 && level <= 3) return "green";
+    if (level >= 4 && level <= 9) return "blue";
+    if (level >= 9 && level <= 15) return "yellow";
+    if (level >= 16) return "orange";
 }
