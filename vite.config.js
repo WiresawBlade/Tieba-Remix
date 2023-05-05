@@ -52,10 +52,11 @@ const commonConfig = defineConfig({
         cssCodeSplit: true
     },
     plugins: [
-        banner(() => {
-            return toMetaString(meta);
-        }),
-        vue()
+        vue(),
+        banner({
+            outDir: "build",
+            content: () => toMetaString(meta)
+        })
     ],
     css: {
         postcss: {

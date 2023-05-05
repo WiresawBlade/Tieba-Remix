@@ -3,6 +3,11 @@
         "./src"
     ],
     "compilerOptions": {
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
         "target": "ESNext",
         "module": "ESNext",
         "allowSyntheticDefaultImports": true,
