@@ -25,6 +25,7 @@ defineEmits(["update:modelValue"]);
     border-radius: 6px;
     background-color: _.$defaultBack;
     outline: none;
+    transition: 0.4s ease;
 }
 
 .user-textbox:hover {
