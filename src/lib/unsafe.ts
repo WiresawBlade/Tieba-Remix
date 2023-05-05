@@ -1,4 +1,4 @@
-import { disabledModules } from "./userlib";
+import { disabledModules } from "./user-config";
 import { afterHead } from "./domlib";
 import { indexOf } from "lodash-es";
 

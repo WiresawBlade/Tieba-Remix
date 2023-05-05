@@ -20,6 +20,31 @@ interface UserModule {
     entry: (() => void)
 }
 
+/** 贴子 */
+interface TiebaPost {
+    id: string
+    forum: {
+        id: string
+        name: string
+        href: string
+    }
+
+    author: {
+        portrait: string
+        name: string
+        href: string
+    }
+    time: string
+
+    title: string
+    content: string
+    replies: number
+    images: {
+        thumb: string
+        original: string
+    }[]
+}
+
 /** 用户模块其他信息 */
 interface UserModulesInfo {
     /** 本次被解析的模块数 */
@@ -33,15 +58,12 @@ interface UserModulesInfo {
     }
 }
 
-class UserWidget {
-    constructor(parameters);
-    id: string;
-    name: string;
-    author: string;
-    version: string;
-
-    init: (() => void);
-}
+type DropdownMenu = {
+    title: string
+    href?: string
+    click?: (() => void)
+    icon?: string
+} | "separator"
 
 /**
  * 屏蔽规则对象
@@ -61,9 +83,9 @@ interface ShieldObject {
     matchHTML?: boolean
 }
 
-interface UserValueNS<T> {
-    invalidTime: number
+interface UserValueTS<T> {
     value: T
+    invalidTime: number
 }
 
 const unsafeWindow: Window;

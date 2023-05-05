@@ -229,7 +229,9 @@ export function injectCSSRule(selector: string, cssObject: Mapped<CSSStyleDeclar
  * @param index 需要删除的规则对应的 index
  */
 export function removeCSSRule(index: number) {
-    defaultStyle.sheet?.deleteRule(index);
+    if (!defaultStyle.sheet) return;
+    console.log("delete", index);
+    defaultStyle.sheet.deleteRule(index);
 }
 
 export function findParentByClass(elem: Element, parentClassName: string): Element | null {

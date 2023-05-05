@@ -1,16 +1,16 @@
 import favicon from "/images/main/favicon32.ico";
+import palette from "@/stylesheets/main/_palette.scss?inline";
+import materialIcons from "@/stylesheets/main/material-icons.css?inline";
+import remixedMain from "@/stylesheets/main/_remixed-main.scss?inline";
+
 import { remixedObservers } from "./lib/observers";
 import { greasyInit } from "./greasy-init";
 import { parseUserModules } from "./lib/unsafe";
-
-import { createApp } from "vue";
-import moduleControlVue from "./components/module-control.vue";
 import { DOMS, afterHead, createNewElement, injectCSSList, injectCSSRule } from "./lib/domlib";
+import { removeDefault, renderDialog, renderPage } from "./lib/render";
 
-import palette from "@/stylesheets/main/_palette.scss?inline";
-import materialIcons from "@/stylesheets/main/material-icons.css?inline";
 import indexVue from "./components/pages/index.vue";
-import { pageRender } from "./lib/components";
+import moduleControlVue from "./components/module-control.vue";
 
 export { afterModulesLoaded, MainModules };
 
@@ -29,20 +29,39 @@ const MainModules: UserModule[] = [];
 let moduleLoadedFlag = false;
 const beforeModulesLoadedFns: (() => void)[] = [];
 
-unsafeWindow.addEventListener("load", () => {
-    if (PageData.page !== "index") return;
-    pageRender(indexVue);
-});
+if (location.href === "https://tieba.baidu.com/") {
+    const bodyMask = injectCSSList(`
+        body {
+            display: none;
+        }
+    `);
+
+    const userbarMask = injectCSSList(`
+        #com_userbar {
+            display: none;
+        }
+    `);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        removeDefault();
+        renderPage(indexVue);
+        bodyMask.remove();
+    });
+
+    window.addEventListener("load", () => removeDefault());
+    window.onload = () => {
+        removeDefault();
+        userbarMask.remove();
+    };
+}
 
 try {
     // 加载基本样式表
     afterHead(() => {
         injectCSSList(palette);
         injectCSSList(materialIcons);
+        injectCSSList(remixedMain);
     });
-
-    // 调试模块
-    // parseUserModules(import.meta.glob("./debug/deb.um.ts"));
 
     // 加载功能模块
     (() => {
@@ -99,44 +118,38 @@ try {
         }
 
         // 临时设置按钮
-        const floatBar = DOMS(".tbui_aside_float_bar")[0];
+        try {
+            const floatBar = DOMS(".tbui_aside_float_bar")[0];
 
-        floatBar.insertBefore(createNewElement("li", {
-            class: "tbui_aside_fbar_button module-settings"
-        }, [createNewElement("a", {
-            href: "javascript:;"
-        })]), floatBar.firstChild);
+            floatBar.insertBefore(createNewElement("li", {
+                class: "tbui_aside_fbar_button module-settings"
+            }, [createNewElement("a", {
+                href: "javascript:;"
+            })]), floatBar.firstChild);
 
-        injectCSSRule(".tbui_aside_float_bar .module-settings", {
-            backgroundColor: "rgb(53, 73, 94)"
-        });
+            injectCSSRule(".tbui_aside_float_bar .module-settings", {
+                backgroundColor: "rgb(53, 73, 94)"
+            });
 
-        injectCSSRule(".module-settings .svg-container::after", {
-            content: `"settings"`,
-            color: "rgb(240, 240, 240)"
-        });
+            injectCSSRule(".module-settings .svg-container::after", {
+                content: `"settings"`,
+                color: "rgb(240, 240, 240)"
+            });
 
-        document.body.insertBefore(createNewElement("div", {
-            class: "vue-module-control",
-            style: "display: none;"
-        }), document.body.firstChild);
+            document.body.insertBefore(createNewElement("div", {
+                class: "vue-module-control",
+                style: "display: none;"
+            }), document.body.firstChild);
 
-        // 临时绑定 Vue 组件
-        // TODO: 好呃呃的写法，快点把入口写好然后改掉吧
-        const ModuleControl = createApp(moduleControlVue, {
-            modules: MainModules
-        });
-        ModuleControl.mount(".vue-module-control");
-
-        DOMS(".tbui_aside_float_bar .module-settings")[0].addEventListener("click", () => {
-            DOMS(".vue-module-control")[0].style.display = "block";
-        });
-
-        const moduleControlShadow = DOMS(".vue-module-control .dialog-shadow")[0];
-        moduleControlShadow.addEventListener("click", (event) => {
-            if (event.target !== moduleControlShadow) return;
-            DOMS(".vue-module-control")[0].style.display = "none";
-        });
+            // 临时绑定 Vue 组件
+            DOMS(".tbui_aside_float_bar .module-settings")[0].addEventListener("click", () => {
+                renderDialog(moduleControlVue, {
+                    modules: MainModules
+                });
+            });
+        } catch (error) {
+            console.log(error);
+        }
     });
 
     // 全部任务激活完毕，打印信息
