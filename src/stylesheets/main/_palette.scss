@@ -1,6 +1,7 @@
 // 全局
 $defaultBack: var(--default-background);
 $defaultHover: var(--default-hover);
+$defaultActive: var(--default-active);
 $pageBack: var(--page-background);
 $transDefaultBack: var(--trans-default-background);
 $deepBack: var(--deep-background);
@@ -33,7 +34,8 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
 
 :root {
     --default-background: rgb(255 255 255);
-    --default-hover: rgb(235 235 235);
+    --default-hover: rgb(250 250 250);
+    --default-active: rgb(230 230 230);
     --page-background: rgb(245 245 245);
     --trans-default-background: rgb(255 255 255 / 60%);
     --deep-background: rgb(200 200 200);
@@ -42,9 +44,9 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
     --trans-light-background: rgb(230 230 230 / 60%);
     --very-light-background: rgb(245 245 245);
     --elem-color: rgb(240 240 240);
-    --default-fore: rgb(10 10 10);
-    --light-fore: rgb(20 20 20);
-    --minimal-fore: rgb(60 60 60);
+    --default-fore: rgb(16 16 16);
+    --light-fore: rgb(64 64 64);
+    --minimal-fore: rgb(92 92 92);
     --highlight-fore: rgb(0 0 0);
     --border-color: rgb(210 210 210 / 60%);
     --light-border-color: rgb(210 210 210 / 20%);
@@ -54,13 +56,13 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
     --tieba-theme-background: rgb(97 78 194 / 20%);
     --tieba-theme-fore: rgb(58 46 116);
 
-    --level-green-background: rgb(84 130 53 / 30%);
+    --level-green-background: rgb(84 130 53 / 20%);
     --level-green-fore: rgb(51 78 32);
-    --level-blue-background: rgb(0 153 213 / 30%);
+    --level-blue-background: rgb(0 153 213 / 20%);
     --level-blue-fore: rgb(0 81 111);
-    --level-yellow-background: rgb(164 139 63 / 30%);
+    --level-yellow-background: rgb(164 139 63 / 20%);
     --level-yellow-fore: rgb(124 105 46);
-    --level-orange-background: rgb(255 153 0 / 30%);
+    --level-orange-background: rgb(255 153 0 / 20%);
     --level-orange-fore: rgb(178 104 0);
 
     // --svg-accessibility: url("/images/svgs/accessibility.svg?raw");
@@ -82,6 +84,7 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
     :root {
         --default-background: rgb(32 32 32);
         --default-hover: rgb(42 42 42);
+        --default-active: rgb(54 54 54);
         --page-background: rgb(26 26 26);
         --trans-default-background: rgb(32 32 32 / 60%);
         --deep-background: rgb(26 26 26);
@@ -102,13 +105,13 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
         --tieba-theme-background: rgb(113 97 193 / 20%);
         --tieba-theme-fore: rgb(150 128 255);
 
-        --level-green-background: rgb(96 153 59 / 30%);
+        --level-green-background: rgb(96 153 59 / 20%);
         --level-green-fore: rgb(133 206 84);
-        --level-blue-background: rgb(0 165 227 / 30%);
+        --level-blue-background: rgb(0 165 227 / 20%);
         --level-blue-fore: rgb(0 169 255);
-        --level-yellow-background: rgb(229 193 90 / 30%);
+        --level-yellow-background: rgb(229 193 90 / 20%);
         --level-yellow-fore: rgb(242 205 96);
-        --level-orange-background: rgb(204 122 0 / 30%);
+        --level-orange-background: rgb(204 122 0 / 20%);
         --level-orange-fore: rgb(255 170 0);
     }
 }

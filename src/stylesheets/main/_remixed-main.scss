@@ -1,0 +1,52 @@
+@use "./palette" as _;
+
+html {
+    padding: 0;
+    margin: 0;
+    text-align: justify;
+}
+
+.icon {
+    font-family: "Material Icons", monospace;
+}
+
+a {
+    color: unset;
+    text-decoration: none;
+}
+
+.level-green {
+    background-color: _.$levelGreenBack;
+    color: _.$levelGreenFore;
+}
+
+.level-blue {
+    background-color: _.$levelBlueBack;
+    color: _.$levelBlueFore;
+}
+
+.level-yellow {
+    background-color: _.$levelYellowBack;
+    color: _.$levelYellowFore;
+}
+
+.level-orange {
+    background-color: _.$levelOrangeBack;
+    color: _.$levelOrangeFore;
+}
+
+@mixin transition-prototype($type, $time) {
+    transition: $type $time;
+}
+
+@mixin slow-transition($type) {
+    @include transition-prototype($type, 0.8s);
+}
+
+@mixin default-transition($type) {
+    @include transition-prototype($type, 0.4s);
+}
+
+@mixin fast-transition($type) {
+    @include transition-prototype($type, 0.2s);
+}

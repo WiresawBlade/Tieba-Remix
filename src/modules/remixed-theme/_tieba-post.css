@@ -3,7 +3,7 @@ a {
 }
 
 .d_name a:hover,
-.content a.at:hover {
+#container .content a.at:hover {
     text-decoration: none;
 }
 
@@ -33,7 +33,7 @@ a {
 }
 
 /* 内容 */
-.content {
+#container .content {
     border-radius: 24px;
     background: unset;
     box-shadow: 0 0 80px -32px rgb(0 0 0 / 40%);
