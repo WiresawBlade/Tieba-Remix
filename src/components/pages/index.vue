@@ -38,14 +38,13 @@
 
                     <!-- 搜索建议组件 -->
                     <div v-show="suggToggle && suggestions.length > 0" class="search-suggestions">
-                        <UserButton class="search-elem" v-for="sugg in suggestions">
-                            <a :href="sugg.href" target="_blank">
-                                <img class="sugg-img" :src="sugg.image" alt="">
-                                <div class="sugg-content">
-                                    <p class="sugg-title">{{ sugg.title }}</p>
-                                    <p class="sugg-desc">{{ sugg.desc }}</p>
-                                </div>
-                            </a>
+                        <UserButton :is-anchor="true" class="search-elem" v-for="sugg in suggestions" :href="sugg.href"
+                            target="_blank">
+                            <img class="sugg-img" :src="sugg.image" alt="">
+                            <div class="sugg-content">
+                                <p class="sugg-title">{{ sugg.title }}</p>
+                                <p class="sugg-desc">{{ sugg.desc }}</p>
+                            </div>
                         </UserButton>
                     </div>
                 </div>
@@ -91,7 +90,7 @@
                 </div>
 
                 <div class="block-container topic-list">
-                    <a v-for=" topic  in  take(topicList, 10) " :href="topic.topic_url" target="_blank">
+                    <a v-for="topic in take(topicList, 10)" :href="topic.topic_url" target="_blank">
                         <UserButton class="topic-btn" :shadow-border="true">
                             <img class="topic-img" :src="topic.topic_pic">
                             <div class="topic-content">
@@ -121,7 +120,7 @@
 
             <div ref="feedsContainer" class="feeds-container">
                 <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :async-load="true"
-                    @click-image="showImages">
+                    :shadow-border="true" @click-image="showImages">
                 </PostContainer>
             </div>
 
@@ -142,8 +141,9 @@ import {
     TopicListResponse, TopicList
 } from "@/lib/api.tieba";
 
-import { getCurrentInstance, nextTick, onMounted, ref, watch } from "vue";
-import { debounce, forEach, map, take } from "lodash-es";
+import { nextTick, onMounted, ref } from "vue";
+import { debounce, forEach, map, take, throttle } from "lodash-es";
+
 import { findParentByClass } from "@/lib/domlib";
 import { renderDialog } from "@/lib/render";
 import { MainModules } from "@/main";
@@ -216,7 +216,7 @@ onMounted(async () => {
         },
         "separator",
         {
-            title: "源代码 (Github)",
+            title: "源代码 (GitHub)",
             href: GithubRepo
         },
         {
@@ -304,11 +304,12 @@ onMounted(async () => {
         }
     } else {
         unread.length = 0;
-        console.log(unread);
     }
 
     const fetchFeeds = debounce(() => {
-        addFeedList();
+        addFeedList().then(() => {
+            console.log(feeds.value);
+        });
     }, 1000, { leading: true });
 
     // 页面滚动到底部加载新的推送
@@ -319,7 +320,8 @@ onMounted(async () => {
         const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
 
-        if (scrollTop + clientHeight >= scrollHeight - 1) {
+        // 在距离屏幕底部约 320px的位置请求下一次推送，这个距离在不故意快速滑动的情况下基本保证无感
+        if (scrollTop + clientHeight >= scrollHeight - 320) {
             fetchFeeds();
         }
     });
@@ -368,26 +370,43 @@ function renderFeeds() {
 
         msnry = new Masonry(feedsContainer.value, {
             itemSelector: ".post-elem",
+            columnWidth: 360,
             gutter: 12,
             fitWidth: true,
             transitionDuration: 0
         });
 
-        window.addEventListener("resize", () => {
-            if (typeof msnry.layout === "function") msnry.layout();
+        // 由于未知原因，在页面真正挂载到贴吧时 resize事件会产生问题，所以不得不特殊处理
+        const rerender = throttle(() => {
+            // 当推送过多（百度 > 150，开发服务器 > 300），重排布会消耗很长时间，导致页面阻塞
+            // (async () => {
+            //     if (typeof msnry.layout === "function") {
+            //         msnry.layout();
+            //     }
+            // })();
+
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    if (typeof msnry.layout === "function") {
+                        msnry.layout();
+                    }
+                    console.log(feeds.value.length);
+                });
+            }, 0);
+        }, 100, { leading: true });
+
+        window.addEventListener("resize", rerender, {
+            passive: true
         });
 
-        watch(feeds.value, () => {
-            if (msnry.layout) msnry.layout();
-        });
+        clearInterval(0);
+        clearInterval(1);
     });
 }
 
 function refreshFeeds() {
-    feeds.value = [];
-    addFeedList().then(() => {
-        renderFeeds();
-    });
+    feeds.value.length = 0;
+    addFeedList();
 }
 
 /**
@@ -452,6 +471,7 @@ function showImages(images: string[], index: number) {
 
 <style scoped lang="scss">
 @use "@/stylesheets/main/palette" as _;
+@use "@/stylesheets/main/remixed-main" as _main;
 
 $menu-margin: 24px;
 $menu-button-size: 32px;
@@ -481,7 +501,7 @@ a {
     .block-container {
         padding: 8px;
         border-radius: 12px;
-        background-color: _.$lightBack;
+        background-color: _.$transLightBack;
     }
 }
 
@@ -494,7 +514,7 @@ a {
     padding: 2px 8px;
     border-radius: 24px;
     margin-left: auto;
-    background-color: _.$lightBack;
+    background-color: _.$transLightBack;
     font-size: 14px;
     gap: 4px;
     text-align: center;
@@ -509,10 +529,6 @@ a {
         border: none;
         border-radius: 48px;
     }
-
-    // .panel-btn:hover {
-    //     background-color: _.$defaultHover;
-    // }
 }
 
 .block-panel.left-align {
@@ -572,14 +588,20 @@ a {
 
                 .search-button {
                     border: none;
-                    background-color: _.$lightBack;
+                    background-color: _.$tiebaThemeColor;
                     border-bottom-left-radius: 0;
                     border-top-left-radius: 0;
+                    color: _.$defaultBack;
                     font-size: 16px;
+                    font-weight: bold;
                 }
 
                 .search-button:hover {
-                    background-color: _.$defaultBack;
+                    background-color: _.$tiebaThemeHover;
+                }
+
+                .search-button:active {
+                    background-color: _.$tiebaThemeActive;
                 }
 
                 .search-suggestions {
@@ -597,59 +619,65 @@ a {
                     background-color: _.$defaultBack;
                     box-shadow: 0 0 20px rgb(0 0 0 / 20%);
 
+                    @include _main.fade-in(0.2s);
+
                     .search-elem {
                         $img-size: 42px;
                         $gap: 8px;
-
+                        display: flex;
                         overflow: hidden;
                         box-sizing: border-box;
                         padding: 0;
+                        padding: $gap;
                         border: none;
                         border-radius: 0;
-                        text-align: justify;
 
-                        a {
-                            display: flex;
-                            padding: $gap;
-                            gap: $gap;
-
-                            .sugg-img {
-                                width: $img-size;
-                                height: $img-size;
-                                border-radius: 8px;
+                        @keyframes stretch {
+                            0% {
+                                padding: calc($gap / 2) $gap;
                             }
 
-                            .sugg-content {
-                                position: relative;
-                                display: flex;
-                                width: calc(100% - $img-size - $gap);
-                                flex-direction: column;
-                                justify-content: center;
-                                gap: 4px;
-
-                                .sugg-title {
-                                    overflow: hidden;
-                                    margin: 0;
-                                    font-size: 14px;
-                                    font-weight: bold;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                }
-
-                                .sugg-desc {
-                                    overflow: hidden;
-                                    margin: 0;
-                                    color: _.$lightFore;
-                                    font-size: 12px;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                }
+                            100% {
+                                padding: $gap;
                             }
                         }
-                    }
 
-                    .search-elem:hover {
-                        background-color: _.$defaultHover;
+                        animation: stretch 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+                        gap: $gap;
+                        text-align: justify;
+
+                        .sugg-img {
+                            width: $img-size;
+                            height: $img-size;
+                            border-radius: 8px;
+                        }
+
+                        .sugg-content {
+                            position: relative;
+                            display: flex;
+                            width: calc(100% - $img-size - $gap);
+                            flex-direction: column;
+                            justify-content: center;
+                            gap: 4px;
+
+                            .sugg-title {
+                                overflow: hidden;
+                                margin: 0;
+                                font-size: 14px;
+                                font-weight: bold;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+
+                            .sugg-desc {
+                                overflow: hidden;
+                                margin: 0;
+                                color: _.$lightFore;
+                                font-size: 12px;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+                        }
                     }
                 }
             }
@@ -710,6 +738,7 @@ a {
             .config-menu {
                 top: 64px;
                 right: 24px;
+                opacity: 1;
             }
         }
 
@@ -729,7 +758,7 @@ a {
                 flex-wrap: wrap;
                 padding: 8px;
                 border-radius: 12px;
-                background-color: _.$lightBack;
+                background-color: _.$transLightBack;
                 gap: 4px;
 
                 .followed-btn {
@@ -820,6 +849,10 @@ a {
 
             .post-elem {
                 margin-bottom: 12px;
+            }
+
+            .post-elem:not(:hover, :active, :focus) {
+                box-shadow: none;
             }
         }
 
