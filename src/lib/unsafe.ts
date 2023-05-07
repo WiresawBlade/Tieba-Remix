@@ -82,7 +82,7 @@ export function parseUserModules(
                     },
 
                     "loaded": () => {
-                        unsafeWindow.addEventListener("load", () => {
+                        window.addEventListener("load", () => {
                             m.entry();
                         });
                     }

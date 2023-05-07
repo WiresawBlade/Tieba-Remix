@@ -26,11 +26,11 @@ export function renderPage(root: Component, rootProps?: LiteralObject) {
     return renderComponent(root, "body", rootProps);
 }
 
-export function renderDialog(dialog: Component, childProps?: LiteralObject, forced = false) {
+export function renderDialog(dialog: Component, childProps?: LiteralObject, wrapperProps?: LiteralObject) {
     const dialogWrapper = createApp(dialogWrapperVue, {
         dialog: dialog,
         childProps: childProps,
-        forced: forced
+        ...wrapperProps
     });
 
     if (!document.getElementById("dialog-wrapper")) {

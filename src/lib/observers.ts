@@ -36,7 +36,7 @@ export class ObsType {
         if (typeof this.initEvent === "undefined") {
             event();
         } else {
-            unsafeWindow.addEventListener(this.initEvent, event);
+            window.addEventListener(this.initEvent, event);
         }
         this.events.push(event);
     };
