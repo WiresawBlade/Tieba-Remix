@@ -6,7 +6,8 @@ $pageBack: var(--page-background);
 $transDefaultBack: var(--trans-default-background);
 $deepBack: var(--deep-background);
 $transDeepBack: var(--trans-deep-background);
-$lightBack: var(--trans-light-background);
+$lightBack: var(--light-background);
+$transLightBack: var(--trans-light-background);
 $minimalBack: var(--very-light-background);
 $elemColor: var(--elem-color);
 $defaultFore: var(--default-fore);
@@ -18,6 +19,8 @@ $lightBorderColor: var(--light-border-color);
 
 $tiebaThemeColor: var(--tieba-theme-color);
 $transTiebaThemeColor: var(--trans-tieba-theme-color);
+$tiebaThemeHover: var(--tieba-theme-hover);
+$tiebaThemeActive: var(--tieba-theme-active);
 $tiebaThemeBack: var(--tieba-theme-background);
 $tiebaThemeFore: var(--tieba-theme-fore);
 
@@ -34,14 +37,14 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
 
 :root {
     --default-background: rgb(255 255 255);
-    --default-hover: rgb(250 250 250);
-    --default-active: rgb(230 230 230);
+    --default-hover: rgb(240 240 240);
+    --default-active: rgb(224 224 224);
     --page-background: rgb(245 245 245);
     --trans-default-background: rgb(255 255 255 / 60%);
     --deep-background: rgb(200 200 200);
     --trans-deep-background: rgb(200 200 200 / 60%);
-    --light-background: rgb(230 230 230);
-    --trans-light-background: rgb(230 230 230 / 60%);
+    --light-background: rgb(228 228 228);
+    --trans-light-background: rgb(228 228 228 / 60%);
     --very-light-background: rgb(245 245 245);
     --elem-color: rgb(240 240 240);
     --default-fore: rgb(16 16 16);
@@ -53,6 +56,8 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
 
     --tieba-theme-color: rgb(97 78 194);
     --trans-tieba-theme-color: rgb(97 78 194 / 60%);
+    --tieba-theme-hover: rgb(119 105 194);
+    --tieba-theme-active: rgb(150 134 232);
     --tieba-theme-background: rgb(97 78 194 / 20%);
     --tieba-theme-fore: rgb(58 46 116);
 
@@ -102,6 +107,8 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
 
         --tieba-theme-color: rgb(113 97 193);
         --trans-tieba-theme-color: rgb(113 97 193 / 60%);
+        --tieba-theme-hover: rgb(149 128 254);
+        --tieba-theme-active: rgb(172 156 253);
         --tieba-theme-background: rgb(113 97 193 / 20%);
         --tieba-theme-fore: rgb(150 128 255);
 
