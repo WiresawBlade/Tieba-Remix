@@ -1,5 +1,6 @@
 <template>
-    <div class="dialog-wrapper dialog-toggle" @click="onClick" @wheel="onWheel">
+    <div class="dialog-wrapper dialog-toggle" :class="{ 'blur-effect': props.blurEffect }" @click="onClick"
+        @wheel="onWheel">
     </div>
 </template>
 
@@ -11,12 +12,10 @@ import { Component, createApp, onMounted } from "vue";
 interface Props {
     dialog: Component
     childProps?: LiteralObject
-    forced?: boolean
+    blurEffect?: true
+    forced?: true
 }
-const props = withDefaults(defineProps<Props>(), {
-    forced: false,
-    toggleElems: <any>[]
-});
+const props = defineProps<Props>();
 
 const emit = defineEmits(["RequestClose"]);
 
@@ -50,6 +49,10 @@ function onWheel(payload: Event) {
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: rgba($color: #000, $alpha: 80%);
+    background-color: rgba($color: #000, $alpha: 60%);
+}
+
+.blur-effect {
+    backdrop-filter: blur(24px);
 }
 </style>

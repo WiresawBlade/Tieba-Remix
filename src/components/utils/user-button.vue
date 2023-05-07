@@ -1,17 +1,19 @@
 <template>
-    <button class="user-button" :class="{ 'shadow-border': props.shadowBorder, 'unset-background': props.unsetBackground }"
-        type="button">
+    <component :is="isAnchor ? 'a' : 'button'" class="user-button"
+        :class="{ 'shadow-border': props.shadowBorder, 'unset-background': props.unsetBackground }" type="button">
         <slot></slot>
-    </button>
+    </component>
 </template>
 
 <script setup lang="ts">
 interface Props {
+    isAnchor?: boolean
     shadowBorder?: boolean
     unsetBackground?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
+    isAnchor: false,
     shadowBorder: false,
     unsetBackground: false
 });

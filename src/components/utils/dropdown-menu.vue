@@ -49,6 +49,17 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @use "@/stylesheets/main/palette" as _;
+@use "@/stylesheets/main/remixed-main" as _main;
+
+@keyframes stretch {
+    0% {
+        padding: 2px 14px;
+    }
+
+    100% {
+        padding: 8px 14px;
+    }
+}
 
 a {
     color: unset;
@@ -67,10 +78,13 @@ a {
     box-shadow: 0 0 20px rgb(0 0 0 / 8%);
     font-size: 14px;
 
+    @include _main.fade-in(0.1s);
+
     .menu-item {
         display: flex;
         align-items: center;
         padding: 8px 14px;
+        animation: stretch 0.1s cubic-bezier(0.22, 0.61, 0.36, 1);
         gap: 6px;
     }
 

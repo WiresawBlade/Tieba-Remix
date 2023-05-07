@@ -33,7 +33,7 @@
         </UserButton>
 
         <div class="control-panel bottom-controls">
-            <UserButton v-for="image, index in imageArray" class="bottom-btn" :class="index === curr ? 'selected' : ''">
+            <UserButton v-for="image, index in imageArray" class="bottom-btn" :class="{ 'selected': index === curr }">
                 <img class="image-list" :src="image" alt="" @click="changeCurr(index)">
             </UserButton>
         </div>
@@ -41,10 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import UserButton from './utils/user-button.vue';
-import { map, round } from 'lodash-es';
-import { unloadDialog } from '@/lib/render';
+import { ref } from "vue";
+import UserButton from "./utils/user-button.vue";
+import { map, round } from "lodash-es";
+import { unloadDialog } from "@/lib/render";
 
 interface Props {
     content: string | string[] | TiebaPost

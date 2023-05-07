@@ -1,5 +1,5 @@
 <template>
-    <a ref="postContainer" class="post-container" :href="'/p/' + props.post.id" target="_blank">
+    <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id" target="_blank">
         <div class="main-content">
             <a :href="props.post.forum.href" target="_blank">
                 <UserButton class="forum">
@@ -19,8 +19,8 @@
         <div class="bottom-controls">
             <a :href="props.post.author.href" target="_blank">
                 <UserButton class="author">
-                    <img class="author-portrait" :src="tiebaAPI.URL_profile(props.post.author.portrait)"
-                        onerror="this.onerror=null; this.style.backgroundColor='red';">
+                    <img class="author-portrait"
+                        :src="isIntersecting ? tiebaAPI.URL_profile(props.post.author.portrait) : ''">
                     <div class="author-info">
                         <div class="author-name">{{ props.post.author.name }}</div>
                         <div class="post-time">{{ props.post.time }}</div>
@@ -29,14 +29,14 @@
             </a>
             <div class="replies">{{ props.post.replies }}</div>
         </div>
-    </a>
+    </UserButton>
 </template>
 
 <script setup lang="ts">
+import { ComponentPublicInstance, onMounted, ref } from "vue";
+import { map } from "lodash-es";
 import { tiebaAPI } from "@/lib/api.tieba";
 import UserButton from "./utils/user-button.vue";
-import { onMounted, ref } from "vue";
-import { map } from "lodash-es";
 
 interface Props {
     post: TiebaPost
@@ -48,8 +48,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits(["ClickImage"]);
 
-const postContainer = ref<HTMLAnchorElement>();
-const isIntersecting = ref(false);
+const postContainer = ref<ComponentPublicInstance>();
+const isIntersecting = ref(!props.asyncLoad);
 
 onMounted(() => {
     if (!props.asyncLoad) return;
@@ -65,7 +65,7 @@ onMounted(() => {
         });
     });
 
-    iObs.observe(postContainer.value);
+    iObs.observe(postContainer.value.$el);
 });
 
 function showImage(index: number) {
@@ -106,7 +106,6 @@ img::before {
     background-color: _.$defaultBack;
     cursor: pointer;
     text-align: justify;
-    transition: 0.4s ease;
 
     .main-content {
         .forum {
@@ -121,6 +120,7 @@ img::before {
         }
 
         .content {
+            margin-top: -10px;
             font-size: small;
         }
     }
@@ -156,6 +156,7 @@ img::before {
             padding: 0;
             border: none;
             border-radius: 24px;
+            background-color: unset;
 
             .author-portrait {
                 width: 32px;
