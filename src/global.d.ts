@@ -38,7 +38,7 @@ interface TiebaPost {
 
     title: string
     content: string
-    replies: number
+    replies: number | string
     images: {
         thumb: string
         original: string
