@@ -5,6 +5,7 @@ docs/release-notes/
 node_modules/
 
 @deprecated*
+@debug*
 .vscode/settings.json
 deb.ts
 index.html
