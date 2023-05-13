@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // 全局
 $defaultBack: var(--default-background);
 $defaultHover: var(--default-hover);
@@ -33,6 +35,10 @@ $levelYellowFore: var(--level-yellow-fore);
 $levelOrangeBack: var(--level-orange-background);
 $levelOrangeFore: var(--level-orange-fore);
 
+$check-color: color.adjust(green, $lightness: 10%);
+$error-color: color.adjust(red, $lightness: 16%);
+$warning-color: color.adjust(orange, $blackness: 10%);
+
 $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/icon.png");
 
 :root {
@@ -41,9 +47,9 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/main/images/main/
     --default-active: rgb(224 224 224);
     --page-background: rgb(245 245 245);
     --trans-default-background: rgb(255 255 255 / 60%);
-    --deep-background: rgb(200 200 200);
+    --deep-background: rgb(228 228 228);
     --trans-deep-background: rgb(200 200 200 / 60%);
-    --light-background: rgb(228 228 228);
+    --light-background: rgb(235 235 235);
     --trans-light-background: rgb(228 228 228 / 60%);
     --very-light-background: rgb(245 245 245);
     --elem-color: rgb(240 240 240);

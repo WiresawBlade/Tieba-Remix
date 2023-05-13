@@ -1,5 +1,11 @@
 @use "./palette" as _;
-@use "sass:math";
+
+$blur-radius: 24px;
+$xfast-animation-duration: 0.1s;
+$fast-animation-duration: 0.2s;
+$default-animation-duration: 0.4s;
+$slow-animation-duration: 0.5s;
+$vslow-animation-duration: 0.6s;
 
 html {
     padding: 0;
@@ -14,6 +20,11 @@ html {
 a {
     color: unset;
     text-decoration: none;
+}
+
+div,
+p {
+    margin: 0;
 }
 
 .level-green {
@@ -78,4 +89,24 @@ a {
 
 @mixin fade-out($time) {
     animation: fade-out-keyframe $time;
+}
+
+@mixin blur-effect($radius: $blur-radius) {
+    backdrop-filter: blur($radius);
+
+    @media (prefers-color-scheme: dark) {
+        backdrop-filter: blur($radius) brightness(0.8);
+    }
+}
+
+@keyframes dialog-in {
+    0% {
+        opacity: 0;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
