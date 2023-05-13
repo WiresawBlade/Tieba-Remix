@@ -1,15 +1,15 @@
 import { forEach, join, split } from "lodash-es";
 import { DOMS } from "./domlib";
-import { fetchWithBody, carryDefault } from "./utils";
+import { fetchWithBody, carryDefault, requestBody } from "./utils";
 
 /** 贴吧 API */
 export const tiebaAPI = {
     /** 首页推荐 */
     feedlist: () =>
-        fetchWithBody("/f/index/feedlist", {
+        fetch("/f/index/feedlist?" + requestBody({
             "is_new": 1,
             "tag_id": "like"
-        }),
+        })),
 
     /** 用户头像 */
     URL_profile: (portrait: string) =>
@@ -89,7 +89,7 @@ export const tiebaAPI = {
 
     /** 一键签到（Web 端） */
     oneKeySign: () =>
-        fetch("https://tieba.baidu.com/tbmall/onekeySignin1"),
+        fetch("/tbmall/onekeySignin1"),
 
     /** 热门动态 */
     hotFeeds: (un: string, pn: number, encoding = "utf-8", serverTime?: number) =>
@@ -118,6 +118,13 @@ export const tiebaAPI = {
             "last_id": lastId,
             "topic_id": topicId,
             "sort_type": sortType
+        }),
+
+    /** 将贴子添加到收藏 */
+    addFavoritePost: (tbs: string, tid: number, fid: number, encoding = "utf-8") =>
+        fetch("/i/submit/open_storethread", {
+            method: "POST",
+            body: requestBody({ tbs, tid, fid, encoding })
         })
 };
 
