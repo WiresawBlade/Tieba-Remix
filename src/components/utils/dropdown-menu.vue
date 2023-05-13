@@ -105,7 +105,8 @@ a {
 }
 
 .blur-effect {
-    backdrop-filter: blur(24px);
     background-color: _.$transDefaultBack;
+
+    @include _main.blur-effect;
 }
 </style>

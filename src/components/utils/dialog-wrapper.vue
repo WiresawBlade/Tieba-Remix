@@ -24,23 +24,25 @@ onMounted(() => {
     dialog.mount(".dialog-wrapper");
 });
 
-function onClick(payload: Event) {
+function onClick(e: Event) {
     // 防止事件穿透
-    if (!includes((payload.target as HTMLElement).classList, "dialog-toggle")) return;
+    if (!includes((e.target as HTMLElement).classList, "dialog-toggle")) return;
     if (!props.forced) {
         emit("RequestClose");
         unloadDialog();
     }
 }
 
-function onWheel(payload: Event) {
-    if (!includes((payload.target as HTMLElement).classList, "dialog-wrapper"))
+function onWheel(e: Event) {
+    if (!includes((e.target as HTMLElement).classList, "dialog-wrapper"))
         return;
-    payload.preventDefault();
+    e.preventDefault();
 }
 </script>
 
 <style scoped lang="scss">
+@use "@/stylesheets/main/remixed-main" as _main;
+
 .dialog-wrapper {
     position: fixed;
     z-index: 99999;
@@ -49,10 +51,12 @@ function onWheel(payload: Event) {
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: rgba($color: #000, $alpha: 60%);
+    background-color: rgba($color: #000, $alpha: 72%);
+
+    @include _main.fade-in(0.2s);
 }
 
 .blur-effect {
-    backdrop-filter: blur(24px);
+    @include _main.blur-effect;
 }
 </style>

@@ -1,22 +1,20 @@
 <template>
     <component :is="isAnchor ? 'a' : 'button'" class="user-button"
-        :class="{ 'shadow-border': props.shadowBorder, 'unset-background': props.unsetBackground }" type="button">
+        :class="{ 'shadow-border': props.shadowBorder, 'unset-background': props.unsetBackground, 'theme-style': props.themeStyle }"
+        type="button">
         <slot></slot>
     </component>
 </template>
 
 <script setup lang="ts">
 interface Props {
-    isAnchor?: boolean
-    shadowBorder?: boolean
-    unsetBackground?: boolean
+    isAnchor?: true
+    shadowBorder?: true
+    unsetBackground?: true
+    themeStyle?: true
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    isAnchor: false,
-    shadowBorder: false,
-    unsetBackground: false
-});
+const props = defineProps<Props>();
 </script>
 
 <style scoped lang="scss">
@@ -33,6 +31,35 @@ const props = withDefaults(defineProps<Props>(), {
     transition: 0.4s ease;
 }
 
+.user-button:hover {
+    background-color: _.$defaultHover;
+}
+
+.user-button:active {
+    background-color: _.$defaultActive;
+}
+
+.user-button:focus {
+    border: 2px solid _.$tiebaThemeColor;
+}
+
+.theme-style {
+    background-color: _.$tiebaThemeColor;
+    color: _.$defaultBack;
+}
+
+.theme-style:hover {
+    background-color: _.$tiebaThemeHover;
+}
+
+.theme-style:active {
+    background-color: _.$tiebaThemeActive;
+}
+
+.theme-style:focus {
+    border-color: var(--tieba-theme-active);
+}
+
 .unset-background {
     background-color: unset;
 }
@@ -42,20 +69,13 @@ const props = withDefaults(defineProps<Props>(), {
     box-shadow: 0 0 0 1px _.$borderColor;
 }
 
-.user-button:hover {
-    background-color: _.$defaultHover;
-}
-
-.user-button:focus {
-    border: 2px solid _.$tiebaThemeColor;
-}
-
-.user-button:active {
-    background-color: _.$defaultActive;
-}
-
 .shadow-border:focus {
     border: none;
     box-shadow: 0 0 0 2px _.$tiebaThemeColor;
+}
+
+.shadow-border.theme-style:focus {
+    border: none;
+    box-shadow: 0 0 0 2px var(--tieba-theme-active);
 }
 </style>

@@ -168,10 +168,11 @@ $panel-radius: 12px;
         padding: 10px;
         border: 1px solid _.$lightBorderColor;
         border-radius: $panel-radius;
-        backdrop-filter: blur(24px);
         background-color: _.$transDefaultBack;
         box-shadow: 0 0 32px rgb(0 0 0 / 40%);
         gap: 2px;
+
+        @include _main.blur-effect;
     }
 
     .head-controls {
@@ -192,7 +193,7 @@ $panel-radius: 12px;
         }
 
         .close:hover {
-            color: red;
+            color: _.$error-color;
         }
 
         span {

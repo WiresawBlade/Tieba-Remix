@@ -1,16 +1,18 @@
 <template>
     <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id" target="_blank">
-        <div class="main-content">
-            <a :href="props.post.forum.href" target="_blank">
-                <UserButton class="forum">
-                    {{ props.post.forum.name + " 吧" }}
-                </UserButton>
-            </a>
-            <p class="title">{{ props.post.title }}</p>
-            <p class="content">{{ props.post.content }}</p>
+        <div>
+            <UserButton :is-anchor="true" class="forum-btn" :shadow-border="true" :href="props.post.forum.href"
+                target="_blank">
+                {{ props.post.forum.name + " 吧" }}
+            </UserButton>
         </div>
 
-        <div class="img-container">
+        <div class="main-content">
+            <p class="title">{{ props.post.title }}</p>
+            <p v-if="props.post.content && props.post.content !== ' '" class="content">{{ props.post.content }}</p>
+        </div>
+
+        <div v-if="props.post.images.length > 0" class="img-container">
             <a v-for="image, index in props.post.images" href="javascript:;" @click="showImage(index)">
                 <img class="post-img" :src="isIntersecting ? image.original : ''">
             </a>
@@ -18,7 +20,7 @@
 
         <div class="bottom-controls">
             <a :href="props.post.author.href" target="_blank">
-                <UserButton class="author">
+                <UserButton class="author" :shadow-border="true">
                     <img class="author-portrait"
                         :src="isIntersecting ? tiebaAPI.URL_profile(props.post.author.portrait) : ''">
                     <div class="author-info">
@@ -87,6 +89,10 @@ a {
     text-decoration: none;
 }
 
+p {
+    margin: 0;
+}
+
 img::before {
     display: block;
     width: 100%;
@@ -105,23 +111,33 @@ img::before {
     border-radius: 16px;
     background-color: _.$defaultBack;
     cursor: pointer;
+    gap: 20px;
     text-align: justify;
 
+    .forum-btn {
+        border-radius: 24px;
+        font-size: 14px;
+    }
+
+    .forum-btn:not(:hover, :active, :focus) {
+        background-color: _.$lightBack;
+        box-shadow: none;
+    }
+
     .main-content {
-        .forum {
-            border: none;
-            border-radius: 24px;
-            background-color: _.$lightBack;
-        }
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
 
         .title {
+            margin: 0;
             color: _.$highlightFore;
             font-weight: bold;
         }
 
         .content {
-            margin-top: -10px;
-            font-size: small;
+            color: _.$lightFore;
+            font-size: 14px;
         }
     }
 
@@ -133,6 +149,7 @@ img::before {
         gap: 6px;
 
         a {
+            overflow: hidden;
             min-width: 40%;
             height: 144px;
             flex: 1;
@@ -142,19 +159,23 @@ img::before {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: 0.4s ease;
+        }
+
+        .post-img:hover {
+            scale: 1.2;
         }
     }
 
     .bottom-controls {
         display: flex;
         align-items: center;
-        margin-top: 24px;
         gap: 12px;
 
         .author {
             display: flex;
+            align-items: center;
             padding: 0;
-            border: none;
             border-radius: 24px;
             background-color: unset;
 
@@ -182,6 +203,10 @@ img::before {
             }
         }
 
+        .author:not(:hover, :active, :focus) {
+            box-shadow: none;
+        }
+
         .replies {
             display: flex;
             min-width: 16px;
@@ -199,13 +224,5 @@ img::before {
             font-size: medium;
         }
     }
-}
-
-.post-container:hover {
-    background-color: _.$defaultHover;
-}
-
-.post-container:active {
-    background-color: _.$defaultActive;
 }
 </style>

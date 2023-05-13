@@ -1,6 +1,12 @@
 <template>
     <div class="mdoule-control-wrapper">
         <div class="left-container">
+            <div class="head-controls">
+                <p class="title">{{ headTitle }}</p>
+                <UserTextbox v-model="searchText" class="search-box" :placeholder="searchPH" autocomplete="none">
+                </UserTextbox>
+            </div>
+
             <div class="module-list-container">
                 <UserButton v-for="module in filteredModules" :key="module.id" class="module-item"
                     :class="selectedModule.id === module.id ? 'selected' : ''" @click="moduleItemClick(module)">
@@ -8,19 +14,13 @@
                     <p class="brief">{{ module.brief }}</p>
                 </UserButton>
             </div>
-
-            <div class="head-controls">
-                <p class="title">{{ headTitle }}</p>
-                <UserTextbox v-model="searchText" class="search-box" :placeholder="searchPH" autocomplete="none">
-                </UserTextbox>
-            </div>
         </div>
 
         <div class="right-container">
             <div v-show="selectedModule.id ? true : false" class="module-container">
                 <div class="module-info">
-                    <p class="title">{{ selectedModule.name }} <span>{{ selectedModule.id }} {{ selectedModule.version
-                    }}</span></p>
+                    <p class="title">{{ selectedModule.name }}</p>
+                    <p class="info">{{ selectedModule.id }} {{ selectedModule.version }}</p>
                     <p class="brief">{{ selectedModule.brief }}</p>
                     <p class="desc">{{ selectedModule.description }}</p>
                 </div>
@@ -108,6 +108,7 @@ function toggleClick(module: UserModule) {
 
 <style scoped lang="scss">
 @use "@/stylesheets/main/palette" as _;
+@use "@/stylesheets/main/remixed-main" as _main;
 
 $dialog-height: 400px;
 $dialog-radius: 12px;
@@ -120,6 +121,7 @@ $bottom-height: 60px;
 
 .mdoule-control-wrapper {
     display: grid;
+    overflow: hidden;
     width: 600px;
     height: 400px;
     border-width: 1px;
@@ -127,6 +129,7 @@ $bottom-height: 60px;
     border-color: _.$borderColor;
     border-radius: $dialog-radius;
     margin: auto;
+    animation: dialog-in 0.4s ease;
     background-color: _.$defaultBack;
     box-shadow: 0 0 40px rgba(0 0 0 / 20%);
     grid-template-columns: 240px 360px;
@@ -136,29 +139,24 @@ $bottom-height: 60px;
         display: flex;
         width: 240px;
         height: 400px;
-        border-radius: $dialog-radius 0 0 $dialog-radius;
-        background-color: _.$elemColor;
+        flex-direction: column;
+        background-color: _.$deepBack;
 
         .head-controls {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: $head-height;
+            display: flex;
             box-sizing: border-box;
-            padding: 0 $dialog-margin;
-            border-radius: $dialog-radius 0 0 0;
-            backdrop-filter: blur(24px);
+            flex-direction: column;
+            padding: 16px $dialog-margin;
+            background-color: _.$deepBack;
+            gap: 8px;
 
             .title {
-                padding-top: 14px;
                 margin: 0;
                 color: _.$lightFore;
             }
 
             .search-box {
                 width: 100%;
-                margin-top: 8px;
-                margin-bottom: 8px;
             }
         }
 
@@ -166,7 +164,6 @@ $bottom-height: 60px;
             overflow: hidden;
             height: 100%;
             box-sizing: border-box;
-            border-radius: $dialog-radius 0 0 $dialog-radius;
 
             .module-item {
                 display: flex;
@@ -176,7 +173,6 @@ $bottom-height: 60px;
                 padding: 12px $dialog-margin;
                 border: none;
                 border-radius: 0;
-                background-color: unset;
                 gap: 4px;
                 text-align: justify;
                 white-space: nowrap;
@@ -196,13 +192,13 @@ $bottom-height: 60px;
                 }
             }
 
-            .module-item:hover {
-                background-color: _.$defaultHover;
+            .module-item:not(:hover) {
+                background-color: _.$deepBack;
             }
 
             .module-item.selected {
                 background-color: _.$tiebaThemeColor;
-                color: _.$elemColor;
+                color: _.$deepBack;
 
                 .brief {
                     color: inherit;
@@ -236,27 +232,27 @@ $bottom-height: 60px;
             gap: 16px;
 
             .module-info {
+                display: flex;
                 overflow: hidden;
+                flex-direction: column;
                 padding-bottom: $bottom-height;
+                gap: 8px;
 
                 .title {
-                    padding-bottom: 8px;
                     margin: 0;
                     font-size: 20px;
                     font-weight: bold;
+                }
 
-                    span {
-                        margin-left: 8px;
-                        color: _.$minimalFore;
-                        font-family: monospace;
-                        font-size: 16px;
-                        font-weight: normal;
-                    }
+                .info {
+                    color: _.$minimalFore;
+                    font-family: monospace;
+                    font-size: 14px;
                 }
 
                 .brief {
                     margin: 0;
-                    color: _.$minimalFore;
+                    color: _.$lightFore;
                     font-size: 14px;
                 }
 
@@ -304,7 +300,7 @@ $bottom-height: 60px;
                 justify-content: flex-end;
                 padding: 12px $dialog-margin;
                 border-radius: 0 0 $dialog-radius 0;
-                backdrop-filter: blur(24px);
+                backdrop-filter: brightness(0.8);
                 background-color: _.$transDefaultBack;
 
                 .toggle,
