@@ -40,7 +40,7 @@ export function DOMS<_T extends keyof HTMLElementTagNameMap>(...args: any[]): an
             if (args[1] instanceof Element) {
                 return (args[1] as Element).querySelectorAll(selector);
             } else {
-                return document.querySelector(selector);
+                return document.querySelectorAll(selector);
             }
         case 3:
             return (args[2] as Element).querySelectorAll(selector);
@@ -168,13 +168,12 @@ export function createNewElement<T extends keyof HTMLElementTagNameMap>(
 }
 
 export function parseCSSObject(
-    selector: string, cssObject: Mapped<CSSStyleDeclaration>
+    cssObject: Mapped<CSSStyleDeclaration>
 ): string {
-    let css = selector + "{";
+    let css = "";
     forOwn(cssObject, (value, key) => {
         css += kebabCase(key) + ":" + value + ";";
     });
-    css += "}";
     return css;
 }
 
@@ -220,7 +219,7 @@ export function injectCSSRule(selector: string, cssObject: Mapped<CSSStyleDeclar
     if (cssObject.length === 0) return;
     if (!defaultStyle.sheet) return;
 
-    const css = parseCSSObject(selector, cssObject);
+    const css = selector + "{" + parseCSSObject(cssObject) + "}";
     return defaultStyle.sheet.insertRule(css);
 }
 
