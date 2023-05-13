@@ -12,7 +12,7 @@ export const Main: UserModule = {
     id: "easy-jump",
     name: "直链跳转",
     author: "锯刃Blade",
-    version: "1.0",
+    version: "1.0.1",
     brief: "链接跳转避免二次确认",
     description: `自动跳转至分享链接的原始地址，不再进行中转（不处理被严重警告的链接）`,
     scope: ["jump.bdimg.com/safecheck/", "jump2.bdimg.com/safecheck/"],
@@ -20,13 +20,13 @@ export const Main: UserModule = {
     entry: main
 };
 
-function main(): void {
+function main() {
     injectCSSRule(".warning_wrap", {
         display: "none"
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const realUrl = DOMS(".btn-next", "a")[0].href;
-        if (realUrl) location.href = realUrl;
+    window.addEventListener("load", () => {
+        const realAnchor = DOMS(".btn-next", "a")[0];
+        if (realAnchor) location.href = realAnchor.href;
     });
 }
