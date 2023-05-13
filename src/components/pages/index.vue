@@ -34,7 +34,7 @@
                         @focus="searchBoxFocus" @input="searchMatch">
                     </UserTextbox>
 
-                    <UserButton class="search-button">搜索</UserButton>
+                    <UserButton class="search-button" :theme-style="true">搜索</UserButton>
 
                     <!-- 搜索建议组件 -->
                     <div v-show="suggToggle && suggestions.length > 0" class="search-suggestions">
@@ -58,22 +58,21 @@
                     </div>
 
                     <div class="block-panel followed">
-                        <UserButton class="panel-btn icon sign-btn" :unset-background="true">task_alt</UserButton>
+                        <UserButton class="panel-btn icon sign-btn" :unset-background="true" @click="oneKeySignInstance">
+                            task_alt</UserButton>
                         <UserButton class="panel-btn icon settings" :unset-background="true">settings</UserButton>
                     </div>
                 </div>
 
                 <div class="block-container followed-list">
-                    <a v-for=" forum  in  followed?.like_forum " :href="tiebaAPI.URL_forum(forum.forum_name)"
-                        target="_blank">
-                        <UserButton class="followed-btn" :shadow-border="true">
-                            <div v-if="forum.is_sign === 1" class="icon signed">check</div>
-                            <div class="forum-title">{{ forum.forum_name }}</div>
-                            <div class="forum-level" :class="'level-' + levelToClass(forum.user_level)">
-                                {{ forum.user_level }}
-                            </div>
-                        </UserButton>
-                    </a>
+                    <UserButton v-for="forum in followed.like_forum" :is-anchor="true" class="followed-btn"
+                        :shadow-border="true" :href="tiebaAPI.URL_forum(forum.forum_name)" target="_blank">
+                        <div v-if="forum.is_sign === 1" class="icon signed">check</div>
+                        <div class="forum-title">{{ forum.forum_name }}</div>
+                        <div class="forum-level" :class="'level-' + levelToClass(forum.user_level)">
+                            {{ forum.user_level }}
+                        </div>
+                    </UserButton>
                 </div>
             </div>
 
@@ -90,25 +89,24 @@
                 </div>
 
                 <div class="block-container topic-list">
-                    <a v-for="topic in take(topicList, 10)" :href="topic.topic_url" target="_blank">
-                        <UserButton class="topic-btn" :shadow-border="true">
-                            <img class="topic-img" :src="topic.topic_pic">
-                            <div class="topic-content">
-                                <div class="topic-title">
-                                    <div :class="'topic-rank-' + topic.idx_num">{{ topic.idx_num }}</div>
-                                    <div class="topic-name">{{ topic.topic_name }}</div>
-                                </div>
-                                <div class="topic-desc">{{ topic.topic_desc }}</div>
+                    <UserButton v-for="topic in take(topicList, 10)" :is-anchor="true" class="topic-btn"
+                        :shadow-border="true" :href="topic.topic_url" target="_blank">
+                        <img class="topic-img" :src="topic.topic_pic">
+                        <div class="topic-content">
+                            <div class="topic-title">
+                                <div :class="'topic-rank-' + topic.idx_num">{{ topic.idx_num }}</div>
+                                <div class="topic-name">{{ topic.topic_name }}</div>
                             </div>
-                        </UserButton>
-                    </a>
+                            <div class="topic-desc">{{ topic.topic_desc }}</div>
+                        </div>
+                    </UserButton>
                 </div>
             </div>
 
             <div id="carousel_wrap"></div>
         </div>
 
-        <div class="masonry-container">
+        <div ref="masonryContainer" class="masonry-container">
             <!-- 推送 -->
             <div v-if="feeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
                 <div class="block-panel feeds">
@@ -119,6 +117,12 @@
             </div>
 
             <div ref="feedsContainer" class="feeds-container">
+                <UserButton v-if="feeds.length >= maxFeeds && feedsIntersecting" class="feeds-refresh-btn"
+                    @click="refreshFeedsAndMove" :theme-style="true">
+                    <div class="icon">refresh</div>
+                    刷新
+                </UserButton>
+
                 <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :async-load="true"
                     :shadow-border="true" @click-image="showImages">
                 </PostContainer>
@@ -145,10 +149,10 @@ import { nextTick, onMounted, ref } from "vue";
 import { debounce, forEach, map, take, throttle } from "lodash-es";
 
 import { findParentByClass } from "@/lib/domlib";
-import { renderDialog } from "@/lib/render";
+import { messageBox, renderDialog, toast } from "@/lib/render";
 import { MainModules } from "@/main";
 import { getUserValueTS, setUserValueTS } from "@/lib/userlib";
-import { BaiduPassport, GiteeRepo, GithubRepo, spawnOffsetTS } from "@/lib/utils";
+import { BaiduPassport, GiteeRepo, GithubRepo, errorMessage, requestInstance, spawnOffsetTS } from "@/lib/utils";
 
 import PostContainer from "../post-container.vue";
 import ImagesViewer from "../images-viewer.vue";
@@ -157,6 +161,11 @@ import UserButton from "../utils/user-button.vue";
 import Masonry from "masonry-layout";
 import DropdownMenu from "../utils/dropdown-menu.vue";
 import ModuleControl from "../module-control.vue";
+import { OneKeySignResponse } from "@/lib/api.tieba";
+
+// 基础配置
+const maxFeeds = 80;
+const nextFeedsMargin = 320;
 
 const feeds = ref<TiebaPost[]>([]);
 const userInfo = ref<UserInfoResponse["data"]>();
@@ -164,6 +173,7 @@ const followed = ref<FollowedForumsResponse["data"]>();
 
 const postImages = ref<string[]>([]);
 const defaultIndex = ref(0);
+const masonryContainer = ref<HTMLDivElement>();
 const feedsContainer = ref<HTMLAnchorElement>();
 const searchText = ref<string>("");
 const suggToggle = ref(false);
@@ -177,8 +187,8 @@ const configToggle = ref(false);
 const configMenu = ref<DropdownMenu[]>();
 const profileToggle = ref(false);
 const profileMenu = ref<DropdownMenu[]>();
-
 const topicList = ref<TopicList[]>([]);
+const feedsIntersecting = ref(false);
 
 // 状态
 let isFetchingFeeds = false;
@@ -188,6 +198,25 @@ let msnry: Masonry;
 
 // 初始化
 onMounted(async () => {
+    init().then(() => {
+        // 监控
+        if (masonryContainer.value) {
+            const iObs = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    feedsIntersecting.value = true;
+                } else {
+                    feedsIntersecting.value = false;
+                }
+            });
+            iObs.observe(masonryContainer.value);
+        }
+    });
+});
+
+window.addEventListener("focusin", (ev) => toggleSuggControls(ev));
+window.addEventListener("mousedown", (ev) => toggleSuggControls(ev));
+
+async function init() {
     // 用户信息
     userInfo.value = await (async () => {
         try {
@@ -196,7 +225,11 @@ onMounted(async () => {
                 return userInfoResp.data;
             }
         } catch (error) {
-            console.warn(error);
+            toast({
+                message: errorMessage(error as Error),
+                type: "error",
+                duration: 6000
+            });
         }
     })();
     console.log("user info", userInfo.value);
@@ -260,33 +293,25 @@ onMounted(async () => {
 
     // 获取关注的吧
     if (userInfo.value) {
-        tiebaAPI.followedForums().then((response) => {
-            if (response.ok) {
-                response.json().then((value: FollowedForumsResponse) => {
-                    if (value) {
-                        followed.value = value.data;
+        requestInstance(tiebaAPI.followedForums()).then((response: FollowedForumsResponse) => {
+            if (response) {
+                followed.value = response.data;
 
-                        // 已签到计数
-                        forEach(followed.value.like_forum, forum => {
-                            if (forum.is_sign === 1) signedForums++;
-                        });
-                        // 排序关注吧
-                        followed.value.like_forum.sort((a, b) =>
-                            parseInt(b.user_exp) - parseInt(a.user_exp));
-                    }
+                // 已签到计数
+                forEach(followed.value.like_forum, forum => {
+                    if (forum.is_sign === 1) signedForums++;
                 });
+                // 排序关注吧
+                followed.value.like_forum.sort((a, b) =>
+                    parseInt(b.user_exp) - parseInt(a.user_exp));
             }
         });
     }
 
     // 贴吧热议
-    tiebaAPI.topicList().then((response) => {
-        if (response.ok) {
-            response.json().then((value: TopicListResponse) => {
-                if (value) {
-                    topicList.value.push(...value.data.bang_topic.topic_list);
-                }
-            });
+    requestInstance(tiebaAPI.topicList()).then((response: TopicListResponse) => {
+        if (response) {
+            topicList.value.push(...response.data.bang_topic.topic_list);
         }
     });
 
@@ -321,17 +346,16 @@ onMounted(async () => {
         const clientHeight = document.documentElement.clientHeight;
 
         // 在距离屏幕底部约 320px的位置请求下一次推送，这个距离在不故意快速滑动的情况下基本保证无感
-        if (scrollTop + clientHeight >= scrollHeight - 320) {
-            fetchFeeds();
+        if (scrollTop + clientHeight >= scrollHeight - nextFeedsMargin) {
+            if (feeds.value.length < maxFeeds) {
+                fetchFeeds();
+            }
         }
     });
-});
+}
 
-window.addEventListener("focusin", (ev) => toggleSuggControls(ev));
-window.addEventListener("mousedown", (ev) => toggleSuggControls(ev));
-
-function toggleSuggControls(payload: Event) {
-    const el = payload.target as HTMLElement;
+function toggleSuggControls(e: Event) {
+    const el = e.target as HTMLElement;
     const pt = findParentByClass(el, "search-controls");
     if (pt) {
         suggToggle.value = true;
@@ -375,22 +399,16 @@ function renderFeeds() {
             fitWidth: true,
             transitionDuration: 0
         });
+        console.log(msnry);
 
         // 由于未知原因，在页面真正挂载到贴吧时 resize事件会产生问题，所以不得不特殊处理
         const rerender = throttle(() => {
             // 当推送过多（百度 > 150，开发服务器 > 300），重排布会消耗很长时间，导致页面阻塞
-            // (async () => {
-            //     if (typeof msnry.layout === "function") {
-            //         msnry.layout();
-            //     }
-            // })();
-
             setTimeout(() => {
                 requestAnimationFrame(() => {
                     if (typeof msnry.layout === "function") {
                         msnry.layout();
                     }
-                    console.log(feeds.value.length);
                 });
             }, 0);
         }, 100, { leading: true });
@@ -398,15 +416,17 @@ function renderFeeds() {
         window.addEventListener("resize", rerender, {
             passive: true
         });
-
-        clearInterval(0);
-        clearInterval(1);
     });
 }
 
 function refreshFeeds() {
     feeds.value.length = 0;
     addFeedList();
+}
+
+function refreshFeedsAndMove() {
+    window.scrollTo({ top: masonryContainer.value?.offsetTop, behavior: "smooth" });
+    refreshFeeds();
 }
 
 /**
@@ -467,6 +487,49 @@ function showImages(images: string[], index: number) {
         defaultIndex: defaultIndex.value
     });
 }
+
+async function oneKeySignInstance() {
+    messageBox({
+        title: "一键签到",
+        message: "需要注意，Web端签到获取到的经验远少于移动端，建议使用其他设备进行签到。",
+        type: "OkCancel"
+    }).then((tag) => {
+        if (tag === "positive") {
+            requestInstance(tiebaAPI.oneKeySign()).then((response: OneKeySignResponse) => {
+                // messageBox({
+                //     title: "签到成功",
+                //     message: `本次共签到成功 ${response.data.signedForumAmount} 个吧，未签到 ${response.data.unsignedForumAmount} 个吧，签到失败 ${response.data.signedForumAmountFail} 个吧，共获得 ${response.data.gradeNoVip} 经验。`
+                // });
+
+                toast({
+                    message: `本次共签到成功 ${response.data.signedForumAmount} 个吧，未签到 ${response.data.unsignedForumAmount} 个吧，签到失败 ${response.data.signedForumAmountFail} 个吧，共获得 ${response.data.gradeNoVip} 经验。`,
+                    type: "check",
+                    blurEffect: true
+                });
+
+                tiebaAPI.followedForums().then((_response) => {
+                    if (_response.ok) {
+                        _response.json().then((value: FollowedForumsResponse) => {
+                            if (value) {
+                                followed.value = value.data;
+
+                                // 已签到计数
+                                forEach(followed.value.like_forum, forum => {
+                                    if (forum.is_sign === 1) signedForums++;
+                                });
+                                // 排序关注吧
+                                followed.value.like_forum.sort((a, b) =>
+                                    parseInt(b.user_exp) - parseInt(a.user_exp));
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    });
+}
+
+
 </script>
 
 <style scoped lang="scss">
@@ -588,20 +651,10 @@ a {
 
                 .search-button {
                     border: none;
-                    background-color: _.$tiebaThemeColor;
                     border-bottom-left-radius: 0;
                     border-top-left-radius: 0;
-                    color: _.$defaultBack;
                     font-size: 16px;
                     font-weight: bold;
-                }
-
-                .search-button:hover {
-                    background-color: _.$tiebaThemeHover;
-                }
-
-                .search-button:active {
-                    background-color: _.$tiebaThemeActive;
                 }
 
                 .search-suggestions {
@@ -766,6 +819,7 @@ a {
                     align-items: center;
                     padding: 6px;
                     border-radius: 12px;
+                    font-size: 14px;
                     gap: 6px;
 
                     .signed {
@@ -778,6 +832,7 @@ a {
                         padding: 0 2px;
                         border-radius: 24px;
                         font-weight: bold;
+                        text-align: center;
                     }
                 }
             }
@@ -788,7 +843,6 @@ a {
             gap: 4px;
             grid-auto-rows: max-content;
             grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(auto-fill, minmax(1px, 1fr));
 
             .topic-btn {
                 display: flex;
@@ -832,6 +886,7 @@ a {
 
                     .topic-desc {
                         color: _.$lightFore;
+                        font-size: 14px;
                     }
                 }
             }
@@ -840,6 +895,7 @@ a {
 
     .masonry-container {
         display: flex;
+        box-sizing: border-box;
         flex-direction: column;
         align-items: center;
         gap: 8px;
@@ -847,8 +903,54 @@ a {
         .feeds-container {
             margin: auto;
 
+            @keyframes feeds-in {
+                0% {
+                    transform: scale(0.72);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes refresh-btn-in {
+                0% {
+                    padding: 0 18px;
+                    opacity: 0;
+                }
+
+                100% {
+                    padding: 8px 18px;
+                    opacity: 1;
+                }
+            }
+
+            .feeds-refresh-btn {
+                position: fixed;
+                z-index: 1;
+                bottom: 24px;
+                left: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 8px 18px;
+                border-width: 2px;
+                border-radius: 16px;
+                animation: refresh-btn-in 0.4s ease;
+                box-shadow: 0 6px 20px rgb(0 0 0 / 30%);
+                font-size: 14px;
+                font-weight: bold;
+                gap: 6px;
+                transform: translateX(-50%);
+
+                .icon {
+                    font-size: 18px;
+                }
+            }
+
             .post-elem {
                 margin-bottom: 12px;
+                animation: feeds-in 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.2);
             }
 
             .post-elem:not(:hover, :active, :focus) {
