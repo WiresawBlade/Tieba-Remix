@@ -1,9 +1,53 @@
 import { forOwn, includes } from "lodash-es";
+import { toast } from "./render";
 
 export const MainTitle = "Tieba Remix";
 export const GithubRepo = "https://github.com/WiresawBlade/Tieba-Remix";
 export const GiteeRepo = "https://gitee.com/WiresawBlade/Tieba-Remix/";
 export const BaiduPassport = "https://passport.baidu.com/";
+
+const publicLib: LiteralObject = {};
+
+export function getPublicLib<T>(key: string): T | undefined;
+export function getPublicLib<T>(key: string, defaultValue: T): T;
+
+export function getPublicLib<T>(key: string, defaultValue?: T) {
+    if (publicLib[key]) {
+        return publicLib[key];
+    } else {
+        if (defaultValue)
+            return defaultValue;
+    }
+}
+
+export function setPublicLib<T>(key: string, value: T) {
+    publicLib[key] = value;
+}
+
+/**
+ * 接口调用实现的共公有模板
+ * @param api 需要调用的接口，理论上所有的 `Promise<Response>` 都是被接受的
+ * @returns 该请求返回的 json
+ */
+export async function requestInstance(api: Promise<Response>): Promise<any> {
+    try {
+        const response = await api;
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch (error) {
+        toast({
+            message: errorMessage(error as Error),
+            type: "error",
+            duration: 6000
+        });
+    }
+}
+
+export function errorMessage(error: Error) {
+    const errBody = error.stack ? error.stack : error.message;
+    return `${GM_info.script.name} ${GM_info.script.version}\n${errBody}`;
+}
 
 /**
  * 让 GET 请求可以像 POST 请求一样通过对象传递参数
@@ -12,15 +56,14 @@ export const BaiduPassport = "https://passport.baidu.com/";
  * @returns 对应的 `fetch`
  */
 export function fetchWithBody(input: string, body?: LiteralObject) {
-    let reqUrl = input;
-    if (body) {
-        reqUrl += "?";
-        forOwn(body, (value, key) => {
-            if (!value) value = "";
-            reqUrl += `${key}=${value}&`;
-        });
+    const reqBody = body ? requestBody(body) : undefined;
+    console.log("🚀 ~ file: utils.ts:42 ~ fetchWithBody ~ reqBody:", reqBody);
+
+    if (reqBody) {
+        return fetch(`${input}?${reqBody}`);
+    } else {
+        return fetch(input);
     }
-    return fetch(reqUrl.slice(0, -1));
 }
 
 export function carryDefault<T>(val: any, def: T): T {
@@ -42,4 +85,13 @@ export function spawnOffsetTS(
     const offset = new Date(now.getFullYear() + year, now.getMonth() + month, now.getDate() + day,
         now.getHours() + hours, now.getMinutes() + minutes, now.getSeconds() + seconds, 0);
     return offset.getTime();
+}
+
+export function requestBody(body: LiteralObject) {
+    let reqBody = "";
+    forOwn(body, (value, key) => {
+        if (!value) value = "";
+        reqBody += `${key}=${value}&`;
+    });
+    return reqBody.slice(0, -1);
 }
