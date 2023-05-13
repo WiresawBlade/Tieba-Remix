@@ -3,11 +3,14 @@ import palette from "@/stylesheets/main/_palette.scss?inline";
 import materialIcons from "@/stylesheets/main/material-icons.css?inline";
 import remixedMain from "@/stylesheets/main/_remixed-main.scss?inline";
 
+import { forEach, includes } from "lodash-es";
+
 import { remixedObservers } from "./lib/observers";
 import { greasyInit } from "./greasy-init";
 import { parseUserModules } from "./lib/unsafe";
 import { DOMS, afterHead, createNewElement, injectCSSList, injectCSSRule } from "./lib/domlib";
-import { removeDefault, renderDialog, renderPage } from "./lib/render";
+import { removeDefault, renderDialog, renderPage, toast } from "./lib/render";
+import { errorMessage } from "./lib/utils";
 
 import indexVue from "./components/pages/index.vue";
 import moduleControlVue from "./components/module-control.vue";
@@ -29,7 +32,10 @@ const MainModules: UserModule[] = [];
 let moduleLoadedFlag = false;
 const beforeModulesLoadedFns: (() => void)[] = [];
 
-if (location.href === "https://tieba.baidu.com/") {
+(() => {
+    if (location.hostname.toLowerCase() !== "tieba.baidu.com") return;
+    if (!includes(["/", "/index.html"], location.pathname.toLowerCase())) return;
+
     const bodyMask = injectCSSList(`
         body {
             display: none;
@@ -53,7 +59,7 @@ if (location.href === "https://tieba.baidu.com/") {
         removeDefault();
         userbarMask.remove();
     };
-}
+})();
 
 try {
     // 加载基本样式表
@@ -121,41 +127,49 @@ try {
         try {
             const floatBar = DOMS(".tbui_aside_float_bar")[0];
 
-            floatBar.insertBefore(createNewElement("li", {
-                class: "tbui_aside_fbar_button module-settings"
-            }, [createNewElement("a", {
-                href: "javascript:;"
-            })]), floatBar.firstChild);
+            if (floatBar) {
+                floatBar.insertBefore(createNewElement("li", {
+                    class: "tbui_aside_fbar_button module-settings"
+                }, [createNewElement("a", {
+                    href: "javascript:;"
+                })]), floatBar.firstChild);
 
-            injectCSSRule(".tbui_aside_float_bar .module-settings", {
-                backgroundColor: "rgb(53, 73, 94)"
-            });
-
-            injectCSSRule(".module-settings .svg-container::after", {
-                content: `"settings"`,
-                color: "rgb(240, 240, 240)"
-            });
-
-            document.body.insertBefore(createNewElement("div", {
-                class: "vue-module-control",
-                style: "display: none;"
-            }), document.body.firstChild);
-
-            // 临时绑定 Vue 组件
-            DOMS(".tbui_aside_float_bar .module-settings")[0].addEventListener("click", () => {
-                renderDialog(moduleControlVue, {
-                    modules: MainModules
+                injectCSSRule(".tbui_aside_float_bar .module-settings", {
+                    backgroundColor: "rgb(53, 73, 94)"
                 });
-            });
+
+                injectCSSRule(".module-settings .svg-container::after", {
+                    content: `"settings"`,
+                    color: "rgb(240, 240, 240)"
+                });
+
+                document.body.insertBefore(createNewElement("div", {
+                    class: "vue-module-control",
+                    style: "display: none;"
+                }), document.body.firstChild);
+
+                // 临时绑定 Vue 组件
+                DOMS(".tbui_aside_float_bar .module-settings")[0].addEventListener("click", () => {
+                    renderDialog(moduleControlVue, {
+                        modules: MainModules
+                    });
+                });
+            }
         } catch (error) {
-            console.log(error);
+            toast({
+                message: errorMessage(error as Error),
+                type: "error"
+            });
         }
     });
 
     // 全部任务激活完毕，打印信息
     console.info(REMIXED);
 } catch (error) {
-    console.error(error);
+    toast({
+        message: errorMessage(error as Error),
+        type: "error"
+    });
 }
 
 /**
