@@ -91,7 +91,8 @@ const commonConfig = defineConfig({
                 changeOrigin: true
             }
         }
-    }
+    },
+    ssr: false
 });
 
 const devConfig = defineConfig({
