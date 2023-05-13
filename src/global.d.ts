@@ -88,6 +88,22 @@ interface UserValueTS<T> {
     invalidTime: number
 }
 
+const GM_info: {
+    script: {
+        name: string
+        version: string
+        description: string
+        namespace: string
+        author: string
+        homepageURL: string
+        icon: string
+        includes: string[]
+        matches: string[]
+        excludeMatches: string[]
+        grant: string[]
+    }
+};
+
 const unsafeWindow: Window;
 
 function GM_setValue<T>(key: string, value: T): void;
