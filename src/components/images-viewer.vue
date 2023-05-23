@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import UserButton from "./utils/user-button.vue";
 import { map, round } from "lodash-es";
 import { unloadDialog } from "@/lib/render";
@@ -77,6 +77,31 @@ const deg = ref(0);
 // 状态
 const minSize = 0.2;
 const maxSize = 4.0;
+
+onMounted(() => {
+    let offsetX = 0, offsetY = 0;
+
+    currImage.value?.addEventListener("mousedown", (e: MouseEvent) => {
+        if (!currImage.value) return;
+        e.preventDefault();
+
+        offsetX = e.clientX - currImage.value.offsetLeft;
+        offsetY = e.clientY - currImage.value.offsetTop;
+
+        document.addEventListener("mousemove", moveHandler);
+    });
+
+    document.addEventListener("mouseup", (e: MouseEvent) => {
+        e.preventDefault();
+        document.removeEventListener("mousemove", moveHandler);
+    });
+
+    function moveHandler(e: MouseEvent) {
+        if (!currImage.value) return;
+        currImage.value.style.left = `${(e.clientX - offsetX)}px`;
+        currImage.value.style.top = `${(e.clientY - offsetY)}px`;
+    }
+});
 
 /** 卸载组件 */
 function unload() {
@@ -158,7 +183,6 @@ $panel-radius: 12px;
 
     .icon {
         color: _.$lightFore;
-        font-family: "Material Icons", monospace;
     }
 
     .control-panel {
@@ -232,13 +256,16 @@ $panel-radius: 12px;
     }
 
     .image-container {
+        display: flex;
         width: auto;
+        align-items: center;
+        justify-content: center;
         margin: auto;
 
         .curr-image {
+            position: absolute;
             object-fit: contain;
-
-            @include _main.default-transition(all ease);
+            transition: all 0.4s ease, left 0s, top 0s;
         }
     }
 
