@@ -2,22 +2,16 @@ interface LiteralObject {
     [prop: string]: any
 }
 
-/** 用户模块 */
-interface UserModule {
-    [prop: string]: unknown
+type Mapped<T> = {
+    [prop in keyof T]: T[prop]
+}
 
-    id: string
-    /** 需要显示给用户的模块名称 */
-    name: string
-    author: string
-    version: string
-    brief: string
-    description: string
+type KeyMapped<T, U> = {
+    [prop in keyof T]: U
+}
 
-    switch?: boolean
-    scope: true | string | string[]
-    runAt: "immediately" | "afterHead" | "DOMLoaded" | "loaded"
-    entry: (() => void)
+type OptionalMapped<T> = {
+    [prop in keyof T]?: T[prop];
 }
 
 /** 贴子 */
@@ -72,7 +66,7 @@ interface ShieldObject {
     /** 匹配规则，它可能是直接的屏蔽词，也可能是正则表达式 */
     rule: string
     /** 描述当前规则的类型 */
-    type: "string" | "RegExp"
+    type: "string" | "regex"
     /** 作用域，屏蔽规则作用于贴子或用户 */
     scope: "posts" | "users"
     /** 是否启用该规则 */
@@ -95,6 +89,7 @@ const GM_info: {
         description: string
         namespace: string
         author: string
+        license: string
         homepageURL: string
         icon: string
         includes: string[]
