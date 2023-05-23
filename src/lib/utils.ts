@@ -1,29 +1,6 @@
 import { forOwn, includes } from "lodash-es";
 import { toast } from "./render";
 
-export const MainTitle = "Tieba Remix";
-export const GithubRepo = "https://github.com/WiresawBlade/Tieba-Remix";
-export const GiteeRepo = "https://gitee.com/WiresawBlade/Tieba-Remix/";
-export const BaiduPassport = "https://passport.baidu.com/";
-
-const publicLib: LiteralObject = {};
-
-export function getPublicLib<T>(key: string): T | undefined;
-export function getPublicLib<T>(key: string, defaultValue: T): T;
-
-export function getPublicLib<T>(key: string, defaultValue?: T) {
-    if (publicLib[key]) {
-        return publicLib[key];
-    } else {
-        if (defaultValue)
-            return defaultValue;
-    }
-}
-
-export function setPublicLib<T>(key: string, value: T) {
-    publicLib[key] = value;
-}
-
 /**
  * 接口调用实现的共公有模板
  * @param api 需要调用的接口，理论上所有的 `Promise<Response>` 都是被接受的
@@ -57,7 +34,6 @@ export function errorMessage(error: Error) {
  */
 export function fetchWithBody(input: string, body?: LiteralObject) {
     const reqBody = body ? requestBody(body) : undefined;
-    console.log("🚀 ~ file: utils.ts:42 ~ fetchWithBody ~ reqBody:", reqBody);
 
     if (reqBody) {
         return fetch(`${input}?${reqBody}`);

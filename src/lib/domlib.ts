@@ -4,10 +4,6 @@ const defaultStyle = document.createElement("style");  // 默认默认样式
 export const fadeInElems: string[] = [];
 const fadeInClass = "fade-in-elem";
 
-type Mapped<T> = {
-    [prop in keyof T]?: T[prop];
-}
-
 defaultStyle.id = "default-stylesheet";
 
 // 插入默认元素
@@ -168,7 +164,7 @@ export function createNewElement<T extends keyof HTMLElementTagNameMap>(
 }
 
 export function parseCSSObject(
-    cssObject: Mapped<CSSStyleDeclaration>
+    cssObject: OptionalMapped<CSSStyleDeclaration>
 ): string {
     let css = "";
     forOwn(cssObject, (value, key) => {
@@ -214,7 +210,7 @@ export function injectCSSFile(filename: string): HTMLLinkElement {
  * @param cssObject 包含 CSS 规则的对象，属性默认使用驼峰命名法
  * @returns 该规则的 index 或 `undefined`
  */
-export function injectCSSRule(selector: string, cssObject: Mapped<CSSStyleDeclaration>) {
+export function injectCSSRule(selector: string, cssObject: OptionalMapped<CSSStyleDeclaration>) {
     if (selector === "") return;
     if (cssObject.length === 0) return;
     if (!defaultStyle.sheet) return;
