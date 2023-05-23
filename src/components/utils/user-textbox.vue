@@ -1,14 +1,15 @@
 <template>
-    <input class="user-textbox" type="text" :value="modelValue"
-        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" autocomplete="off">
+    <component :is="props.mutiLines? 'textarea' : 'input'" class="user-textbox" type="text" :value="modelValue"
+        @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" autocomplete="off"></component>
 </template>
 
 <script setup lang="ts">
 interface Props {
     modelValue?: string
+    mutiLines?: true
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
     modelValue: ""
 });
 
