@@ -1,5 +1,6 @@
 <template>
-    <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id" target="_blank">
+    <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id" target="_blank"
+        :class="{ 'dynamic': props.dynamic }">
         <div>
             <UserButton :is-anchor="true" class="forum-btn" :shadow-border="true" :href="props.post.forum.href"
                 target="_blank">
@@ -13,22 +14,20 @@
         </div>
 
         <div v-if="props.post.images.length > 0" class="img-container">
-            <a v-for="image, index in props.post.images" href="javascript:;" @click="showImage(index)">
+            <UserButton v-for="image, index in props.post.images" class="img-button" @click="showImage($event, index)">
                 <img class="post-img" :src="isIntersecting ? image.original : ''">
-            </a>
+            </UserButton>
         </div>
 
         <div class="bottom-controls">
-            <a :href="props.post.author.href" target="_blank">
-                <UserButton class="author" :shadow-border="true">
-                    <img class="author-portrait"
-                        :src="isIntersecting ? tiebaAPI.URL_profile(props.post.author.portrait) : ''">
-                    <div class="author-info">
-                        <div class="author-name">{{ props.post.author.name }}</div>
-                        <div class="post-time">{{ props.post.time }}</div>
-                    </div>
-                </UserButton>
-            </a>
+            <UserButton class="author" :is-anchor="true" :href="props.post.author.href" target="_blank"
+                :shadow-border="true">
+                <img class="author-portrait" :src="isIntersecting ? tiebaAPI.URL_profile(props.post.author.portrait) : ''">
+                <div class="author-info">
+                    <div class="author-name">{{ props.post.author.name }}</div>
+                    <div class="post-time">{{ props.post.time }}</div>
+                </div>
+            </UserButton>
             <div class="replies">{{ props.post.replies }}</div>
         </div>
     </UserButton>
@@ -42,19 +41,21 @@ import UserButton from "./utils/user-button.vue";
 
 interface Props {
     post: TiebaPost
-    asyncLoad?: boolean
+    lazyLoad?: boolean
+    dynamic?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
-    asyncLoad: false
+    lazyLoad: false,
+    dynamic: false
 });
 
 const emit = defineEmits(["ClickImage"]);
 
 const postContainer = ref<ComponentPublicInstance>();
-const isIntersecting = ref(!props.asyncLoad);
+const isIntersecting = ref(!props.lazyLoad);
 
 onMounted(() => {
-    if (!props.asyncLoad) return;
+    if (!props.lazyLoad) return;
     if (!postContainer.value) return;
 
     // 进入视图后再加载图片
@@ -70,7 +71,8 @@ onMounted(() => {
     iObs.observe(postContainer.value.$el);
 });
 
-function showImage(index: number) {
+function showImage(e: MouseEvent, index: number) {
+    e.preventDefault();
     emit("ClickImage", (() => {
         const output: string[] = [];
         map(props.post.images, (value) => {
@@ -100,6 +102,14 @@ img::before {
     box-sizing: border-box;
     background-color: _.$lightBack;
     content: "";
+}
+
+.dynamic {
+    .img-button {
+        min-width: 30% !important;
+        flex: unset !important;
+        flex-grow: 1 !important;
+    }
 }
 
 .post-container {
@@ -148,22 +158,25 @@ img::before {
         border-radius: 16px;
         gap: 6px;
 
-        a {
+        .img-button {
             overflow: hidden;
             min-width: 40%;
             height: 144px;
             flex: 1;
-        }
+            padding: 0;
+            border: none;
+            border-radius: 0;
 
-        .post-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: 0.4s ease;
-        }
+            .post-img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: 0.4s cubic-bezier(0, 0, 0.2, 1);
+            }
 
-        .post-img:hover {
-            scale: 1.2;
+            .post-img:hover {
+                scale: 1.2;
+            }
         }
     }
 
@@ -193,12 +206,13 @@ img::before {
                 text-align: left;
 
                 .author-name {
+                    font-size: 14px;
                     font-weight: bold;
                 }
 
                 .post-time {
                     color: _.$minimalFore;
-                    font-size: smaller;
+                    font-size: 12px;
                 }
             }
         }
@@ -214,14 +228,16 @@ img::before {
             border-radius: 24px;
             margin-left: auto;
             color: _.$lightFore;
-            font-size: small;
+            font-family: monospace;
+            font-weight: bold;
         }
 
         .replies::before {
             margin-right: 6px;
             content: "forum";
-            font-family: "Material Icons", monospace;
-            font-size: medium;
+            font-family: "Material Symbols", monospace;
+            font-size: 16px;
+            font-weight: normal;
         }
     }
 }
