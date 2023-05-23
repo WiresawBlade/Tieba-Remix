@@ -1,6 +1,6 @@
 import favicon from "/images/main/favicon32.ico";
 import palette from "@/stylesheets/main/_palette.scss?inline";
-import materialIcons from "@/stylesheets/main/material-icons.css?inline";
+import materialIcons from "@/stylesheets/main/material-symbols.css?inline";
 import remixedMain from "@/stylesheets/main/_remixed-main.scss?inline";
 
 import { forEach, includes } from "lodash-es";

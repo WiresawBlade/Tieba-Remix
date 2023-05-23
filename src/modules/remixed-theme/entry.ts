@@ -105,7 +105,7 @@ function main(): void {
         // 为功能按钮注入 svg 容器
         DOMS(".tbui_aside_float_bar li a").forEach(elem => {
             elem.appendChild(createNewElement("div", {
-                class: "material-icons svg-container"
+                class: "icon svg-container"
             }));
         });
 

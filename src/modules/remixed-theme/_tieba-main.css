@@ -146,7 +146,7 @@
 .p_tools .tb_icon_turnleft::before,
 .p_tools .tb_icon_turnright::before {
     margin-right: 4px;
-    font-family: "Material Icons", system-ui;
+    font-family: "Material Symbols", system-ui;
     font-size: 14px;
     vertical-align: bottom;
 }

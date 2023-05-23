@@ -153,7 +153,7 @@
 .search_internal_btn::after {
     color: var(--default-background);
     content: "search";
-    font-family: "Material Icons";
+    font-family: "Material Symbols";
     font-size: 18px;
     font-weight: bold;
     line-height: 26px;
@@ -340,7 +340,7 @@
 
 .icon_author::after {
     content: "person";
-    font-family: "Material Icons";
+    font-family: "Material Symbols";
     font-style: normal;
 }
 
@@ -351,6 +351,6 @@
 
 .icon_replyer::after {
     content: "comment";
-    font-family: "Material Icons";
+    font-family: "Material Symbols";
     font-style: normal;
 }

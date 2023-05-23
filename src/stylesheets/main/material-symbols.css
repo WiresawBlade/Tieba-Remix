@@ -1,0 +1,25 @@
+/* stylelint-disable font-family-no-missing-generic-family-keyword */
+/* https: //fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..400,0..1,-50..100 */
+
+/* fallback */
+@font-face {
+    font-family: "Material Symbols";
+    font-style: normal;
+    font-weight: 200 400;
+    src: url("https://fonts.gstatic.com/s/materialsymbolsoutlined/v110/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2") format("woff2");
+}
+
+.material-symbols-outlined {
+    display: inline-block;
+    direction: ltr;
+    font-family: "Material Symbols";
+    font-size: 24px;
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+}
