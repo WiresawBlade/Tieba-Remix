@@ -21,7 +21,7 @@
 
                 <!-- 配置按钮 -->
                 <div class="config-menu-container" @click="configToggle = !configToggle">
-                    <UserButton class="config-menu-btn" :unset-background="true">menu</UserButton>
+                    <UserButton class="config-menu-btn icon" :unset-background="true">menu</UserButton>
 
                     <DropdownMenu v-if="configToggle" :menu-items="configMenu!" class="config-menu" :blur-effect="true"
                         @request-close="configToggle = false">
@@ -122,11 +122,11 @@
                     <div class="icon">refresh</div>
                     刷新
                 </UserButton>
-
-                <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :async-load="true"
-                    :shadow-border="true" @click-image="showImages">
-                </PostContainer>
             </div>
+
+            <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :shadow-border="true"
+                :lazy-load="true" :dynamic="experimental['dynamic-post-container']" @click-image="showImages">
+            </PostContainer>
 
             <div v-if="feeds.length === 0" class="empty-container">
                 <p class="no-feed-content">没有更多了</p>
@@ -150,21 +150,20 @@ import { debounce, forEach, map, take, throttle } from "lodash-es";
 
 import { findParentByClass } from "@/lib/domlib";
 import { messageBox, renderDialog, toast } from "@/lib/render";
-import { MainModules } from "@/main";
-import { getUserValueTS, setUserValueTS } from "@/lib/userlib";
-import { BaiduPassport, GiteeRepo, GithubRepo, errorMessage, requestInstance, spawnOffsetTS } from "@/lib/utils";
+import { errorMessage, requestInstance, spawnOffsetTS } from "@/lib/utils";
 
 import PostContainer from "../post-container.vue";
 import ImagesViewer from "../images-viewer.vue";
 import UserTextbox from "../utils/user-textbox.vue";
 import UserButton from "../utils/user-button.vue";
-import Masonry from "masonry-layout";
 import DropdownMenu from "../utils/dropdown-menu.vue";
-import ModuleControl from "../module-control.vue";
 import { OneKeySignResponse } from "@/lib/api.tieba";
+import { FlexMasonry } from "@/layouts/flex-masonry";
+import Settings from "../settings.vue";
+import { BaiduPassport, GiteeRepo, GithubRepo, experimental, getUserValueTS, setUserValueTS } from "@/lib/user-values";
 
 // 基础配置
-const maxFeeds = 80;
+const maxFeeds = 1000;
 const nextFeedsMargin = 320;
 
 const feeds = ref<TiebaPost[]>([]);
@@ -194,7 +193,7 @@ const feedsIntersecting = ref(false);
 let isFetchingFeeds = false;
 let signedForums = 0;
 
-let msnry: Masonry;
+let flexMasonry: FlexMasonry;
 
 // 初始化
 onMounted(async () => {
@@ -237,14 +236,9 @@ async function init() {
     // 配置菜单
     configMenu.value = [
         {
-            title: "设置"
-        },
-        {
-            title: "模块管理",
+            title: "设置",
             click() {
-                renderDialog(ModuleControl, {
-                    modules: MainModules
-                });
+                renderDialog(Settings);
             }
         },
         "separator",
@@ -293,19 +287,7 @@ async function init() {
 
     // 获取关注的吧
     if (userInfo.value) {
-        requestInstance(tiebaAPI.followedForums()).then((response: FollowedForumsResponse) => {
-            if (response) {
-                followed.value = response.data;
-
-                // 已签到计数
-                forEach(followed.value.like_forum, forum => {
-                    if (forum.is_sign === 1) signedForums++;
-                });
-                // 排序关注吧
-                followed.value.like_forum.sort((a, b) =>
-                    parseInt(b.user_exp) - parseInt(a.user_exp));
-            }
-        });
+        getFollowedInstance();
     }
 
     // 贴吧热议
@@ -319,20 +301,21 @@ async function init() {
     if (!feedsContainer.value) return;
 
     const unread = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
+
     if (userInfo.value) {
         if (unread.length > 0) {
             // 有未读推送则直接使用
-            addFeedList(unread);
+            getFeedsInstance(unread);
         } else {
             // 异步加载推荐并计算布局
-            addFeedList();
+            getFeedsInstance();
         }
     } else {
         unread.length = 0;
     }
 
     const fetchFeeds = debounce(() => {
-        addFeedList().then(() => {
+        getFeedsInstance().then(() => {
             console.log(feeds.value);
         });
     }, 1000, { leading: true });
@@ -367,7 +350,7 @@ function toggleSuggControls(e: Event) {
 /**
  * 将一次推荐请求获取到的贴子加入 `feeds`
  */
-async function addFeedList(newFeeds?: TiebaPost[]) {
+async function getFeedsInstance(newFeeds?: TiebaPost[]) {
     if (!newFeeds) {
         isFetchingFeeds = true;
         const response = await tiebaAPI.feedlist();
@@ -390,38 +373,38 @@ async function addFeedList(newFeeds?: TiebaPost[]) {
 
 function renderFeeds() {
     nextTick(() => {
-        if (!feedsContainer.value) return;
+        if (!flexMasonry) {
+            if (!feedsContainer.value) return;
+            flexMasonry = new FlexMasonry({
+                container: feedsContainer.value,
+                items: ".post-elem",
+                columnWidth: 360,
+                gap: 12
+            });
 
-        msnry = new Masonry(feedsContainer.value, {
-            itemSelector: ".post-elem",
-            columnWidth: 360,
-            gutter: 12,
-            fitWidth: true,
-            transitionDuration: 0
-        });
-        console.log(msnry);
-
-        // 由于未知原因，在页面真正挂载到贴吧时 resize事件会产生问题，所以不得不特殊处理
-        const rerender = throttle(() => {
-            // 当推送过多（百度 > 150，开发服务器 > 300），重排布会消耗很长时间，导致页面阻塞
-            setTimeout(() => {
+            const rerender = throttle(() => {
                 requestAnimationFrame(() => {
-                    if (typeof msnry.layout === "function") {
-                        msnry.layout();
+                    if (flexMasonry.columns !== flexMasonry.calcColumns()) {
+                        flexMasonry.exec();
                     }
                 });
-            }, 0);
-        }, 100, { leading: true });
+            }, 100, { leading: true });
 
-        window.addEventListener("resize", rerender, {
-            passive: true
-        });
+            window.addEventListener("resize", rerender, {
+                passive: true
+            });
+        } else {
+            flexMasonry.append();
+        }
     });
 }
 
 function refreshFeeds() {
     feeds.value.length = 0;
-    addFeedList();
+    flexMasonry.clear();
+    getFeedsInstance().then(() => {
+        flexMasonry.exec();
+    });
 }
 
 function refreshFeedsAndMove() {
@@ -488,6 +471,23 @@ function showImages(images: string[], index: number) {
     });
 }
 
+function getFollowedInstance() {
+    requestInstance(tiebaAPI.followedForums()).then((response: FollowedForumsResponse) => {
+        if (response) {
+            signedForums = 0;
+            followed.value = response.data;
+
+            // 已签到计数
+            forEach(followed.value.like_forum, forum => {
+                if (forum.is_sign === 1) signedForums++;
+            });
+            // 排序关注吧
+            followed.value.like_forum.sort((a, b) =>
+                parseInt(b.user_exp) - parseInt(a.user_exp));
+        }
+    });
+}
+
 async function oneKeySignInstance() {
     messageBox({
         title: "一键签到",
@@ -496,40 +496,18 @@ async function oneKeySignInstance() {
     }).then((tag) => {
         if (tag === "positive") {
             requestInstance(tiebaAPI.oneKeySign()).then((response: OneKeySignResponse) => {
-                // messageBox({
-                //     title: "签到成功",
-                //     message: `本次共签到成功 ${response.data.signedForumAmount} 个吧，未签到 ${response.data.unsignedForumAmount} 个吧，签到失败 ${response.data.signedForumAmountFail} 个吧，共获得 ${response.data.gradeNoVip} 经验。`
-                // });
-
                 toast({
                     message: `本次共签到成功 ${response.data.signedForumAmount} 个吧，未签到 ${response.data.unsignedForumAmount} 个吧，签到失败 ${response.data.signedForumAmountFail} 个吧，共获得 ${response.data.gradeNoVip} 经验。`,
                     type: "check",
                     blurEffect: true
                 });
 
-                tiebaAPI.followedForums().then((_response) => {
-                    if (_response.ok) {
-                        _response.json().then((value: FollowedForumsResponse) => {
-                            if (value) {
-                                followed.value = value.data;
-
-                                // 已签到计数
-                                forEach(followed.value.like_forum, forum => {
-                                    if (forum.is_sign === 1) signedForums++;
-                                });
-                                // 排序关注吧
-                                followed.value.like_forum.sort((a, b) =>
-                                    parseInt(b.user_exp) - parseInt(a.user_exp));
-                            }
-                        });
-                    }
-                });
+                // 刷新关注的吧
+                getFollowedInstance();
             });
         }
     });
 }
-
-
 </script>
 
 <style scoped lang="scss">
@@ -776,7 +754,6 @@ a {
                 border: none;
                 border-radius: 36px;
                 background-color: _.$pageBack;
-                font-family: "Material Icons", monospace;
                 font-size: 24px;
             }
 
@@ -817,7 +794,7 @@ a {
                 .followed-btn {
                     display: flex;
                     align-items: center;
-                    padding: 6px;
+                    padding: 6px 8px;
                     border-radius: 12px;
                     font-size: 14px;
                     gap: 6px;
@@ -901,6 +878,7 @@ a {
         gap: 8px;
 
         .feeds-container {
+            width: 100%;
             margin: auto;
 
             @keyframes feeds-in {
@@ -947,15 +925,14 @@ a {
                     font-size: 18px;
                 }
             }
+        }
 
-            .post-elem {
-                margin-bottom: 12px;
-                animation: feeds-in 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.2);
-            }
+        .post-elem {
+            animation: feeds-in 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.2);
+        }
 
-            .post-elem:not(:hover, :active, :focus) {
-                box-shadow: none;
-            }
+        .post-elem:not(:hover, :active, :focus) {
+            box-shadow: none;
         }
 
         .empty-container {
