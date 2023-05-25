@@ -1,3 +1,7 @@
+import { spawnOffsetTS } from "./utils";
+import meta from "/meta.json";
+
+export const META = meta;
 export const MainTitle = "Tieba Remix";
 export const Owner = "WiresawBlade";
 export const RepoName = "Tieba-Remix";
@@ -16,12 +20,22 @@ export const experimental: Experimental = GM_getValue<Experimental>("experimenta
     "new-index": true,
     "dynamic-post-container": false
 });
+/** 最新发行版相关信息 */
+export const latestRelease: LatestReleaseFromGitee | undefined = getUserValueTS("latestRelease", undefined);
+
+export const updateConfig: UpdateConfig = GM_getValue("updateConfig", {
+    time: "6h"
+});
 
 export interface Experimental {
     [props: string]: boolean
 
     "new-index": boolean
     "dynamic-post-container": boolean
+}
+
+export interface UpdateConfig {
+    time: "1h" | "3h" | "6h" | "never"
 }
 
 const publicLib: LiteralObject = {};
@@ -76,8 +90,31 @@ export interface LatestReleaseFromGitee {
     }[]
 }
 
-export async function getLatestReleaseFromGitee(owner = Owner, repo = RepoName) {
-    return await fetch(`https://gitee.com/api/v5/repos/${owner}/${repo}/releases/latest`);
+export async function getLatestReleaseFromGitee(owner = Owner, repo = RepoName, forceUpdate = false): Promise<LatestReleaseFromGitee | undefined> {
+    if (latestRelease && !forceUpdate) {
+        return latestRelease;
+    } else {
+        const TTL = (function () {
+            switch (updateConfig.time) {
+                case "1h": return 1;
+                case "3h": return 3;
+                case "6h": return 6;
+                case "never": return -1;
+            }
+        })();
+
+        if (TTL < 0) return;
+
+        const response = await fetch(`https://gitee.com/api/v5/repos/${owner}/${repo}/releases/latest/`);
+
+        if (response.ok) {
+            const result = await response.json() as LatestReleaseFromGitee;
+            setUserValueTS("latestRelease", result, spawnOffsetTS(0, 0, 0, TTL));
+            return result;
+        } else {
+            return undefined;
+        }
+    }
 }
 
 /**

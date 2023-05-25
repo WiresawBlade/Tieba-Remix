@@ -150,8 +150,7 @@ export function renderToast(toastProps: ToastProps) {
     // id 名带 "toast" 会被 AdBlock 直接暴力隐藏
     if (!document.getElementById("t-wrapper"/* toast-wrapper */)) {
         document.body.insertBefore(createNewElement("div", {
-            "id": "t-wrapper",
-            style: "display: block !important;"
+            "id": "t-wrapper"
         }), document.body.firstChild);
     }
 
