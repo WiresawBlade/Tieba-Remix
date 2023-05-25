@@ -14,7 +14,112 @@ html {
 }
 
 .icon {
-    font-family: "Material Icons", monospace;
+    font-family: "Material Symbols", monospace;
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 20;
+    user-select: none;
+}
+
+.markdown {
+    code {
+        padding: 2px 6px;
+        border-radius: 8px;
+        background-color: var(--light-border-color);
+        font-family: monospace;
+    }
+
+    a {
+        color: var(--tieba-theme-fore);
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    h2 {
+        margin: 26px 0 10px;
+        font-size: 24px;
+    }
+
+    h3 {
+        margin: 20px 0 6px;
+    }
+
+    ul {
+        margin: 6px 0;
+    }
+
+    li {
+        margin: 8px 0;
+    }
+
+    li::marker {
+        color: var(--minimal-fore);
+    }
+
+    blockquote {
+        margin: 20px 16px;
+        color: var(--minimal-fore);
+    }
+}
+
+select {
+    padding: 1px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+option {
+    cursor: pointer;
+}
+
+option:checked {
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+}
+
+.toggle-button {
+    border: none !important;
+    border-radius: 36px;
+    background-color: unset !important;
+}
+
+.toggle-button.toggle-off {
+    color: var(--minimal-fore);
+    font-variation-settings: "FILL" 0;
+}
+
+.toggle-button.toggle-off::after {
+    content: "toggle_off";
+}
+
+.toggle-button.toggle-on::after {
+    content: "toggle_on";
+}
+
+.toggle-button.toggle-on {
+    color: var(--tieba-theme-color);
+    font-variation-settings: "FILL" 1;
+}
+
+.toggle-button.toggle-off:hover {
+    color: var(--default-hover);
+}
+
+.toggle-button.toggle-off:active {
+    color: var(--default-active);
+}
+
+.toggle-button.toggle-on:hover {
+    color: var(tieba-theme-hover);
+}
+
+.toggle-button.toggle-on:active {
+    color: var(--tieba-theme-active);
 }
 
 a {
@@ -45,6 +150,21 @@ p {
 .level-orange {
     background-color: _.$levelOrangeBack;
     color: _.$levelOrangeFore;
+}
+
+@mixin remove-default {
+    * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        font-size: unset;
+        line-height: unset;
+        text-align: unset;
+    }
+
+    button {
+        color: unset;
+    }
 }
 
 @mixin transition-prototype($type, $time) {
