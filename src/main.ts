@@ -3,7 +3,7 @@ import palette from "@/stylesheets/main/_palette.scss?inline";
 import materialIcons from "@/stylesheets/main/material-symbols.css?inline";
 import remixedMain from "@/stylesheets/main/_remixed-main.scss?inline";
 
-import { forEach, includes } from "lodash-es";
+import { includes } from "lodash-es";
 
 import { remixedObservers } from "./lib/observers";
 import { greasyInit } from "./greasy-init";
@@ -13,7 +13,9 @@ import { removeDefault, renderDialog, renderPage, toast } from "./lib/render";
 import { errorMessage } from "./lib/utils";
 
 import indexVue from "./components/pages/index.vue";
-import moduleControlVue from "./components/module-control.vue";
+import { UserModule } from "./global.module";
+import { experimental } from "./lib/user-values";
+import settingsVue from "./components/settings.vue";
 
 export { afterModulesLoaded, MainModules };
 
@@ -33,6 +35,7 @@ let moduleLoadedFlag = false;
 const beforeModulesLoadedFns: (() => void)[] = [];
 
 (() => {
+    if (!experimental["new-index"]) return;
     if (location.hostname.toLowerCase() !== "tieba.baidu.com") return;
     if (!includes(["/", "/index.html"], location.pathname.toLowerCase())) return;
 
@@ -150,7 +153,7 @@ try {
 
                 // 临时绑定 Vue 组件
                 DOMS(".tbui_aside_float_bar .module-settings")[0].addEventListener("click", () => {
-                    renderDialog(moduleControlVue, {
+                    renderDialog(settingsVue, {
                         modules: MainModules
                     });
                 });
