@@ -23,8 +23,5 @@
         "GM_deleteValue",
         "GM_openInTab"
     ],
-    "require": [
-        "https://cdn.jsdelivr.net/npm/marked/marked.min.js"
-    ],
     "run-at": "document-start"
 }
