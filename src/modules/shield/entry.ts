@@ -2,20 +2,34 @@ import { greasyMenu } from "@/greasy-init";
 import { DOMS } from "@/lib/domlib";
 
 import { ObsType, remixedObservers } from "@/lib/observers";
+import moduleShieldVue from "./module.shield.vue";
+import { UserModule } from "@/global.module";
+import { markRaw } from "vue";
 
 export const Main: UserModule = {
     id: "shield",
     name: "贴吧屏蔽",
     author: "锯刃Blade",
-    version: "1.0",
+    version: "1.1",
     brief: "眼不见为净",
     description: `用户自定义屏蔽规则，符合规则的贴子和楼层将不会显示在首页、看贴页面和进吧页面。支持正则匹配`,
     scope: true,
     runAt: "immediately",
+    settings: {
+        "shield-controls": {
+            title: "管理屏蔽规则",
+            description:
+                `这些屏蔽规则将会在首页（旧版）、看贴页面生效，会自动隐藏所有符合匹配规则的贴子和楼层。`,
+            widgets: {
+                type: "component",
+                component: markRaw(moduleShieldVue)
+            }
+        }
+    },
     entry: main
 };
 
-const shieldList = GM_getValue("shieldList", <ShieldObject[]>[]);
+export const shieldList = GM_getValue("shieldList", <ShieldObject[]>[]);
 
 /**
  * 匹配字符串是否和屏蔽对象规则符合
@@ -41,7 +55,7 @@ function matchShield(obj: ShieldObject, str: string): boolean {
     }
 
     // 正则
-    if (obj.type === "RegExp") {
+    if (obj.type === "regex") {
         let regex: RegExp;
 
         // 忽略大小写
