@@ -29,6 +29,8 @@ html {
         border-radius: 8px;
         background-color: var(--light-border-color);
         font-family: monospace;
+        font-size: 14px;
+        word-wrap: break-word;
     }
 
     a {
@@ -45,7 +47,7 @@ html {
     }
 
     h3 {
-        margin: 20px 0 6px;
+        margin: 20px 0 10px;
     }
 
     ul {
@@ -152,14 +154,24 @@ p {
     color: _.$levelOrangeFore;
 }
 
-@mixin remove-default {
-    * {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        font-size: unset;
-        line-height: unset;
-        text-align: unset;
+.remove-default {
+    font-size: 16px;
+    line-height: initial;
+
+    .content {
+        min-height: unset;
+        background: unset;
+    }
+
+    code {
+        display: unset;
+        width: unset;
+        height: unset;
+    }
+
+    .content,
+    .foot {
+        width: unset;
     }
 
     button {

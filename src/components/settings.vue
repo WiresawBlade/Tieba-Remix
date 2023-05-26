@@ -1,5 +1,5 @@
 <template>
-    <div class="settings-wrapper">
+    <div class="settings-wrapper remove-default">
         <div class="left-container">
             <div class="search-controls">
                 <div class="title">设置</div>
@@ -75,7 +75,7 @@ import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 import { MainModules } from "@/main";
 import { disabledModules, experimental, updateConfig } from "@/lib/user-values";
-import { conforms, debounce, find, forEach, includes, pull } from "lodash-es";
+import { debounce, find, includes, pull } from "lodash-es";
 
 import AboutDetail from "./setting-widgets/about.detail.vue";
 import { UserModule } from "@/global.module";
@@ -331,9 +331,6 @@ const debSearchKey = debounce(searchKey, 500);
 </script>
 
 <style lang="scss" scoped>
-@use "@/stylesheets/main/remixed-main" as _main;
-@include _main.remove-default;
-
 $wrapper-padding: 16px;
 
 @keyframes content-in {

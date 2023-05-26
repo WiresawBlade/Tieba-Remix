@@ -62,6 +62,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .update-wrapper {
     display: flex;
+    max-width: 100%;
     flex-direction: column;
     gap: 8px;
 
