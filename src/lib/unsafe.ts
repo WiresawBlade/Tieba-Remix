@@ -1,6 +1,8 @@
 import { disabledModules } from "./user-values";
 import { afterHead } from "./domlib";
-import { indexOf } from "lodash-es";
+import { forOwn, indexOf } from "lodash-es";
+import { UserModule } from "@/global.module";
+import { currentPageType } from "./api.remixed";
 
 /**
  * 解析用户模块，并根据默认情况按需执行模块
@@ -42,20 +44,18 @@ export function parseUserModules(
                             return true;
                         }
 
-                        // 字符串
-                        if (typeof m.scope === "string") {
-                            if (location.href.indexOf(m.scope) !== -1) {
-                                return true;
-                            }
-                        }
-
                         // 数组
                         if (Array.isArray(m.scope)) {
-                            for (const scope in m.scope) {
-                                const str = scope;
-                                if (location.href.indexOf(str) !== -1) {
+                            forOwn(m.scope, (_index, scope) => {
+                                if (currentPageType() === scope) {
                                     return true;
                                 }
+                            });
+                        }
+
+                        if ({}.toString.call(m.scope) === "[object RegExp]") {
+                            if ((m.scope as RegExp).test(location.href)) {
+                                return true;
                             }
                         }
                     }

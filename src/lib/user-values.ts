@@ -90,33 +90,6 @@ export interface LatestReleaseFromGitee {
     }[]
 }
 
-export async function getLatestReleaseFromGitee(owner = Owner, repo = RepoName, forceUpdate = false): Promise<LatestReleaseFromGitee | undefined> {
-    if (latestRelease && !forceUpdate) {
-        return latestRelease;
-    } else {
-        const TTL = (function () {
-            switch (updateConfig.time) {
-                case "1h": return 1;
-                case "3h": return 3;
-                case "6h": return 6;
-                case "never": return -1;
-            }
-        })();
-
-        if (TTL < 0) return;
-
-        const response = await fetch(`https://gitee.com/api/v5/repos/${owner}/${repo}/releases/latest/`);
-
-        if (response.ok) {
-            const result = await response.json() as LatestReleaseFromGitee;
-            setUserValueTS("latestRelease", result, spawnOffsetTS(0, 0, 0, TTL));
-            return result;
-        } else {
-            return undefined;
-        }
-    }
-}
-
 /**
  * 获取时间敏感的值
  * @param key 需要获取的值对应的键

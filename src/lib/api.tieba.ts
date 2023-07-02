@@ -1,15 +1,15 @@
 import { forEach, join, split } from "lodash-es";
 import { DOMS } from "./domlib";
-import { fetchWithBody, carryDefault, requestBody } from "./utils";
+import { carryDefault, requestBody } from "./utils";
 
 /** 贴吧 API */
 export const tiebaAPI = {
     /** 首页推荐 */
     feedlist: () =>
-        fetch("/f/index/feedlist?" + requestBody({
+        fetch(`/f/index/feedlist?${requestBody({
             "is_new": 1,
             "tag_id": "like"
-        })),
+        })}`),
 
     /** 用户头像 */
     URL_profile: (portrait: string) =>
@@ -17,9 +17,9 @@ export const tiebaAPI = {
 
     /** 当前登录用户信息 */
     userInfo: (serverTime?: number) =>
-        fetchWithBody("/f/user/json_userinfo", {
+        fetch(`/f/user/json_userinfo?${requestBody({
             "_": serverTime
-        }),
+        })}`),
 
     /** 用户主页 */
     URL_userHome: (portrait: string) =>
@@ -27,11 +27,11 @@ export const tiebaAPI = {
 
     /** 搜索建议 */
     suggestions: (query?: string, encoding = "UTF-8", serverTime?: number) =>
-        fetchWithBody("/suggestion", {
+        fetch(`/suggestion?${requestBody({
             "query": query,
             "ie": encoding,
             "_": serverTime
-        }),
+        })}`),
 
     /** 贴吧热议 */
     topicList: () =>
@@ -43,9 +43,9 @@ export const tiebaAPI = {
 
     /** 未读消息 */
     unreadMessages: (serverTime?: number) =>
-        fetchWithBody("/im/pcmsg/query/getAllUnread", {
+        fetch(`/im/pcmsg/query/getAllUnread?${requestBody({
             "_": serverTime
-        }),
+        })}`),
 
     /** 收藏更新 */
     favUpdateNum: () =>
@@ -55,37 +55,41 @@ export const tiebaAPI = {
     tbs: () =>
         fetch("/dc/common/tbs"),
 
+    /** imgtbs */
+    imgtbs: () =>
+        fetch("/dc/common/imgtbs"),
+
     /** 获取已关注的吧 */
     followedForums: () =>
         fetch("/mo/q/newmoindex"),
 
     /** 更详细的用户信息 */
     userInfoAll: (un: string, encoding = "UTF-8") =>
-        fetchWithBody("/home/get/panel", {
+        fetch(`/home/get/panel?${requestBody({
             "ie": encoding,
             "un": un
-        }),
+        })}`),
 
     /** 关注吧 */
     followForum: (tbs: string, forumId: number, forumName: string) =>
-        fetchWithBody("/mo/q/favolike", {
+        fetch(`/mo/q/favolike?${requestBody({
             "itb_tbs": tbs,
             "fid": forumId,
             "kw": forumName
-        }),
+        })}`),
 
     /** 取消关注吧 */
     unfollowForum: (tbs: string, forumName: string) =>
-        fetchWithBody("/mo/q/delmylike", {
+        fetch(`/mo/q/delmylike?${requestBody({
             "itb_tbs": tbs,
             "forum_name": forumName
-        }),
+        })}`),
 
     /** 通过 `uid` 查找用户 */
     getUserFromUID: (uid: string) =>
-        fetchWithBody("/im/pcmsg/query/getUserInfo", {
+        fetch(`/im/pcmsg/query/getUserInfo?${requestBody({
             "chatUid": uid
-        }),
+        })}`),
 
     /** 一键签到（Web 端） */
     oneKeySign: () =>
@@ -93,38 +97,71 @@ export const tiebaAPI = {
 
     /** 热门动态 */
     hotFeeds: (un: string, pn: number, encoding = "utf-8", serverTime?: number) =>
-        fetchWithBody("/mo/q/newmoindex", {
+        fetch(`/mo/q/newmoindex?${requestBody({
             "un": un,
             "pn": pn,
             "ie": encoding,
             "_": serverTime
-        }),
+        })}`),
 
     /** 获取当前页所有楼中楼数据 */
     totalComments: (timeStamp: number, tid: number, fid: number, pn: number, lzOnly = false) =>
-        fetchWithBody("/p/totalComment", {
+        fetch(`/p/totalComment?${requestBody({
             "t": timeStamp,
             "tid": tid,
             "fid": fid,
             "pn": pn,
             "see_lz": Number(lzOnly)
-        }),
+        })}`),
 
     /** 获取热门话题相关贴 */
     topicRelatedThreads: (topicName: string, page: number, lastId: number, topicId: number, sortType = 1) =>
-        fetchWithBody("/hottopic/browse/getTopicRelateThread", {
+        fetch(`/hottopic/browse/getTopicRelateThread?${requestBody({
             "topic_name": topicName,
             "page_no": page,
             "last_id": lastId,
             "topic_id": topicId,
             "sort_type": sortType
-        }),
+        })}`),
 
     /** 将贴子添加到收藏 */
     addFavoritePost: (tbs: string, tid: number, fid: number, encoding = "utf-8") =>
         fetch("/i/submit/open_storethread", {
             method: "POST",
-            body: requestBody({ tbs, tid, fid, encoding })
+            body: JSON.stringify({ tbs, tid, fid, encoding })
+        }),
+
+    forumSignInfo: (forumName: string, encoding = "utf-8") =>
+        fetch(`/sign/info?${requestBody({
+            "kw": forumName,
+            "ie": encoding
+        })}`),
+
+    forumLoadMonth: (forumName: string, encoding = "utf-8") =>
+        fetch(`/sign/loadmonth?${requestBody({
+            "kw": forumName,
+            "ie": encoding
+        })}`),
+
+    addFloor: (tbs: string, forum: string, forumId: number, threadId: number, content: string, floorNum: number, richText: boolean, ev = "comment", __type__ = "reply") =>
+        fetch("/f/commit/post/add", {
+            method: "POST",
+            body: JSON.stringify({
+                "ie": "utf-8",
+                "kw": forum,
+                "fid": forumId,
+                "tid": threadId,
+                "floor_num": floorNum,
+                "rich_text": Number(richText),
+                "tbs": tbs,
+                "content": content,
+                "basilisk": 1,
+                "nick_name": PageData.user.user_nickname,
+                "ev": ev,
+                "biz[po]": PageData.user.portrait.split("?")[0],
+                "__type__": __type__,
+                "geetest_success": 0
+            })
         })
 };
 
@@ -444,6 +481,10 @@ export async function getFeedList(
     }
 
     return feedList;
+}
+
+export function addFloorInstance(content: string) {
+    return tiebaAPI.addFloor(PageData.tbs, PageData.forum.name, parseInt(PageData.forum.id), PageData.thread.thread_id, content, PageData.thread.reply_num + 1, true);
 }
 
 /**
