@@ -16,6 +16,27 @@ type OptionalMapped<T> = {
     [prop in keyof T]?: T[prop];
 }
 
+type PageType = "index" | "thread" | "forum" | "user" | "unhandled"
+
+/** 用户模块 */
+interface UserModule {
+    [prop: string]: any
+
+    id: string
+    /** 需要显示给用户的模块名称 */
+    name: string
+    author: string
+    version: string
+    brief: string
+    description: string
+
+    switch?: boolean
+    scope: true | PageType[] | RegExp
+    runAt: "immediately" | "afterHead" | "DOMLoaded" | "loaded"
+
+    entry: (() => void)
+}
+
 /** 贴子 */
 interface TiebaPost {
     id: string
