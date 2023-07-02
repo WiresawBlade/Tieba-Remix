@@ -108,7 +108,7 @@
 
         <div ref="masonryContainer" class="masonry-container">
             <!-- 推送 -->
-            <div v-if="feeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
+            <div v-if="initFeeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
                 <div class="block-panel feeds">
                     <UserButton class="panel-btn icon refresh" :unset-background="true" @click="refreshFeeds">refresh
                     </UserButton>
@@ -116,7 +116,7 @@
                 </div>
             </div>
 
-            <div ref="feedsContainer" class="feeds-container">
+            <!-- <div ref="feedsContainer" class="feeds-container">
                 <UserButton v-if="feeds.length >= maxFeeds && feedsIntersecting" class="feeds-refresh-btn"
                     @click="refreshFeedsAndMove" :theme-style="true">
                     <div class="icon">refresh</div>
@@ -125,10 +125,13 @@
             </div>
 
             <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :shadow-border="true"
-                :lazy-load="true" :dynamic="experimental['dynamic-post-container']" @click-image="showImages">
-            </PostContainer>
+                :dynamic="experimental['dynamic-post-container']" @click-image="showImages" @assets-loaded="appendLoaded">
+            </PostContainer> -->
 
-            <div v-if="feeds.length === 0" class="empty-container">
+            <FeedsMasonry :init-feeds="initFeeds"></FeedsMasonry>
+            <!-- <component :is="FeedsMasonry"></component> -->
+
+            <div v-if="initFeeds.length === 0" class="empty-container">
                 <p class="no-feed-content">没有更多了</p>
             </div>
         </div>
@@ -138,10 +141,9 @@
 <script setup lang="ts">
 import {
     tiebaAPI,
-    FeedListResponse,
     SuggestionResponse, UserInfoResponse,
     FollowedForumsResponse,
-    levelToClass, parsePostsFromString,
+    levelToClass,
     TopicListResponse, TopicList
 } from "@/lib/api.tieba";
 
@@ -150,9 +152,8 @@ import { debounce, forEach, map, take, throttle } from "lodash-es";
 
 import { findParentByClass } from "@/lib/domlib";
 import { messageBox, renderDialog, toast } from "@/lib/render";
-import { errorMessage, requestInstance, spawnOffsetTS } from "@/lib/utils";
+import { errorMessage, requestInstance } from "@/lib/utils";
 
-import PostContainer from "../post-container.vue";
 import ImagesViewer from "../images-viewer.vue";
 import UserTextbox from "../utils/user-textbox.vue";
 import UserButton from "../utils/user-button.vue";
@@ -160,13 +161,10 @@ import DropdownMenu from "../utils/dropdown-menu.vue";
 import { OneKeySignResponse } from "@/lib/api.tieba";
 import { FlexMasonry } from "@/layouts/flex-masonry";
 import Settings from "../settings.vue";
-import { BaiduPassport, GiteeRepo, GithubRepo, experimental, getUserValueTS, setUserValueTS } from "@/lib/user-values";
+import { BaiduPassport, GiteeRepo, GithubRepo, getUserValueTS } from "@/lib/user-values";
+import FeedsMasonry from "../feeds-masonry.vue";
 
-// 基础配置
-const maxFeeds = 1000;
-const nextFeedsMargin = 320;
-
-const feeds = ref<TiebaPost[]>([]);
+const initFeeds = ref<TiebaPost[]>([]);
 const userInfo = ref<UserInfoResponse["data"]>();
 const followed = ref<FollowedForumsResponse["data"]>();
 
@@ -194,6 +192,9 @@ let isFetchingFeeds = false;
 let signedForums = 0;
 
 let flexMasonry: FlexMasonry;
+
+initFeeds.value = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
+console.log("🚀 ~ file: index.vue:197 ~ initFeeds.value:", initFeeds.value);
 
 // 初始化
 onMounted(async () => {
@@ -299,42 +300,6 @@ async function init() {
 
     // 页面
     if (!feedsContainer.value) return;
-
-    const unread = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
-
-    if (userInfo.value) {
-        if (unread.length > 0) {
-            // 有未读推送则直接使用
-            getFeedsInstance(unread);
-        } else {
-            // 异步加载推荐并计算布局
-            getFeedsInstance();
-        }
-    } else {
-        unread.length = 0;
-    }
-
-    const fetchFeeds = debounce(() => {
-        getFeedsInstance().then(() => {
-            console.log(feeds.value);
-        });
-    }, 1000, { leading: true });
-
-    // 页面滚动到底部加载新的推送
-    window.addEventListener("scroll", () => {
-        if (isFetchingFeeds) return;
-
-        const scrollHeight = document.documentElement.scrollHeight;
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const clientHeight = document.documentElement.clientHeight;
-
-        // 在距离屏幕底部约 320px的位置请求下一次推送，这个距离在不故意快速滑动的情况下基本保证无感
-        if (scrollTop + clientHeight >= scrollHeight - nextFeedsMargin) {
-            if (feeds.value.length < maxFeeds) {
-                fetchFeeds();
-            }
-        }
-    });
 }
 
 function toggleSuggControls(e: Event) {
@@ -347,64 +312,40 @@ function toggleSuggControls(e: Event) {
     }
 }
 
-/**
- * 将一次推荐请求获取到的贴子加入 `feeds`
- */
-async function getFeedsInstance(newFeeds?: TiebaPost[]) {
-    if (!newFeeds) {
-        isFetchingFeeds = true;
-        const response = await tiebaAPI.feedlist();
-        if (response.ok) {
-            await response.json().then((value: FeedListResponse) => {
-                const newFeeds = parsePostsFromString(value.data.html);
-                feeds.value.push(...newFeeds);
-                isFetchingFeeds = false;
+// function renderFeeds() {
+//     nextTick(() => {
+//         if (!flexMasonry) {
+//             if (!feedsContainer.value) return;
+//             flexMasonry = new FlexMasonry({
+//                 container: feedsContainer.value,
+//                 items: ".post-elem.assets-loaded",
+//                 columnWidth: 360,
+//                 gap: 12
+//             });
 
-                renderFeeds();
-                // 将新的推送设置为未读推送，失效时间为2小时后
-                setUserValueTS("unreadFeeds", newFeeds, spawnOffsetTS(0, 0, 0, 2));
-            });
-        }
-    } else {
-        feeds.value.push(...newFeeds);
-        renderFeeds();
-    }
-}
+//             const rerender = throttle(() => {
+//                 requestAnimationFrame(() => {
+//                     if (flexMasonry.columns !== flexMasonry.calcColumns()) {
+//                         flexMasonry.exec();
+//                     }
+//                 });
+//             }, 100, { leading: true });
 
-function renderFeeds() {
-    nextTick(() => {
-        if (!flexMasonry) {
-            if (!feedsContainer.value) return;
-            flexMasonry = new FlexMasonry({
-                container: feedsContainer.value,
-                items: ".post-elem",
-                columnWidth: 360,
-                gap: 12
-            });
-
-            const rerender = throttle(() => {
-                requestAnimationFrame(() => {
-                    if (flexMasonry.columns !== flexMasonry.calcColumns()) {
-                        flexMasonry.exec();
-                    }
-                });
-            }, 100, { leading: true });
-
-            window.addEventListener("resize", rerender, {
-                passive: true
-            });
-        } else {
-            flexMasonry.append();
-        }
-    });
-}
+//             window.addEventListener("resize", rerender, {
+//                 passive: true
+//             });
+//         } else {
+//             flexMasonry.append();
+//         }
+//     });
+// }
 
 function refreshFeeds() {
-    feeds.value.length = 0;
+    initFeeds.value.length = 0;
     flexMasonry.clear();
-    getFeedsInstance().then(() => {
-        flexMasonry.exec();
-    });
+    // getFeedsInstance().then(() => {
+    //     flexMasonry.exec();
+    // });
 }
 
 function refreshFeedsAndMove() {
@@ -461,15 +402,15 @@ function searchTextChange() {
 
 const searchMatch = debounce(searchTextChange, 500);
 
-function showImages(images: string[], index: number) {
-    postImages.value = images;
-    defaultIndex.value = index;
+// function showImages(images: string[], index: number) {
+//     postImages.value = images;
+//     defaultIndex.value = index;
 
-    renderDialog(ImagesViewer, {
-        content: postImages.value,
-        defaultIndex: defaultIndex.value
-    });
-}
+//     renderDialog(ImagesViewer, {
+//         content: postImages.value,
+//         defaultIndex: defaultIndex.value
+//     });
+// }
 
 function getFollowedInstance() {
     requestInstance(tiebaAPI.followedForums()).then((response: FollowedForumsResponse) => {
