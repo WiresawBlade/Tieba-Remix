@@ -40,23 +40,27 @@ export class FlexMasonry {
             }
         })() as HTMLElement;
 
-        this.items = (() => {
-            if (typeof options.items === "string") {
-                this.itemsSelector = options.items;
+        if (options.items) {
+            this.items = (() => {
+                if (typeof options.items === "string") {
+                    this.itemsSelector = options.items;
 
-                const _items = document.querySelectorAll(options.items);
-                if (_items) {
-                    return Array.from(_items);
+                    const _items = document.querySelectorAll(options.items);
+                    if (_items) {
+                        return Array.from(_items);
+                    } else {
+                        return [];
+                    }
                 } else {
-                    throw new Error("Can't find items element.");
+                    return options.items;
                 }
-            } else {
-                return options.items;
-            }
-        })().map((el) => {
-            (el as HTMLElement).style.visibility = "hidden";
-            return { element: el as HTMLElement, cachedHeight: el.clientHeight } as MasonryElement;
-        });
+            })().map((el) => {
+                (el as HTMLElement).style.visibility = "hidden";
+                return { element: el as HTMLElement, cachedHeight: el.clientHeight } as MasonryElement;
+            });
+        } else {
+            this.items = [];
+        }
 
         this.columnWidth = options.columnWidth;
 
@@ -103,6 +107,11 @@ export class FlexMasonry {
 
         const fragment = document.createDocumentFragment();
 
+        const _col = this.container.querySelectorAll(this.columnSelector);
+        _col.forEach(col => {
+            col.remove();
+        });
+
         this.columnContainers.length = 0;
         for (let i = 0; i < this.columns; i++) {
             this.columnContainers.push(
@@ -133,7 +142,7 @@ export class FlexMasonry {
     layout() {
         if (this.fragment) {
             this.container.appendChild(this.fragment);
-            this.removeUnusedColumns();
+            // this.removeUnusedColumns();
         } else {
             throw Error("Never conducted layout calculations before. You should use exec() or calc() first.");
         }
@@ -165,32 +174,38 @@ export class FlexMasonry {
      * 向布局中加入元素
      * @param el 要添加的元素
      */
-    appendElement(el: Element) {
-        const masonryElement = {
-            element: el,
-            cachedHeight: el.clientHeight
-        } as MasonryElement;
+    appendElement(...elems: Element[]) {
+        const masonryElements = elems.map((el) => {
+            return {
+                element: el,
+                cachedHeight: el.clientHeight
+            } as MasonryElement;
+        });
 
-        this._appendElement(masonryElement);
-        this.items.push(masonryElement);
+        this._appendElement(...masonryElements);
+        this.items.push(...masonryElements);
     }
 
-    private _appendElement(el: MasonryElement) {
-        const minIndex = this.columnsHeight.indexOf(Math.min(...this.columnsHeight));
-        this.columnsHeight[minIndex] += el.cachedHeight;
-        this.columnContainers[minIndex].appendChild(el.element);
-        el.element.style.visibility = "visible";
+    private _appendElement(...elems: MasonryElement[]) {
+        elems.forEach((el) => {
+            const minIndex = this.columnsHeight.indexOf(Math.min(...this.columnsHeight));
+            this.columnsHeight[minIndex] += el.cachedHeight;
+            this.columnContainers[minIndex].appendChild(el.element);
+            el.element.style.visibility = "visible";
+        });
     }
 
     /**
      * 在原有子项的基础上追加子项
      * @param newItems 要添加的新元素，接受 CSS选择器
+     * @param interval 插入每个元素间的时间间隔
      */
-    append(newItems?: Element[] | string) {
+    append(newItems?: Element[] | string, interval?: number) {
         const appended = (() => {
             if (newItems) {
                 if (typeof newItems === "string") {
                     const _items = document.querySelectorAll(newItems);
+                    console.log(_items);
                     return Array.from(_items) as HTMLElement[];
                 } else {
                     return newItems as HTMLElement[];
@@ -210,9 +225,17 @@ export class FlexMasonry {
         })();
 
         if (appended) {
-            appended.forEach((el) => {
-                this.appendElement(el);
-            });
+            if (!interval || interval <= 0) {
+                appended.forEach((el) => {
+                    this.appendElement(el);
+                });
+            } else {
+                appended.forEach((el, index) => {
+                    setTimeout(() => {
+                        this.appendElement(el);
+                    }, interval * index);
+                });
+            }
         }
     }
 
@@ -239,7 +262,7 @@ export interface MasonryOptions {
      * 
      * 接受 `Element` 或 `CSS Selector`
      */
-    items: Element[] | string
+    items?: Element[] | string
 
     /** 列宽 */
     columnWidth: number
