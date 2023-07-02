@@ -78,7 +78,6 @@ import { disabledModules, experimental, updateConfig } from "@/lib/user-values";
 import { conforms, debounce, find, forEach, includes, pull } from "lodash-es";
 
 import AboutDetail from "./setting-widgets/about.detail.vue";
-import { UserModule } from "@/global.module";
 import AboutUpdate from "./setting-widgets/about.update.vue";
 
 export interface UserSettings {
