@@ -152,14 +152,24 @@ p {
     color: _.$levelOrangeFore;
 }
 
-@mixin remove-default {
-    * {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        font-size: unset;
-        line-height: unset;
-        text-align: unset;
+.remove-default {
+    font-size: 16px;
+    line-height: initial;
+
+    .content {
+        min-height: unset;
+        background: unset;
+    }
+
+    code {
+        display: unset;
+        width: unset;
+        height: unset;
+    }
+
+    .content,
+    .foot {
+        width: unset;
     }
 
     button {

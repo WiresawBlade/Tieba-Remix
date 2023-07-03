@@ -1,5 +1,5 @@
 <template>
-    <div class="settings-wrapper">
+    <div class="settings-wrapper remove-default">
         <div class="left-container">
             <div class="search-controls">
                 <div class="title">设置</div>
@@ -331,7 +331,6 @@ const debSearchKey = debounce(searchKey, 500);
 
 <style lang="scss" scoped>
 @use "@/stylesheets/main/remixed-main" as _main;
-@include _main.remove-default;
 
 $wrapper-padding: 16px;
 
