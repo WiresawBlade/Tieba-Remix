@@ -12,7 +12,7 @@ export const Main: UserModule = {
     version: "2.0",
     brief: "优化楼中楼浏览体验",
     description: `为楼中楼的楼主、层主等用户添加特殊标签`,
-    scope: "/p/",
+    scope: ["thread"],
     runAt: "loaded",
     entry: main
 };

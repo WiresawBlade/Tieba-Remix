@@ -213,8 +213,8 @@ const PageData: {
 
     // 吧
     forum: {
-        id: number,
-        forum_id: number,
+        id: string,
+        forum_id: string,
         name: string,
         forum_name: string,
         name_url: string,

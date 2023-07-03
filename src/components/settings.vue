@@ -78,7 +78,6 @@ import { disabledModules, experimental, updateConfig } from "@/lib/user-values";
 import { debounce, find, includes, pull } from "lodash-es";
 
 import AboutDetail from "./setting-widgets/about.detail.vue";
-import { UserModule } from "@/global.module";
 import AboutUpdate from "./setting-widgets/about.update.vue";
 
 export interface UserSettings {
@@ -331,6 +330,8 @@ const debSearchKey = debounce(searchKey, 500);
 </script>
 
 <style lang="scss" scoped>
+@use "@/stylesheets/main/remixed-main" as _main;
+
 $wrapper-padding: 16px;
 
 @keyframes content-in {

@@ -1,5 +1,25 @@
-import { forOwn, includes } from "lodash-es";
+import { find, forEach, forOwn, includes } from "lodash-es";
 import { toast } from "./render";
+
+export function cookies(): LiteralObject;
+export function cookies(key: string): string | undefined;
+
+export function cookies(key?: string) {
+    const cookieArray = document.cookie.split(';');
+
+    if (key) {
+        return find(cookieArray, (cookie) => cookie.trim().startsWith(key + "="));
+    } else {
+        const result: LiteralObject = {};
+
+        forEach(cookieArray, (cookie) => {
+            const [key, value] = cookie.split('=');
+            result[key.trim()] = value.trim();
+        });
+
+        return result;
+    }
+}
 
 /**
  * 接口调用实现的共公有模板
@@ -24,22 +44,6 @@ export async function requestInstance(api: Promise<Response>): Promise<any> {
 export function errorMessage(error: Error) {
     const errBody = error.stack ? error.stack : error.message;
     return `${GM_info.script.name} ${GM_info.script.version}\n${errBody}`;
-}
-
-/**
- * 让 GET 请求可以像 POST 请求一样通过对象传递参数
- * @param input 请求输入
- * @param body 请求体
- * @returns 对应的 `fetch`
- */
-export function fetchWithBody(input: string, body?: LiteralObject) {
-    const reqBody = body ? requestBody(body) : undefined;
-
-    if (reqBody) {
-        return fetch(`${input}?${reqBody}`);
-    } else {
-        return fetch(input);
-    }
 }
 
 export function carryDefault<T>(val: any, def: T): T {

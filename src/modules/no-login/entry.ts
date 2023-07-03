@@ -5,7 +5,7 @@ export const Main: UserModule = {
     version: "1.0",
     brief: "免登录浏览贴吧",
     description: `始终伪装为已登录状态，让免登录浏览和已登录基本一致`,
-    scope: "/p/",
+    scope: ["thread"],
     runAt: "DOMLoaded",
     entry: main
 };
@@ -16,7 +16,7 @@ function main() {
     PageData.user.is_login = 1;
     // const nameValue = document.createElement("div");
     // nameValue.id = "nameValue";
-    
+
     // document.addEventListener("DOMContentLoaded", () => {
     //     document.body.appendChild(nameValue);
     // });

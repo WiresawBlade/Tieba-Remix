@@ -3,10 +3,10 @@ import { DOMS } from "@/lib/domlib";
 
 import { ObsType, remixedObservers } from "@/lib/observers";
 import moduleShieldVue from "./module.shield.vue";
-import { UserModule } from "@/global.module";
 import { markRaw } from "vue";
+import { UserModuleExtended } from "@/global.module";
 
-export const Main: UserModule = {
+export const Main: UserModuleExtended = {
     id: "shield",
     name: "贴吧屏蔽",
     author: "锯刃Blade",

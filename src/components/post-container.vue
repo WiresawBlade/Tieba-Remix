@@ -1,6 +1,6 @@
 <template>
     <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id" target="_blank"
-        :class="{ 'dynamic': props.dynamic }">
+        :class="{ 'dynamic': props.dynamic, 'assets-loaded': loadedAssets === props.post.images.length }">
         <div>
             <UserButton :is-anchor="true" class="forum-btn" :shadow-border="true" :href="props.post.forum.href"
                 target="_blank">
@@ -15,7 +15,7 @@
 
         <div v-if="props.post.images.length > 0" class="img-container">
             <UserButton v-for="image, index in props.post.images" class="img-button" @click="showImage($event, index)">
-                <img class="post-img" :src="isIntersecting ? image.original : ''">
+                <img class="post-img" :src="isIntersecting ? image.original : ''" @load="addLoadedPost">
             </UserButton>
         </div>
 
@@ -49,15 +49,20 @@ const props = withDefaults(defineProps<Props>(), {
     dynamic: false
 });
 
-const emit = defineEmits(["ClickImage"]);
+const emit = defineEmits(["ClickImage", "AssetsLoaded"]);
 
 const postContainer = ref<ComponentPublicInstance>();
 const isIntersecting = ref(!props.lazyLoad);
+const loadedAssets = ref(0);
 
 onMounted(() => {
-    if (!props.lazyLoad) return;
     if (!postContainer.value) return;
 
+    if (props.post.images.length === 0) {
+        emit("AssetsLoaded", postContainer.value);
+    }
+
+    if (!props.lazyLoad) return;
     // 进入视图后再加载图片
     const iObs = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -80,6 +85,13 @@ function showImage(e: MouseEvent, index: number) {
         });
         return output;
     })(), index);
+}
+
+function addLoadedPost() {
+    loadedAssets.value += 1;
+    if (loadedAssets.value === props.post.images.length) {
+        emit("AssetsLoaded", postContainer.value);
+    }
 }
 </script>
 

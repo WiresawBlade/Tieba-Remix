@@ -31,7 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getLatestReleaseFromGitee, LatestReleaseFromGitee } from "@/lib/user-values";
+import { LatestReleaseFromGitee } from "@/lib/user-values";
+import { getLatestReleaseFromGitee } from "@/lib/api.remixed";
 import { onMounted, ref } from "vue";
 import { marked } from "marked";
 import UserButton from "../utils/user-button.vue";

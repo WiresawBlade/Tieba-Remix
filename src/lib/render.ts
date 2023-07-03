@@ -5,7 +5,7 @@ import dialogWrapperVue from "@/components/utils/dialog-wrapper.vue";
 import toastVue, { ToastProps } from "@/components/utils/toast.vue";
 import { Queue } from "./util-types";
 import messageBoxVue, { MessageBoxEvents, MessageBoxProps, MessageBoxType } from "@/components/utils/message-box.vue";
-import { getPublicLib } from "./utils";
+import { getPublicLib } from "./user-values";
 
 /** dialog 组件实例 */
 export let publicDialogInstance: App<Element>;

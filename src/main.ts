@@ -3,8 +3,6 @@ import palette from "@/stylesheets/main/_palette.scss?inline";
 import materialIcons from "@/stylesheets/main/material-symbols.css?inline";
 import remixedMain from "@/stylesheets/main/_remixed-main.scss?inline";
 
-import { includes } from "lodash-es";
-
 import { remixedObservers } from "./lib/observers";
 import { greasyInit } from "./greasy-init";
 import { parseUserModules } from "./lib/unsafe";
@@ -13,9 +11,9 @@ import { removeDefault, renderDialog, renderPage, toast } from "./lib/render";
 import { errorMessage } from "./lib/utils";
 
 import indexVue from "./components/pages/index.vue";
-import { UserModule } from "./global.module";
 import { experimental } from "./lib/user-values";
 import settingsVue from "./components/settings.vue";
+import { currentPageType } from "./lib/api.remixed";
 
 export { afterModulesLoaded, MainModules };
 
@@ -36,8 +34,7 @@ const beforeModulesLoadedFns: (() => void)[] = [];
 
 (() => {
     if (!experimental["new-index"]) return;
-    if (location.hostname.toLowerCase() !== "tieba.baidu.com") return;
-    if (!includes(["/", "/index.html"], location.pathname.toLowerCase())) return;
+    if (currentPageType() !== "index") return;
 
     const bodyMask = injectCSSList(`
         body {
