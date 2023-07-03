@@ -1,5 +1,10 @@
 <template>
     <div class="masonry-wrapper">
+        <BlockPanel v-if="feeds.length > 0 || isFetchingFeeds">
+            <UserButton class="panel-button icon refresh" unset-background @click="refreshAndMove">refresh</UserButton>
+            <UserButton class="panel-button icon settings" unset-background>settings</UserButton>
+        </BlockPanel>
+
         <div ref="masonryContainer" class="masonry-container"></div>
 
         <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" dynamic shadow-border
@@ -19,6 +24,8 @@ import { setUserValueTS } from "@/lib/user-values";
 
 import PostContainer from "./post-container.vue";
 import ImagesViewer from "./images-viewer.vue";
+import BlockPanel from "./block-panel.vue";
+import UserButton from "./utils/user-button.vue";
 
 interface Props {
     initFeeds?: TiebaPost[]
@@ -149,8 +156,14 @@ function showImages(images: string[], index: number) {
 function refresh() {
     if (!isFetchingFeeds) {
         feeds.value.length = 0;
+        flexMasonry.clear();
         debAddFeeds();
     }
+}
+
+function refreshAndMove() {
+    window.scrollTo({ top: masonryContainer.value?.offsetTop, behavior: "smooth" });
+    refresh();
 }
 </script>
 
@@ -159,7 +172,8 @@ function refresh() {
     display: flex;
     width: 100%;
     flex-direction: column;
-    gap: 24px;
+    align-items: center;
+    gap: 12px;
 
     .masonry-container {
         width: 100%;

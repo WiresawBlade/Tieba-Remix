@@ -108,13 +108,13 @@
 
         <div ref="masonryContainer" class="masonry-container">
             <!-- 推送 -->
-            <div v-if="initFeeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
+            <!-- <div v-if="initFeeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
                 <div class="block-panel feeds">
                     <UserButton class="panel-btn icon refresh" :unset-background="true" @click="refreshFeeds">refresh
                     </UserButton>
                     <UserButton class="panel-btn icon settings" :unset-background="true">settings</UserButton>
                 </div>
-            </div>
+            </div> -->
 
             <!-- <div ref="feedsContainer" class="feeds-container">
                 <UserButton v-if="feeds.length >= maxFeeds && feedsIntersecting" class="feeds-refresh-btn"
