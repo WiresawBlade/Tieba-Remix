@@ -21,6 +21,7 @@
         "GM_getValue",
         "GM_setValue",
         "GM_deleteValue",
+        "GM_listValues",
         "GM_openInTab"
     ],
     "run-at": "document-start"
