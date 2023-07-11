@@ -210,7 +210,7 @@ const unsafeWindow: Window;
 function GM_setValue<T>(key: string, value: T): void;
 function GM_getValue<T>(key: string): T | undefined;
 function GM_getValue<T>(key: string, defaultValue?: T): T;
-function GM_listValues(): unknown[];
+function GM_listValues(): string[];
 function GM_deleteValue(key: string): void;
 function GM_addElement(tag_name: string, attributes: object): void;
 function GM_addElement(parent_node: Element, tag_name: string, attributes: object): void;
