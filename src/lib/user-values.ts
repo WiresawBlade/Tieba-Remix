@@ -1,4 +1,3 @@
-import { spawnOffsetTS } from "./utils";
 import meta from "/meta.json";
 
 export const META = meta;
@@ -17,8 +16,7 @@ export const perfProfile: "dataSaver" | "performance" = GM_getValue("perfProfile
 export const unreadFeeds: TiebaPost[] = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
 /** 实验性功能配置 */
 export const experimental: Experimental = GM_getValue<Experimental>("experimental", {
-    "new-index": true,
-    "dynamic-post-container": false
+    "new-index": true
 });
 /** 最新发行版相关信息 */
 export const latestRelease: LatestReleaseFromGitee | undefined = getUserValueTS("latestRelease", undefined);
@@ -31,7 +29,6 @@ export interface Experimental {
     [props: string]: boolean
 
     "new-index": boolean
-    "dynamic-post-container": boolean
 }
 
 export interface UpdateConfig {

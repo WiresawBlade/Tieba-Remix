@@ -1,7 +1,6 @@
 import { disabledModules } from "./user-values";
 import { afterHead } from "./domlib";
-import { forOwn, indexOf } from "lodash-es";
-import { UserModule } from "@/global.module";
+import { forEach, forOwn, indexOf } from "lodash-es";
 import { currentPageType } from "./api.remixed";
 
 /**
@@ -46,13 +45,15 @@ export function parseUserModules(
 
                         // 数组
                         if (Array.isArray(m.scope)) {
-                            forOwn(m.scope, (_index, scope) => {
+                            for (let i = 0; i < m.scope.length; i++) {
+                                const scope = m.scope[i];
                                 if (currentPageType() === scope) {
                                     return true;
                                 }
-                            });
+                            }
                         }
 
+                        // 正则表达式
                         if ({}.toString.call(m.scope) === "[object RegExp]") {
                             if ((m.scope as RegExp).test(location.href)) {
                                 return true;

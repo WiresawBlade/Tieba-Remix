@@ -108,28 +108,7 @@
 
         <div ref="masonryContainer" class="masonry-container">
             <!-- 推送 -->
-            <!-- <div v-if="initFeeds.length > 0 || isFetchingFeeds" class="block-controls feeds">
-                <div class="block-panel feeds">
-                    <UserButton class="panel-btn icon refresh" :unset-background="true" @click="refreshFeeds">refresh
-                    </UserButton>
-                    <UserButton class="panel-btn icon settings" :unset-background="true">settings</UserButton>
-                </div>
-            </div> -->
-
-            <!-- <div ref="feedsContainer" class="feeds-container">
-                <UserButton v-if="feeds.length >= maxFeeds && feedsIntersecting" class="feeds-refresh-btn"
-                    @click="refreshFeedsAndMove" :theme-style="true">
-                    <div class="icon">refresh</div>
-                    刷新
-                </UserButton>
-            </div>
-
-            <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" :shadow-border="true"
-                :dynamic="experimental['dynamic-post-container']" @click-image="showImages" @assets-loaded="appendLoaded">
-            </PostContainer> -->
-
             <FeedsMasonry :init-feeds="initFeeds"></FeedsMasonry>
-            <!-- <component :is="FeedsMasonry"></component> -->
 
             <div v-if="initFeeds.length === 0" class="empty-container">
                 <p class="no-feed-content">没有更多了</p>
@@ -147,14 +126,13 @@ import {
     TopicListResponse, TopicList
 } from "@/lib/api.tieba";
 
-import { nextTick, onMounted, ref } from "vue";
-import { debounce, forEach, map, take, throttle } from "lodash-es";
+import { onMounted, ref } from "vue";
+import { debounce, forEach, map, take } from "lodash-es";
 
 import { findParentByClass } from "@/lib/domlib";
 import { messageBox, renderDialog, toast } from "@/lib/render";
 import { errorMessage, requestInstance } from "@/lib/utils";
 
-import ImagesViewer from "../images-viewer.vue";
 import UserTextbox from "../utils/user-textbox.vue";
 import UserButton from "../utils/user-button.vue";
 import DropdownMenu from "../utils/dropdown-menu.vue";
@@ -168,8 +146,6 @@ const initFeeds = ref<TiebaPost[]>([]);
 const userInfo = ref<UserInfoResponse["data"]>();
 const followed = ref<FollowedForumsResponse["data"]>();
 
-const postImages = ref<string[]>([]);
-const defaultIndex = ref(0);
 const masonryContainer = ref<HTMLDivElement>();
 const feedsContainer = ref<HTMLAnchorElement>();
 const searchText = ref<string>("");
@@ -188,7 +164,6 @@ const topicList = ref<TopicList[]>([]);
 const feedsIntersecting = ref(false);
 
 // 状态
-let isFetchingFeeds = false;
 let signedForums = 0;
 
 let flexMasonry: FlexMasonry;
@@ -310,47 +285,6 @@ function toggleSuggControls(e: Event) {
     } else {
         suggToggle.value = false;
     }
-}
-
-// function renderFeeds() {
-//     nextTick(() => {
-//         if (!flexMasonry) {
-//             if (!feedsContainer.value) return;
-//             flexMasonry = new FlexMasonry({
-//                 container: feedsContainer.value,
-//                 items: ".post-elem.assets-loaded",
-//                 columnWidth: 360,
-//                 gap: 12
-//             });
-
-//             const rerender = throttle(() => {
-//                 requestAnimationFrame(() => {
-//                     if (flexMasonry.columns !== flexMasonry.calcColumns()) {
-//                         flexMasonry.exec();
-//                     }
-//                 });
-//             }, 100, { leading: true });
-
-//             window.addEventListener("resize", rerender, {
-//                 passive: true
-//             });
-//         } else {
-//             flexMasonry.append();
-//         }
-//     });
-// }
-
-function refreshFeeds() {
-    initFeeds.value.length = 0;
-    flexMasonry.clear();
-    // getFeedsInstance().then(() => {
-    //     flexMasonry.exec();
-    // });
-}
-
-function refreshFeedsAndMove() {
-    window.scrollTo({ top: masonryContainer.value?.offsetTop, behavior: "smooth" });
-    refreshFeeds();
 }
 
 /**

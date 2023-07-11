@@ -205,7 +205,6 @@ export class FlexMasonry {
             if (newItems) {
                 if (typeof newItems === "string") {
                     const _items = document.querySelectorAll(newItems);
-                    console.log(_items);
                     return Array.from(_items) as HTMLElement[];
                 } else {
                     return newItems as HTMLElement[];
