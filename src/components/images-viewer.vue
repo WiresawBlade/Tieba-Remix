@@ -162,7 +162,7 @@ function rotateImage(delta: number) {
 /** 鼠标滚轮事件 */
 function imageWheel(event: WheelEvent) {
     event.preventDefault();
-    zoomImage(event.deltaY > 0 ? -0.1 : 0.1);
+    zoomImage(-event.deltaY / 1000);
 }
 </script>
 
