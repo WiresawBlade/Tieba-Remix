@@ -9,3 +9,4 @@ node_modules/
 .vscode/settings.json
 deb.ts
 index.html
+todo.md
