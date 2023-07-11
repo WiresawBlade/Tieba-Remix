@@ -48,6 +48,10 @@
                     <div v-if="content?.widgets?.type === 'icon'" class="icon-component icon">{{ content.widgets.content }}
                     </div>
 
+                    <!-- Button -->
+                    <UserButton v-if="content.widgets.type === 'button'" @click="content.widgets.event" shadow-border>
+                        {{ content.widgets.content }}</UserButton>
+
                     <!-- Select -->
                     <select
                         v-if="content.widgets.type === 'select' && {}.toString.call(content.widgets.content) === '[object Object]'"
@@ -75,7 +79,7 @@ import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 import { MainModules } from "@/main";
 import { disabledModules, experimental, updateConfig } from "@/lib/user-values";
-import { debounce, find, includes, pull } from "lodash-es";
+import { debounce, find, forEach, includes, pull } from "lodash-es";
 
 import AboutDetail from "./setting-widgets/about.detail.vue";
 import AboutUpdate from "./setting-widgets/about.update.vue";
@@ -106,7 +110,7 @@ export interface SettingContent {
     title?: string
     description?: string
     widgets?: {
-        type: "toggle" | "icon" | "select" | "component"
+        type: "toggle" | "icon" | "button" | "select" | "component"
         init?: (() => any)
         event?: ((e: Event) => any)
         content?: string | LiteralObject
@@ -206,26 +210,33 @@ const settings: UserSettings = {
                                 return experimentalRef.value["new-index"];
                             }
                         }
+                    }
+                } as KeyMapped<typeof experimental, SettingContent>
+            },
+            "factory-reset": {
+                name: "重置所有配置",
+                content: {
+                    "title": {
+                        title: "重置所有配置",
+                        description:
+                            `如果你需要将脚本的一切配置恢复默认，请使用此功能。`
                     },
 
-                    "dynamic-post-container": {
-                        title: "弹性贴子容器",
-                        description:
-                            `弹性贴子容器是贴子容器组件的另一种布局，它拥有更灵活的呈现方式。
-                            但更多变的布局也带来了更多的问题。由于其在渲染完毕前变得完全不可预测，在将组件呈现给用户前难以做到必要的预先计算工作，这会导致诸如瀑布流布局排版错位等问题。`,
+                    "reset": {
                         widgets: {
-                            type: "toggle",
-                            init() {
-                                return experimentalRef.value["dynamic-post-container"];
-                            },
+                            type: "button",
+                            content: "重置",
                             event() {
-                                experimentalRef.value["dynamic-post-container"] = !experimentalRef.value["dynamic-post-container"];
-                                GM_setValue("experimental", experimentalRef.value);
-                                return experimentalRef.value["dynamic-post-container"];
+                                if (confirm("该操作是不可逆的，请做最后一次确认")) {
+                                    forEach(GM_listValues(), (key) => {
+                                        GM_deleteValue(key);
+                                    });
+                                    location.reload();
+                                }
                             }
                         }
                     }
-                } as KeyMapped<typeof experimental, SettingContent>
+                }
             }
         }
     },
