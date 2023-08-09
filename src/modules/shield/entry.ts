@@ -104,6 +104,8 @@ function main() {
         state: undefined
     });
 
+    // 楼层发帖人名称 干掉恶心的发帖BOT
+    shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".p_author_name");
     // 看贴楼层
     shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_post_content");
     // 首页动态
