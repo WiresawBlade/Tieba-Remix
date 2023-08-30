@@ -29,7 +29,7 @@ html {
         border-radius: 8px;
         background-color: var(--light-border-color);
         font-family: monospace;
-        font-size: 14px;
+        // font-size: 14px;
         word-wrap: break-word;
     }
 
@@ -42,12 +42,12 @@ html {
     }
 
     h2 {
-        margin: 26px 0 10px;
+        margin: 20px 0 8px;
         font-size: 24px;
     }
 
     h3 {
-        margin: 20px 0 10px;
+        margin: 16px 0 6px;
     }
 
     ul {
@@ -55,7 +55,8 @@ html {
     }
 
     li {
-        margin: 8px 0;
+        margin: 6px 0 6px 22px;
+        list-style: disc;
     }
 
     li::marker {
