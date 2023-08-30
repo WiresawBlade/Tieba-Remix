@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   lodash-es:
     specifier: ^4.17.21
@@ -54,6 +58,9 @@ devDependencies:
   eslint-plugin-vue:
     specifier: ^9.14.1
     version: 9.14.1(eslint@8.42.0)
+  pnpm:
+    specifier: ^8.6.12
+    version: 8.6.12
   postcss:
     specifier: ^8.4.24
     version: 8.4.24
@@ -2813,6 +2820,12 @@ packages:
   /picomatch@2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+    dev: true
+
+  /pnpm@8.6.12:
+    resolution: {integrity: sha512-Eza4C5SO/Xl5IYozupbZ5NOA5leBRPYxmXmXfe7G4/4uCkRLhks84rB33aitxNZU/uMrnDGGjwrLktoKvPjqHA==}
+    engines: {node: '>=16.14'}
+    hasBin: true
     dev: true
 
   /postcss-attribute-case-insensitive@6.0.2(postcss@8.4.24):

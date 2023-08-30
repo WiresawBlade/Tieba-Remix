@@ -3,6 +3,7 @@
         "./src"
     ],
     "compilerOptions": {
+        "jsx": "preserve",
         "lib": [
             "DOM",
             "DOM.Iterable",
