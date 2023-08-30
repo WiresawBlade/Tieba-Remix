@@ -11,7 +11,7 @@ interface Props {
     isAnchor?: true
     shadowBorder?: true
     unsetBackground?: true
-    themeStyle?: true
+    themeStyle?: boolean
 }
 
 const props = defineProps<Props>();
@@ -45,7 +45,7 @@ const props = defineProps<Props>();
 
 .theme-style {
     background-color: _.$tiebaThemeColor;
-    color: _.$defaultBack;
+    color: _.$defaultBack !important;
 }
 
 .theme-style:hover {

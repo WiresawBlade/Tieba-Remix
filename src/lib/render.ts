@@ -1,11 +1,10 @@
 import { App, Component, createApp } from "vue";
 import { forEach, includes } from "lodash-es";
-import { createNewElement } from "./domlib";
+import { afterHead, createNewElement } from "./domlib";
 import dialogWrapperVue from "@/components/utils/dialog-wrapper.vue";
 import toastVue, { ToastProps } from "@/components/utils/toast.vue";
 import { Queue } from "./util-types";
-import messageBoxVue, { MessageBoxEvents, MessageBoxProps, MessageBoxType } from "@/components/utils/message-box.vue";
-import { getPublicLib } from "./user-values";
+import messageBoxVue, { MessageBoxEvents, MessageBoxProps } from "@/components/utils/message-box.vue";
 
 /** dialog 组件实例 */
 export let publicDialogInstance: App<Element>;
@@ -91,7 +90,9 @@ export function messageBox(messageBoxProps: MessageBoxProps): Promise<MessageBox
     renderDialog(messageBoxVue, {
         message: messageBoxProps.message,
         title: messageBoxProps.title,
-        type: messageBoxProps.type
+        type: messageBoxProps.type,
+        embedded: messageBoxProps.embedded,
+        buttons: messageBoxProps.buttons
     }, {
         forced: messageBoxProps.type === "forceTrueFalse"
     });
