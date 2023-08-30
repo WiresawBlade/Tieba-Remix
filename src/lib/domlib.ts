@@ -1,4 +1,5 @@
 import { forOwn, kebabCase, merge } from "lodash-es";
+import { isRealObject } from "./utils";
 
 const defaultStyle = document.createElement("style");  // 默认默认样式
 export const fadeInElems: string[] = [];
@@ -89,7 +90,7 @@ export function getNodeAttrsDeeply(node: HTMLElement) {
         if (typeof attr.value === "string") {
             try {
                 const obj = JSON.parse(attr.value);
-                if ({}.toString.call(obj) === "[object Object]" && obj) {
+                if (isRealObject(obj)) {
                     des[attr.name] = obj;
                 }
             } catch (error) {
@@ -114,7 +115,7 @@ export function mergeNodeAttrs<T extends HTMLElement>(
 ) {
     forOwn(attrs, (value, key) => {
         if (value !== node.getAttribute(key)) {
-            if ({}.toString.call(value) === "[object Object]") {
+            if (isRealObject(value)) {
                 node.setAttribute(key, JSON.stringify(attrs[key]));
             } else {
                 node.setAttribute(key, attrs[key]);

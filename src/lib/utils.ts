@@ -75,3 +75,23 @@ export function requestBody(body: LiteralObject) {
     });
     return reqBody.slice(0, -1);
 }
+
+export function waitUtil(condition: (() => boolean), timeout = 10000, interval = 100) {
+    return new Promise<void>((resolve, reject) => {
+        const start = Date.now();
+        const intervalId = setInterval(() => {
+            if (condition()) {
+                clearInterval(intervalId);
+                resolve();
+            } else if (Date.now() - start > timeout) {
+                clearInterval(intervalId);
+                reject(new Error("Timeout"));
+                console.warn("The operation requested with [waitUtil] was not executed because the conditional function timed out.", condition);
+            }
+        }, interval);
+    });
+}
+
+export function isRealObject(obj: any): boolean {
+    return obj && typeof obj === "object" && !Array.isArray(obj);
+}
