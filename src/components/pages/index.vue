@@ -139,7 +139,7 @@ import DropdownMenu from "../utils/dropdown-menu.vue";
 import { OneKeySignResponse } from "@/lib/api.tieba";
 import { FlexMasonry } from "@/layouts/flex-masonry";
 import Settings from "../settings.vue";
-import { BaiduPassport, GiteeRepo, GithubRepo, getUserValueTS } from "@/lib/user-values";
+import { BaiduPassport, GiteeRepo, GithubRepo, unreadFeeds } from "@/lib/user-values";
 import FeedsMasonry from "../feeds-masonry.vue";
 
 const initFeeds = ref<TiebaPost[]>([]);
@@ -166,9 +166,7 @@ const feedsIntersecting = ref(false);
 // 状态
 let signedForums = 0;
 
-let flexMasonry: FlexMasonry;
-
-initFeeds.value = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
+initFeeds.value = unreadFeeds.get();
 console.log("🚀 ~ file: index.vue:197 ~ initFeeds.value:", initFeeds.value);
 
 // 初始化
