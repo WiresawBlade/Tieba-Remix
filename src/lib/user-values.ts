@@ -1,6 +1,8 @@
+import { keys, merge } from "lodash-es";
+import { isRealObject, spawnOffsetTS } from "./utils";
 import meta from "/meta.json";
 
-export const META = meta;
+export const META: Meta = meta;
 export const MainTitle = "Tieba Remix";
 export const Owner = "WiresawBlade";
 export const RepoName = "Tieba-Remix";
@@ -8,22 +10,92 @@ export const GithubRepo = "https://github.com/WiresawBlade/Tieba-Remix";
 export const GiteeRepo = "https://gitee.com/WiresawBlade/Tieba-Remix/";
 export const BaiduPassport = "https://passport.baidu.com/";
 
-/** 用户禁用的所有模块的 id */
-export const disabledModules: string[] = GM_getValue("disabledModules", []);
-/** 性能配置 */
-export const perfProfile: "dataSaver" | "performance" = GM_getValue("perfProfile", "performance");
-/** 未读推送 */
-export const unreadFeeds: TiebaPost[] = getUserValueTS("unreadFeeds", <TiebaPost[]>[]);
-/** 实验性功能配置 */
-export const experimental: Experimental = GM_getValue<Experimental>("experimental", {
-    "new-index": true
-});
-/** 最新发行版相关信息 */
-export const latestRelease: LatestReleaseFromGitee | undefined = getUserValueTS("latestRelease", undefined);
+export const REMIXED =
+    "\n" +
+    "██████╗ ███████╗███╗   ███╗██╗██╗  ██╗███████╗██████╗ \n" +
+    "██╔══██╗██╔════╝████╗ ████║██║╚██╗██╔╝██╔════╝██╔══██╗\n" +
+    "██████╔╝█████╗  ██╔████╔██║██║ ╚███╔╝ █████╗  ██║  ██║\n" +
+    "██╔══██╗██╔══╝  ██║╚██╔╝██║██║ ██╔██╗ ██╔══╝  ██║  ██║\n" +
+    "██║  ██║███████╗██║ ╚═╝ ██║██║██╔╝ ██╗███████╗██████╔╝\n" +
+    "╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ \n";
 
-export const updateConfig: UpdateConfig = GM_getValue("updateConfig", {
-    time: "6h"
-});
+export class UserKey<T> {
+    public key: string;
+    public defaultValue: T;
+
+    constructor(key: string, defaultValue: T) {
+        this.key = key;
+        this.defaultValue = defaultValue;
+    }
+
+    public get() {
+        let payload = GM_getValue<T>(this.key, this.defaultValue);
+        if (isRealObject(payload) &&
+            keys(payload).length < keys(this.defaultValue).length) {
+            payload = { ...this.defaultValue, ...payload };
+        }
+        return payload;
+    }
+
+    public set(value: T) {
+        GM_setValue(this.key, value);
+    }
+
+    public remove() {
+        GM_deleteValue(this.key);
+    }
+
+    public merge(value: OptionalMapped<T>) {
+        if (isRealObject(value)) {
+            this.set({ ...this.get(), ...value });
+        }
+    }
+
+    public mergeDeeply(value: OptionalMapped<T>) {
+        if (isRealObject(value)) {
+            this.set(merge(this.get(), value));
+        }
+    }
+}
+
+export class UserKeyTS<T> extends UserKey<T> {
+    private defaultInvalid = () => spawnOffsetTS(0, 0, 0, 12);
+
+    constructor(key: string, defaultValue: T, invalidfn?: (() => number)) {
+        super(key, defaultValue);
+        this.defaultInvalid = invalidfn ? invalidfn : this.defaultInvalid;
+    }
+
+    public get() {
+        let payload = getUserValueTS<T>(this.key, this.defaultValue);
+        if (isRealObject(payload) &&
+            keys(payload).length < keys(this.defaultValue).length) {
+            payload = { ...this.defaultValue, ...payload };
+        }
+        return payload;
+    }
+
+    /**
+     * 设置时间敏感的用户 key
+     * @param value 需要设置的值
+     * @param invalidTime 失效时间，默认为函数执行 12 小时后
+     */
+    public set(value: T, invalidTime?: number) {
+        setUserValueTS(this.key, value, invalidTime ? invalidTime : this.defaultInvalid());
+    }
+
+    public merge(value: OptionalMapped<T>, invalidTime?: number) {
+        if (isRealObject(value)) {
+            this.set({ ...this.get(), ...value }, invalidTime ? invalidTime : this.defaultInvalid());
+        }
+    }
+
+    public mergeDeeply(value: OptionalMapped<T>, invalidTime?: number) {
+        if (isRealObject(value)) {
+            this.set(merge(this.get(), value), invalidTime ? invalidTime : this.defaultInvalid());
+        }
+    }
+}
 
 export interface Experimental {
     [props: string]: boolean
@@ -32,8 +104,34 @@ export interface Experimental {
 }
 
 export interface UpdateConfig {
-    time: "1h" | "3h" | "6h" | "never"
+    time: "1h" | "3h" | "6h" | "never";
+    notify: boolean;
 }
+
+export type PrefType = "dataSaver" | "performance";
+
+/** 用户禁用的所有模块的 id */
+export const disabledModules = new UserKey<string[]>("disabledModules", []);
+/** 性能配置 */
+export const prefProfile = new UserKey<PrefType>("prefProfile", "performance");
+/** 未读推送 */
+export const unreadFeeds = new UserKeyTS<TiebaPost[]>("unreadFeeds", []);
+/** 实验性功能配置 */
+export const experimental = new UserKey<Experimental>("experimental", {
+    "new-index": true
+});
+/** 最新发行版相关信息 */
+export const latestRelease = new UserKeyTS<GiteeRelease | undefined>("latestRelease", undefined);
+/** 更新配置 */
+export const updateConfig = new UserKey<UpdateConfig>("updateConfig", {
+    time: "6h",
+    notify: true
+});
+/** 今日是否提醒用户更新 */
+export const showUpdateToday = new UserKeyTS("showUpdateToday", true, () => new Date().setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000);
+export const ignoredTag = new UserKey("ignoredTag", "");
+
+export const SymbolFont = "Material Symbols";
 
 const publicLib: LiteralObject = {};
 
@@ -53,7 +151,7 @@ export function setPublicLib<T>(key: string, value: T) {
     publicLib[key] = value;
 }
 
-export interface LatestReleaseFromGitee {
+export interface GiteeRelease {
     "id": number
     "tag_name": string
     "target_commitish": string
@@ -83,7 +181,7 @@ export interface LatestReleaseFromGitee {
     "created_at": string
     "assets": {
         "browser_download_url": string
-        "name": string
+        "name"?: string
     }[]
 }
 

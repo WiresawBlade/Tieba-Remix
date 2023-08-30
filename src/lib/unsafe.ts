@@ -33,7 +33,7 @@ export function parseUserModules(
                 const runnable = (() => {
                     if (m.switch === true || m.switch === undefined) {
                         // 用户配置优先级最高，可以直接否决
-                        if (indexOf(disabledModules, m.id) !== -1) {
+                        if (indexOf(disabledModules.get(), m.id) !== -1) {
                             return false;
                         }
 

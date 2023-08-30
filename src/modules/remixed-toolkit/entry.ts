@@ -3,6 +3,7 @@ import { DOMS } from "@/lib/domlib";
 import { remixedObservers } from "@/lib/observers";
 import { UserModuleExtended } from "@/global.module";
 import { ref } from "vue";
+import { UserKey } from "@/lib/user-values";
 
 export const Main: UserModuleExtended = {
     id: "remixed-toolkit",
@@ -20,18 +21,18 @@ export const Main: UserModuleExtended = {
                 `该功能会自动将帖子中所有的长图片自动展开，无需手动操作`,
             widgets: {
                 type: "toggle",
-                init: () => toolkitToogles.value["auto-expand"],
+                init: () => toolkitRef.value["auto-expand"],
                 event() {
-                    toolkitToogles.value["auto-expand"] = !toolkitToogles.value["auto-expand"];
-                    GM_setValue<ToolkitToogles>("toolkitToogles", toolkitToogles.value);
+                    toolkitRef.value["auto-expand"] = !toolkitRef.value["auto-expand"];
+                    toolkitToogles.set(toolkitRef.value);
                 }
             }
         }
     },
     entry: function () {
         for (const key in toolkitFeatures) {
-            // @ts-ignore
-            if (toolkitToogles.value[key]) toolkitFeatures[key]();
+            const k = key as keyof typeof toolkitFeatures;
+            if (toolkitRef.value[k]) toolkitFeatures[k]();
         }
     }
 };
@@ -51,6 +52,7 @@ const toolkitFeatures = {
 
 type ToolkitToogles = KeyMapped<typeof toolkitFeatures, boolean>
 
-const toolkitToogles = ref(GM_getValue<ToolkitToogles>("toolkitToogles", {
+const toolkitToogles = new UserKey<ToolkitToogles>("toolkitToogles", {
     "auto-expand": true
-}));
+});
+const toolkitRef = ref(toolkitToogles.get());

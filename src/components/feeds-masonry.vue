@@ -20,7 +20,7 @@ import { FlexMasonry } from "@/layouts/flex-masonry";
 import { renderDialog, toast } from "@/lib/render";
 import { FeedListResponse, parsePostsFromString, tiebaAPI } from "@/lib/api.tieba";
 import { requestInstance, spawnOffsetTS } from "@/lib/utils";
-import { setUserValueTS } from "@/lib/user-values";
+import { unreadFeeds } from "@/lib/user-values";
 
 import PostContainer from "./post-container.vue";
 import ImagesViewer from "./images-viewer.vue";
@@ -112,7 +112,7 @@ async function addFeeds(newFeeds?: TiebaPost[]) {
 
         if (currentLoadedFeeds.length >= newFeeds.length) {
             renderMasonry().then(function () {
-                setUserValueTS("unreadFeeds", newFeeds, spawnOffsetTS(0, 0, 0, unreadTTL));
+                unreadFeeds.set(newFeeds ? newFeeds : [], spawnOffsetTS(0, 0, 0, unreadTTL));
 
                 currentLoadedFeeds.length = 0;
                 clearInterval(interval);

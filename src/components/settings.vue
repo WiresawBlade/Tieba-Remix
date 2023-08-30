@@ -53,8 +53,7 @@
                         {{ content.widgets.content }}</UserButton>
 
                     <!-- Select -->
-                    <select
-                        v-if="content.widgets.type === 'select' && {}.toString.call(content.widgets.content) === '[object Object]'"
+                    <select v-if="content.widgets.type === 'select' && isRealObject(content.widgets.content)"
                         @change="content.widgets.event">
                         <option v-for="(value, key) in content.widgets.content" :value="value"
                             :selected="content.widgets.init && value === content.widgets.init()">
@@ -78,11 +77,12 @@ import type { Component } from "vue";
 import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 import { MainModules } from "@/main";
-import { disabledModules, experimental, updateConfig } from "@/lib/user-values";
+import { Experimental, UpdateConfig, disabledModules, experimental, updateConfig } from "@/lib/user-values";
 import { debounce, find, forEach, includes, pull } from "lodash-es";
 
 import AboutDetail from "./setting-widgets/about.detail.vue";
 import AboutUpdate from "./setting-widgets/about.update.vue";
+import { isRealObject } from "@/lib/utils";
 
 export interface UserSettings {
     [props: string]: MainSettingKey
@@ -118,8 +118,9 @@ export interface SettingContent {
     }
 }
 
-const disabledModulesRef = ref(disabledModules);
-const experimentalRef = ref(experimental);
+const disabledModulesRef = ref(disabledModules.get());
+const experimentalRef = ref(experimental.get());
+const updateConfigRef = ref(updateConfig.get());
 const searchText = ref("");
 
 const settings: UserSettings = {
@@ -146,11 +147,11 @@ const settings: UserSettings = {
                                 event() {
                                     if (includes(disabledModulesRef.value, module.id)) {
                                         pull(disabledModulesRef.value, module.id);
-                                        GM_setValue("disabledModules", [...new Set(disabledModulesRef.value)]);
+                                        disabledModules.set([...new Set(disabledModulesRef.value)]);
                                         return true;
                                     } else {
                                         disabledModulesRef.value.push(module.id);
-                                        GM_setValue("disabledModules", [...new Set(disabledModulesRef.value)]);
+                                        disabledModules.set([...new Set(disabledModulesRef.value)]);
                                         return false;
                                     }
                                 }
@@ -206,12 +207,12 @@ const settings: UserSettings = {
                             },
                             event() {
                                 experimentalRef.value["new-index"] = !experimentalRef.value["new-index"];
-                                GM_setValue("experimental", experimentalRef.value);
+                                experimental.set(experimentalRef.value);
                                 return experimentalRef.value["new-index"];
                             }
                         }
                     }
-                } as KeyMapped<typeof experimental, SettingContent>
+                } as KeyMapped<Experimental, SettingContent>
             },
             "factory-reset": {
                 name: "重置所有配置",
@@ -250,6 +251,7 @@ const settings: UserSettings = {
                 name: "检查更新",
                 content: {
                     "update-time": {
+                        title: "检查更新设置",
                         description:
                             `发行信息追踪频率`,
                         widgets: {
@@ -259,14 +261,28 @@ const settings: UserSettings = {
                                 "3 小时": "3h",
                                 "6 小时": "6h",
                                 "从不": "never"
-                            } as { [props: string]: typeof updateConfig["time"] },
+                            } as { [props: string]: UpdateConfig["time"] },
                             init() {
-                                return updateConfig.time;
+                                return updateConfig.get().time;
                             },
                             event(e: Event) {
                                 const newValue = (e.target as HTMLSelectElement).value;
-                                updateConfig.time = newValue as typeof updateConfig["time"];
-                                GM_setValue("updateConfig", { ...updateConfig, time: (e.target as HTMLSelectElement).value });
+                                updateConfig.merge({ time: newValue as any });
+                            }
+                        }
+                    },
+
+                    "update-notify": {
+                        description: `启用一个对话框提示用户更新。该对话框可以立即安装更新，也可以推迟更新操作。`,
+                        widgets: {
+                            type: "toggle",
+                            init() {
+                                return updateConfigRef.value.notify;
+                            },
+                            event() {
+                                const newValue = !updateConfig.get().notify;
+                                updateConfigRef.value.notify = newValue;
+                                updateConfig.merge({ notify: newValue });
                             }
                         }
                     },

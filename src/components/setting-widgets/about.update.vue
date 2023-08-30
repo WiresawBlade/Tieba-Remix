@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts" setup>
-import { LatestReleaseFromGitee } from "@/lib/user-values";
+import { GiteeRelease } from "@/lib/user-values";
 import { getLatestReleaseFromGitee } from "@/lib/api.remixed";
 import { onMounted, ref } from "vue";
 import { marked } from "marked";
 import UserButton from "../utils/user-button.vue";
 
-const release = ref<LatestReleaseFromGitee>();
+const release = ref<GiteeRelease>();
 const forbidden = ref(false);
 const isLatest = ref<boolean>();
 
