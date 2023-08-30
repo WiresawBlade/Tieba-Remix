@@ -102,7 +102,7 @@ function emitAndClose(emitName: MessageBoxEvents) {
 
     .message-content {
         display: flex;
-        overflow: scroll;
+        overflow: hidden scroll;
         flex-direction: column;
         padding: 16px;
         // gap: 8px;

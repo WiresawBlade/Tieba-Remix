@@ -456,6 +456,10 @@ span.tP {
     color: var(--default-fore) !important;
 }
 
+#celebrity {
+    display: none;
+}
+
 .balv_mod .media_left,
 .balv_mod .media-left {
     /* 我的头像 */
