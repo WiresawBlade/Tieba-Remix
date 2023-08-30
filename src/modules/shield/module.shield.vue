@@ -1,7 +1,11 @@
 <template>
     <div class="shield-container">
         <div v-if="shieldListRef.length > 0" class="words-container">
-            <UserButton v-for="sh in shieldListRef" class="shield-elem">{{ sh.rule }}</UserButton>
+            <UserButton v-for="sh in shieldListRef" class="shield-elem"
+                :class="{ 'content-scope': sh.scope === 'posts', 'user-scope': sh.scope === 'users' }">
+                <div class="icon">{{ sh.scope === "posts" ? "chat" : "account_circle" }}</div>
+                {{ sh.rule }}
+            </UserButton>
             <UserButton class="remove-all shield-elem icon" @click="removeAll">delete</UserButton>
         </div>
         <div v-else class="empty-list-container">当前没有记录屏蔽规则</div>
@@ -17,6 +21,11 @@
                     <label for="use-regex">正则表达式</label>
                 </div>
 
+                <div class="user-scope">
+                    <input v-model="scope" id="user-scope" type="checkbox">
+                    <label for="user-scope">屏蔽用户名</label>
+                </div>
+
                 <UserButton class="submit-button" :shadow-border="true" :theme-style="true" @click="updateShieldList">确定
                 </UserButton>
             </div>
@@ -25,14 +34,15 @@
 </template>
 
 <script lang="ts" setup>
-import UserTextbox from "@/components/utils/user-textbox.vue";
-import { shieldList } from "./entry";
-import UserButton from "@/components/utils/user-button.vue";
 import { ref } from "vue";
+import { shieldList } from "./entry";
+import UserTextbox from "@/components/utils/user-textbox.vue";
+import UserButton from "@/components/utils/user-button.vue";
 
-const shieldListRef = ref(shieldList);
+const shieldListRef = ref(shieldList.get());
 const inputRule = ref("");
 const useRegex = ref(false);
+const scope = ref<ShieldObject["scope"]>("posts");
 
 function inputKeyPress(e: KeyboardEvent) {
     if (e.key === "Enter") {
@@ -43,23 +53,22 @@ function inputKeyPress(e: KeyboardEvent) {
 
 function removeAll() {
     shieldListRef.value.length = 0;
-    GM_deleteValue("shieldList");
+    shieldList.remove();
 }
 
 function updateShieldList() {
     if (inputRule.value.length <= 0) return;
 
-    const sh = {
+    const sh: ShieldObject = {
         rule: inputRule.value,
         type: useRegex.value ? "regex" : "string",
-        scope: "posts",
+        scope: scope.value,
         switch: true
-    } as ShieldObject;
+    };
     shieldListRef.value.push(sh);
 
     inputRule.value = "";
-
-    GM_setValue("shieldList", shieldListRef.value);
+    shieldList.set(shieldListRef.value);
 }
 </script>
 
@@ -81,10 +90,17 @@ function updateShieldList() {
         gap: 4px;
 
         .shield-elem {
+            display: flex;
+            align-items: center;
             padding: 4px 8px;
             border: none;
             border-radius: 8px;
             font-size: 14px;
+            gap: 4px;
+
+            .icon {
+                color: var(--light-fore);
+            }
         }
 
         .remove-all {
@@ -119,13 +135,14 @@ function updateShieldList() {
             justify-content: flex-end;
             gap: 12px;
 
+            label {
+                margin-left: 4px;
+                user-select: none;
+            }
+
             .regex-check {
                 margin-right: 8px;
                 font-size: 16px;
-
-                label {
-                    user-select: none;
-                }
             }
 
             .submit-button {

@@ -1,16 +1,15 @@
-import { greasyMenu } from "@/greasy-init";
 import { DOMS } from "@/lib/domlib";
-
 import { ObsType, remixedObservers } from "@/lib/observers";
 import moduleShieldVue from "./module.shield.vue";
 import { markRaw } from "vue";
 import { UserModuleExtended } from "@/global.module";
+import { UserKey } from "@/lib/user-values";
 
 export const Main: UserModuleExtended = {
     id: "shield",
     name: "贴吧屏蔽",
     author: "锯刃Blade",
-    version: "1.1",
+    version: "1.2",
     brief: "眼不见为净",
     description: `用户自定义屏蔽规则，符合规则的贴子和楼层将不会显示在首页、看贴页面和进吧页面。支持正则匹配`,
     scope: true,
@@ -29,7 +28,7 @@ export const Main: UserModuleExtended = {
     entry: main
 };
 
-export const shieldList = GM_getValue("shieldList", <ShieldObject[]>[]);
+export const shieldList = new UserKey<ShieldObject[]>("shieldList", []);
 
 /**
  * 匹配字符串是否和屏蔽对象规则符合
@@ -86,7 +85,7 @@ function shieldElementsBySelector(observer: ObsType, parentSelector: string, sub
             const content = elem.querySelector(subSelector)?.textContent;
             if (content === null || content === undefined) return;
 
-            for (const sh of shieldList) {
+            for (const sh of shieldList.get()) {
                 if (matchShield(sh, content)) {
                     isMatch = true;
                     break;
@@ -101,25 +100,12 @@ function shieldElementsBySelector(observer: ObsType, parentSelector: string, sub
 }
 
 function main() {
-    let menuContent: string;
-
-    // 菜单文本
-    if (shieldList.length === 0) {
-        menuContent = "当前没有屏蔽规则被装载";
-        return;
-    } else {
-        menuContent = `当前共有 ${shieldList.length} 条屏蔽规则被装载`;
-    }
-
-    greasyMenu.push({
-        id: "shield",
-        title: "贴吧屏蔽: " + menuContent,
-        type: "button",
-        state: undefined
-    });
-
     // 看贴楼层
     shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_post_content");
     // 首页动态
     shieldElementsBySelector(remixedObservers.newListObserver, ".new_list li", ".n_txt");
+    // 发帖用户
+    shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_name a");
+    shieldElementsBySelector(remixedObservers.commentsObserver, ".lzl_single_post", ".lzl_cnt .j_user_card");
+    shieldElementsBySelector(remixedObservers.threadListObserver, ".j_feed_li", ".post_author");
 }
