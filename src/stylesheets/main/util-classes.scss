@@ -1,0 +1,147 @@
+@use "./remixed-main.scss" as *;
+
+.icon,
+.outline-icon {
+    @extend %icon;
+}
+
+.filled-icon {
+    @extend %filled-icon;
+}
+
+.markdown {
+    font-family: sans-serif;
+
+    code {
+        padding: 2px 6px;
+        border-radius: 8px;
+        background-color: var(--light-border-color);
+        font-family: monospace;
+        // font-size: 14px;
+        word-wrap: break-word;
+    }
+
+    a {
+        color: var(--tieba-theme-fore);
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    h2 {
+        margin: 20px 0 8px;
+        font-size: 24px;
+    }
+
+    h3 {
+        margin: 16px 0 6px;
+    }
+
+    ul {
+        margin: 6px 0;
+    }
+
+    li {
+        margin: 6px 0 6px 22px;
+        list-style: disc;
+    }
+
+    li::marker {
+        color: var(--minimal-fore);
+    }
+
+    blockquote {
+        margin: 20px 16px;
+        color: var(--minimal-fore);
+    }
+}
+
+.settings-toggle-button {
+    border: none !important;
+    border-radius: 36px;
+    background-color: unset !important;
+}
+
+.settings-toggle-button.toggle-off {
+    color: var(--minimal-fore);
+    font-variation-settings: "FILL" 0;
+}
+
+.settings-toggle-button.toggle-off::after {
+    content: "toggle_off";
+}
+
+.settings-toggle-button.toggle-on::after {
+    content: "toggle_on";
+}
+
+.settings-toggle-button.toggle-on {
+    color: var(--tieba-theme-color);
+    font-variation-settings: "FILL" 1;
+}
+
+.settings-toggle-button.toggle-off:hover {
+    color: var(--default-hover);
+}
+
+.settings-toggle-button.toggle-off:active {
+    color: var(--default-active);
+}
+
+.settings-toggle-button.toggle-on:hover {
+    color: var(tieba-theme-hover);
+}
+
+.settings-toggle-button.toggle-on:active {
+    color: var(--tieba-theme-active);
+}
+
+.level-green {
+    background-color: var(--level-green-background) !important;
+    color: var(--level-green-fore) !important;
+}
+
+.level-blue {
+    background-color: var(--level-blue-background) !important;
+    color: var(--level-blue-fore) !important;
+}
+
+.level-yellow {
+    background-color: var(--level-yellow-background) !important;
+    color: var(--level-yellow-fore) !important;
+}
+
+.level-orange {
+    background-color: var(--level-orange-background) !important;
+    color: var(--level-orange-fore) !important;
+}
+
+.remove-default {
+    font-size: 16px;
+    line-height: initial;
+
+    .content {
+        min-height: unset;
+        background: unset;
+    }
+
+    code {
+        display: unset;
+        width: unset;
+        height: unset;
+    }
+
+    .content,
+    .foot {
+        width: unset;
+    }
+
+    button {
+        color: unset;
+    }
+}
+
+.blur-if-custom-background {
+    @include blur-if-custom-background;
+}

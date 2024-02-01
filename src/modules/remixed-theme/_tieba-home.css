@@ -1,0 +1,630 @@
+body {
+    background-color: var(--page-background);
+    color: var(--default-fore);
+}
+
+/* 导航栏 */
+.head_inner {
+    /* 导航栏额头 */
+    background-color: var(--default-background);
+}
+
+.u_menu_item a {
+    /* 顶部超链接 */
+    color: var(--default-fore);
+}
+
+.head_inner .search_logo {
+    left: 72px;
+    width: 60px;
+    height: 60px;
+    /* logo */
+    background-image: var(--img-tieba-icon);
+}
+
+.search_top {
+    border: none;
+}
+
+.search_nav a:link,
+.search_nav a:hover,
+.search_nav a:visited {
+    /* 导航栏超链接 */
+    color: var(--default-fore);
+}
+
+.u_menu_item a:hover,
+.u_menu_item a:visited {
+    color: var(--default-fore);
+}
+
+/* 搜索 */
+.search_main {
+    padding-bottom: 96px;
+}
+
+.search_bright .search_inp_border {
+    /* 搜索框 */
+    border-color: var(--border-color);
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    color: var(--default-fore);
+}
+
+.search_bright .search_inp_border:focus {
+    border-color: var(--tieba-theme-color);
+}
+
+.search_bright .search_btn {
+    border-color: var(--trans-tieba-theme-color);
+    /* 搜索相关按钮 */
+    border-radius: 8px;
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+}
+
+.search_bright .search_btn_enter_ba {
+    /* “进入贴吧”按钮 */
+    background-color: var(--tieba-theme-color);
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    color: var(--default-background);
+}
+
+.search_bright .search_btn:visited {
+    color: var(--tieba-theme-fore);
+}
+
+.search_bright .search_btn_enter_ba:visited {
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+}
+
+.search_bright .search_btn:hover {
+    /* 搜索相关 hover */
+    border-color: var(--trans-tieba-theme-color);
+    background-color: var(--tieba-theme-background);
+    box-shadow: 0 0 0 2px var(--trans-tieba-theme-color);
+}
+
+.search_bright .search_btn_enter_ba:hover {
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+}
+
+.suggestion {
+    /* 搜索推荐 */
+    border-color: var(--border-color);
+    border-radius: 0 0 16px 16px;
+    background-color: var(--elem-color);
+    box-shadow: 0 10px 20px rgb(0 0 0 / 30%);
+    color: var(--default-fore);
+}
+
+.suggestion .break_tip {
+    background-color: var(--default-background);
+}
+
+.suggestion .highlight {
+    /* 高亮文本 */
+    color: var(--tieba-theme-color);
+}
+
+.suggestion .operation_title {
+    /* 热议文字 */
+    color: var(--default-fore);
+}
+
+.suggestion .forum_image {
+    /* 推荐图标 */
+    border-radius: 8px;
+}
+
+.suggestion .forum_name {
+    /* 推荐标题 */
+    color: var(--highlight-fore);
+}
+
+.suggestion .on {
+    /* 搜索推荐：选中 */
+    background-color: var(--light-background);
+}
+
+/* 首页横幅 */
+.page-container .top-sec {
+    display: none;
+}
+
+/* 内容 */
+.page-container .content-sec {
+    background: none;
+}
+
+/* 左侧悬停 */
+.page-container .left-sec {
+    border-radius: 24px;
+    border-top: none;
+    background: none;
+    background-color: var(--elem-color);
+}
+
+.f-d-w {
+    border-radius: 24px;
+    /* 左侧悬停 2 */
+    background-color: var(--elem-color);
+}
+
+.f-d-w .f-d-item {
+    background: none;
+}
+
+.aggregate_entrance_wrap {
+    /* 专题 */
+    display: none;
+}
+
+.u-f-t .gap {
+    border: none;
+    /* “贴吧分类”分隔符 */
+    background: none;
+}
+
+.f-d-w .all {
+    /* “查看全部”按钮 */
+    background: none;
+}
+
+.forum_rcmd {
+    /* 热门吧卡片 */
+    border: 0;
+    border-radius: 24px;
+    background-color: var(--elem-color);
+}
+
+.region_bright .region_header {
+    /* “我在贴吧”标题 */
+    color: var(--default-fore);
+}
+
+.page-container .left-sec .region_bright {
+    border-radius: 24px;
+}
+
+.my_tieba_mod .media_left,
+.my_tieba_mod .media-left {
+    /* 头像边框 */
+    border: none;
+}
+
+.media_left img,
+.media-left img {
+    /* 头像 */
+    border-radius: 16px;
+}
+
+#nameValue {
+    /* 我的用户名 */
+    color: var(--default-fore);
+}
+
+#j_tcharge_dialog {
+    /* “获取”超链接 */
+    color: var(--default-fore);
+}
+
+#onekey_sign .onekey_btn,
+#onekey_sign a.onekey_btn {
+    /* 签到按钮 */
+    border-radius: 8px;
+    margin-right: -5px;
+    background: none;
+    background-color: var(--tieba-theme-color);
+    color: var(--elem-color);
+    text-align: center;
+}
+
+#onekey_sign .onekey_btn::after {
+    content: "一键签到";
+}
+
+#onekey_sign a.signed_btn .icon_signed {
+    /* 已签到标记 */
+    margin-top: 2px;
+    background: var(--svg-checkmark);
+    background-repeat: no-repeat;
+    background-size: 20px;
+    filter: drop-shadow(var(--elem-color) 0 9999px);
+    transform: translateY(-9999px);
+}
+
+#onekey_sign .onekey_btn:hover {
+    box-shadow: 0 0 10px var(--tieba-theme-color);
+}
+
+.u-f-w {
+    /* 进吧 div */
+    padding-bottom: 20px;
+}
+
+.left-cont-fixed {
+    /* 进吧 div 固定 */
+    position: relative;
+    bottom: 0;
+}
+
+.u-f-w .sign,
+.u-f-w .unsign,
+.always-forum-item .sign,
+.always-forum-item .unsign {
+    /* 进吧按钮 */
+    border-radius: 8px;
+    background: none;
+    background-color: var(--light-background);
+    color: var(--default-fore);
+}
+
+.u-f-w .sign,
+.always-forum-item .sign {
+    /* 已签到 */
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+}
+
+.u-f-w .sign,
+.u-f-w .unsign {
+    margin-bottom: 8px;
+}
+
+.u-f-w .sign:hover,
+.u-f-w .unsign:hover,
+.always-forum-item .sign:hover,
+.always-forum-item .unsign:hover {
+    background: none;
+    background-color: var(--tieba-theme-color);
+    box-shadow: 0 0 10px var(--tieba-theme-color);
+    color: var(--elem-color);
+    text-decoration: none;
+}
+
+.u-f-w .more {
+    /* “查看更多”按钮 */
+    border: none;
+    border-radius: 8px;
+    background: none;
+    background-color: var(--elem-color);
+    box-shadow: none;
+    color: var(--default-fore);
+}
+
+.more-txt {
+    /* “查看更多”按钮文字 */
+    color: var(--default-fore);
+}
+
+.u-f-w .more-hover {
+    width: 188px;
+    margin: auto;
+    background-color: var(--tieba-theme-color);
+    box-shadow: 0 0 10px var(--tieba-theme-color);
+    color: var(--elem-color);
+}
+
+.u-f-w .more-hover .more-txt,
+.u-f-w .more:hover .more-txt {
+    margin-left: 60px;
+    color: var(--elem-color);
+}
+
+.always-forum-title {
+    /* 展开标题 */
+    border: none;
+    margin-top: 10px;
+}
+
+#alwayforum-wraper {
+    /* 关注吧展开 */
+    background-color: var(--elem-color);
+}
+
+.pop-up-frame {
+    /* 展开页面 */
+    border: none;
+    border-radius: 24px;
+    background-color: var(--elem-color);
+    border-bottom-left-radius: 0;
+    box-shadow: none;
+}
+
+.always-forum-close {
+    /* 展开叉号 */
+    display: none;
+}
+
+.always-forum-item .addnewforumbtn {
+    /* “添加爱逛的吧”按钮 */
+    width: 110px;
+    padding-left: 0;
+    border-radius: 8px;
+    background: none;
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+    font-size: 20px;
+    text-align: center;
+}
+
+.always-forum-item .addnewforumbtn::after {
+    content: "+";
+}
+
+.always-forum-item .addnewforumbtn:hover {
+    background-color: var(--tieba-theme-color);
+    box-shadow: 0 0 10px var(--tieba-theme-color);
+    color: var(--elem-color);
+}
+
+.tbui_scroll_panel .tbui_scroll_button {
+    /* 展开滚动条 */
+    width: 6px;
+    border: none;
+    border-radius: 24px;
+    background-color: var(--very-light-background);
+}
+
+.tbui_scroll_panel .tbui_scroll_bar {
+    width: 6px;
+    /* 滚动条背景 */
+    background: none;
+}
+
+.forum_rcmd .class_title > div {
+    /* 热门吧 icon */
+    color: var(--default-fore);
+}
+
+.rcmd_forum_item .forum_name {
+    /* 热门吧标题 */
+    color: var(--default-fore);
+}
+
+.rcmd_forum_item .rcmd_forum_logo {
+    /* 热门吧图片 */
+    border: none;
+    border-radius: 16px;
+    background: none;
+}
+
+/* 动态 */
+.page-container .r-left-sec,
+.sub_nav_wrap,
+.title-tag-wraper,
+.thread-name-wraper,
+.n_reply {
+    width: 780px;
+}
+
+.n_txt {
+    /* 动态正文 */
+    width: 720px;
+    color: var(--light-fore);
+}
+
+.sub_nav_wrap {
+    /* 动态切换 */
+    background: none;
+    background-color: var(--default-background);
+    box-shadow: none;
+}
+
+.sub_nav_list a.cur {
+    /* 当前标签 */
+    border: none;
+    color: var(--tieba-theme-color);
+}
+
+.sub_nav_list .nav_hover {
+    width: 56px !important;
+    /* 标签色块 */
+    border-bottom: 3px solid var(--tieba-theme-color);
+}
+
+.sub_nav_list li.sub_nav_line {
+    /* 标签分隔符 */
+    background: none;
+}
+
+/* 右侧悬停 */
+.page-container .r-right-sec {
+    display: none;
+}
+
+.item_hd {
+    /* “贴吧热议榜”标题 */
+    border: none;
+    border-radius: 24px;
+    background-color: var(--default-background);
+    color: var(--default-fore);
+}
+
+.item_hd .title {
+    color: var(--default-fore);
+}
+
+.topic_list .topic_item .topic_flag_hot {
+    /* 热点数字编号 */
+    border-radius: 4px;
+}
+
+.item .item_hd {
+    /* 公告板标题 */
+    border: none;
+    background-color: var(--default-background);
+    color: var(--default-fore);
+}
+
+.item .item_hd .title {
+    color: var(--default-fore);
+}
+
+.notice-wrap-fixed {
+    /* 公告板悬停 */
+    background-color: var(--default-color);
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+}
+
+.notice,
+.notice img {
+    /* 公告板图片 */
+    border-radius: 24px;
+}
+
+/* 动态内容 */
+.new_list .title {
+    /* 贴子标题 */
+    color: var(--tieba-theme-color);
+}
+
+.new_list .title:hover {
+    color: var(--tieba-theme-color);
+    text-decoration: underline;
+}
+
+.title-tag-wraper a {
+    /* 动态贴吧名 */
+    padding: 4px 10px;
+    border-radius: 24px;
+    background-color: var(--light-background);
+    color: var(--light-fore);
+    font-size: 12px;
+}
+
+.title-tag-wraper a:hover {
+    color: var(--light-fore);
+    text-decoration: none;
+}
+
+.list-post-num {
+    /* 贴子回复数 */
+    top: 0;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 16px;
+    background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore);
+}
+
+.list-triangle-border,
+.list-triangle-body {
+    /* 贴子回复数三角 */
+    display: none;
+}
+
+.new_list .post_author {
+    /* 作者 */
+    padding: 0;
+    margin-bottom: 24px;
+    background: none;
+    color: var(--default-fore);
+    text-decoration: none;
+}
+
+.new_list .time {
+    /* 时间 */
+    padding: 0;
+    background: none;
+}
+
+.topic-tag {
+    /* 动态话题 */
+    display: none;
+}
+
+.n_img img {
+    /* 动态图片 */
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.n_img li {
+    border-radius: 16px;
+}
+
+.n_img li .feed_highlight {
+    /* 图片放大 */
+    background: none;
+    cursor: pointer;
+}
+
+.media_box {
+    /* 图片控件 */
+    border: none;
+    border-radius: 16px;
+    background-color: var(--light-background);
+}
+
+.media_box img {
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.ui_btn {
+    /* “进入贴子”按钮 */
+    border: none;
+    border-radius: 24px;
+    background: none;
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+}
+
+.ui_btn:hover {
+    background: none;
+    background-color: var(--tieba-theme-color);
+    box-shadow: 0 0 10px var(--tieba-theme-color);
+    color: var(--default-background);
+    text-decoration: none !important;
+}
+
+.btn_more {
+    /* 更多按钮 */
+    width: 200px;
+    height: unset;
+    border-radius: 24px;
+    background: none;
+    background-color: var(--tieba-theme-background);
+}
+
+.btn_more:hover,
+.data_error_bar a:hover,
+.btn_more a:hover {
+    background: none !important;
+    background-color: var(--tieba-theme-color) !important;
+    color: var(--default-background) !important;
+}
+
+.data_error_bar a,
+.btn_more a {
+    border: none;
+    color: var(--tieba-theme-fore);
+}
+
+/* 页脚 */
+.bottom-bg {
+    background: none;
+}
+
+.footer {
+    border-top: 1px solid var(--light-background);
+    background-color: var(--light-background);
+}
+
+/* 无关内容 */
+.f-d-w,
+.left-cont-wraper .ufw-gap {
+    display: none;
+}
+
+/* 底部加载 gif */
+#data_loading img {
+    display: none;
+}

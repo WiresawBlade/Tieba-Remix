@@ -1,0 +1,91 @@
+#com_userbar {
+    display: none;
+}
+
+// @import "@/stylesheets/main/remixed-main";
+
+// $nav-height: 48px;
+
+// #com_userbar {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     display: flex;
+//     width: 100%;
+//     height: $nav-height;
+//     justify-content: space-around;
+//     backdrop-filter: blur(24px);
+//     background-color: var(--trans-default-background);
+//     gap: 8px;
+
+//     a {
+//         @extend %anchor;
+
+//         display: block;
+//         color: var(--default-fore);
+//         text-decoration: none;
+//     }
+
+//     .u_split,
+//     .u_bdhome,
+//     .u_official,
+//     .i-arrow-down {
+//         display: none;
+//     }
+
+//     ul li {
+//         height: $nav-height;
+
+//         .u_menu_item {
+//             height: $nav-height;
+//             padding: 0;
+
+//             a {
+//                 height: $nav-height;
+//                 padding: 0 20px;
+//                 font-size: 15px;
+//                 line-height: $nav-height;
+//             }
+
+//             .i-member {
+//                 display: none;
+//             }
+//         }
+//     }
+// }
+
+// .u_ddl {
+//     top: calc($nav-height - 4px);
+//     left: 0 !important;
+//     overflow: hidden;
+//     min-width: 100px;
+//     padding: 4px;
+//     border: 1px solid var(--border-color);
+//     border-radius: 6px;
+//     background-color: var(--default-background);
+//     box-shadow: 0 0 10px rgba($color: #000, $alpha: 10%);
+//     font-size: 13px !important;
+
+//     .u_ddl_arrow {
+//         display: none;
+//     }
+
+//     .u_ddl_con {
+//         border: none;
+//         background: none;
+//         box-shadow: none;
+
+//         .u_ddl_con_top {
+//             background: none;
+
+//             li {
+//                 height: auto !important;
+
+//                 a {
+//                     padding: 0 10px;
+//                     border-radius: 4px;
+//                 }
+//             }
+//         }
+//     }
+// }

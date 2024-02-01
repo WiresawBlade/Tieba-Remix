@@ -1,0 +1,24 @@
+@use "@/stylesheets/main/animations" as *;
+@use "@/stylesheets/main/remixed-main" as *;
+
+.float-message {
+    position: fixed;
+    z-index: 99999;
+    display: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--default-background);
+    font-size: 14px;
+    transition: 0.3s;
+
+    @include main-box-shadow;
+    @include fade-in(0.3s);
+
+    .float-content {
+        display: flex;
+        overflow: auto;
+    }
+}

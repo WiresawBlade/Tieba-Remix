@@ -1,0 +1,559 @@
+@use "@/stylesheets/main/animations" as *;
+@use "@/stylesheets/main/remixed-main" as *;
+
+$content-font-size: 16px;
+$avatar-size: 36px;
+$floor-padding: 8px;
+
+body {
+    background-color: var(--page-background);
+    overflow-x: hidden;
+}
+
+body.special_conf_skin {
+    background: var(--page-background);
+}
+
+.wrap1 {
+    background: none !important;
+    background-color: transparent !important;
+
+    .wrap2 {
+        background: none !important;
+        background-color: transparent !important;
+    }
+}
+
+.head_inner {
+    display: none;
+}
+
+#container {
+    width: 100%;
+    max-width: 100%;
+    max-width: var(--content-max);
+    box-sizing: border-box;
+    margin-top: 120px;
+
+    .content {
+        width: 100%;
+
+        .pb_content {
+            position: relative;
+            width: 100%;
+            border-top: 6px solid var(--tieba-theme-color);
+            background-color: var(--default-background);
+            box-shadow: 0 12px 80px -32px rgb(0 0 0 / 40%);
+
+            &::before {
+                position: absolute;
+                top: -30px;
+                right: 0;
+                left: 0;
+                width: 100%;
+                height: 24px;
+                background: linear-gradient(to top, var(--tieba-theme-color), transparent);
+                content: "";
+                opacity: 0.2;
+            }
+        }
+    }
+
+    // 标题浮动
+    .tittle_fill_dom {
+        display: none;
+    }
+}
+
+// 帖子头
+.card_top_wrap,
+.nav_wrap,
+.p_thread {
+    display: none;
+}
+
+.core_title_wrap_bright {
+    display: none !important;
+}
+
+.d_post_content a,
+.lzl_cnt .lzl_content_main a:not(.at) {
+    @extend %anchor-underline;
+}
+
+.lzl_p_p img {
+    @extend %avatar-fit;
+}
+
+.lzl_cnt {
+    .at {
+        @extend %anchor;
+        padding: 2px 0;
+        color: var(--default-fore);
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .lzl_content_main {
+        a {
+            @extend %anchor;
+        }
+
+        img {
+            vertical-align: text-bottom;
+        }
+    }
+}
+
+.hideLzl {
+    position: absolute;
+}
+
+// 帖子内容容器
+#j_p_postlist {
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 24px;
+    gap: 16px;
+
+    // 楼层右上角 badge
+    .save_face_bg {
+        display: none;
+    }
+
+    .l_post_bright {
+        border: none;
+
+        .d_post_content_main {
+            width: 100%;
+            padding: 0;
+            background-color: unset !important;
+
+            .p_content {
+                min-height: unset;
+                padding: 0;
+                margin-bottom: -42px;
+                background-color: unset;
+
+                // 该贴已被 *吧屏蔽
+                .shield-tip {
+                    background: none;
+                }
+
+                .d_post_content {
+                    padding: 0;
+                    background-color: unset !important;
+                    font-size: $content-font-size;
+                    grid-area: content;
+                }
+
+                .replace_div {
+                    width: auto !important;
+                }
+
+                .BDE_Smiley {
+                    width: 24px;
+                    height: 24px;
+                    vertical-align: text-bottom;
+                }
+
+                .BDE_Image {
+                    display: flex;
+                    width: auto;
+                    max-height: 540px;
+                    border-radius: 12px;
+                    margin: 6px auto;
+                }
+            }
+
+            .core_reply {
+                margin-right: unset;
+
+                .core_reply_tail {
+                    margin-top: 0;
+                }
+
+                .core_reply_wrapper {
+                    width: 100%;
+                    border: none !important;
+                    background-color: unset !important;
+
+                    .core_reply_content {
+                        padding: 0 0 0 $avatar-size;
+
+                        .lzl_single_post {
+                            @include fade-in;
+
+                            &:not(.first_no_border) {
+                                padding-top: 0;
+                                margin-top: 0;
+                            }
+                        }
+
+                        // 楼中楼编辑器
+                        .edui-container {
+                            width: auto !important;
+                            max-height: 64px;
+
+                            .edui-editor-body {
+                                overflow: hidden;
+                                height: max-content !important;
+                                max-height: 72px;
+                                padding: 6px;
+                                border-radius: 6px;
+
+                                .edui-body-container {
+                                    min-height: 16px !important;
+                                    max-height: 64px;
+                                    padding-left: 0;
+                                    border-radius: 6px;
+                                    font-size: 14px;
+                                    overflow-y: auto;
+                                }
+                            }
+                        }
+
+                        .lzl_panel_wrapper {
+                            width: 100%;
+
+                            .lzl_panel_submit {
+                                background: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.main-wrapper {
+    display: flex;
+    max-width: 80%;
+    flex-direction: column;
+    padding: $floor-padding;
+    margin: auto;
+    margin-top: 48px;
+
+    @media (min-width: 1200px) {
+        max-width: 60%;
+    }
+}
+
+.left_section {
+    width: 100%;
+}
+
+// 我在贴吧
+.right_section {
+    display: none;
+}
+
+.title-wrapper {
+    display: flex;
+    box-sizing: border-box;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin: 36px 0;
+    gap: 8px;
+
+    @media (max-width: var(--content-max)) {
+        padding: 0 24px;
+    }
+
+    .thread-title {
+        max-width: 40%;
+        font-size: 32px;
+        line-height: 36px;
+        text-align: left;
+        text-decoration: underline 3px var(--tieba-theme-color);
+    }
+
+    .forum-container {
+        display: flex;
+        overflow: hidden;
+        width: max-content;
+        height: max-content;
+        align-items: center;
+        border-radius: 8px;
+        background-color: var(--trans-light-background);
+        gap: 8px;
+
+        @include blur-if-custom-background;
+
+        &:last-child {
+            padding-right: 8px;
+        }
+
+        .forum-icon {
+            width: 36px;
+            height: 36px;
+        }
+
+        .forum-name {
+            color: var(--highlight-fore);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .forum-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .forum-members {
+                display: flex;
+                gap: 8px;
+            }
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center;
+
+            .forum-button {
+                padding: 0 4px;
+                background-color: transparent;
+                color: var(--tieba-theme-color);
+                font-size: 16px;
+                font-weight: bold;
+
+                &:not(:hover, :active, :focus) {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+}
+
+.forum-mask-wrapper {
+    position: relative;
+    z-index: -1;
+    display: flex;
+    justify-content: center;
+    user-select: none;
+
+    @keyframes mask-fade-in {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 0.1;
+        }
+    }
+
+    .forum-mask {
+        position: absolute;
+        top: -320px;
+        width: 480px;
+        height: 480px;
+        border-radius: 480px;
+        animation: mask-fade-in 1s ease-in-out;
+        filter: blur(60px);
+        opacity: 0.1;
+        user-select: none;
+    }
+}
+
+.content-wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+
+    .author-container {
+        display: grid;
+        margin-bottom: 8px;
+        gap: 6px;
+        grid-template:
+            "avatar name" auto
+            "avatar tags" auto
+            / $avatar-size 1fr;
+
+        .floor-avatar {
+            overflow: hidden;
+            width: max-content !important;
+            height: max-content !important;
+            padding: 0 !important;
+            grid-area: avatar;
+
+            img {
+                @extend %avatar-fit;
+                width: $avatar-size;
+                height: $avatar-size;
+                border-radius: 8px;
+            }
+        }
+
+        .floor-name {
+            width: fit-content;
+            color: var(--highlight-fore);
+            font-size: 14px;
+            font-weight: bold;
+            grid-area: name;
+
+            @extend %anchor;
+        }
+
+        .badge-container {
+            display: flex;
+            margin-top: -4px;
+            gap: 4px;
+            grid-area: tags;
+
+            .floor-badge {
+                display: flex;
+                width: fit-content;
+                padding: 0 6px;
+                border-radius: 6px;
+                background-color: var(--trans-light-background);
+                color: var(--light-fore);
+                gap: 6px;
+
+                .badge-level {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+
+    .floor-wrapper {
+        display: grid;
+        grid-template:
+            "avatar name" auto
+            "avatar tags" auto
+            "content content" 1fr
+            "footer footer" auto
+            "comments comments" auto
+            / $avatar-size 1fr;
+
+        .floor-avatar {
+            overflow: hidden;
+            width: max-content !important;
+            height: max-content !important;
+            padding: 0 !important;
+            grid-area: avatar;
+
+            img {
+                width: $avatar-size;
+                border-radius: 8px;
+            }
+        }
+
+        .floor-name {
+            width: fit-content;
+            margin: 0 8px 4px;
+            font-size: 14px;
+            grid-area: name;
+        }
+
+        .floor-badge {
+            display: flex;
+            width: fit-content;
+            padding: 0 6px;
+            border-radius: 6px;
+            margin: 0 8px 8px;
+            background-color: var(--trans-light-background);
+            color: var(--light-fore);
+            gap: 6px;
+            grid-area: tags;
+
+            .badge-level {
+                font-weight: bold;
+            }
+        }
+
+        .floor-content {
+            padding: 8px 0;
+            font-size: $content-font-size;
+            grid-area: content;
+
+            .BDE_Smiley {
+                width: 24px;
+                height: 24px;
+                vertical-align: sub;
+            }
+        }
+
+        .floor-info {
+            display: flex;
+            justify-content: flex-end;
+            color: var(--light-fore);
+            gap: 12px;
+            grid-area: footer;
+        }
+
+        .floor-comments {
+            width: 100%;
+            grid-area: comments;
+
+            .core_reply_wrapper {
+                width: 100%;
+            }
+        }
+    }
+}
+
+// 内部文本框
+#ueditor_replace {
+    overflow: hidden;
+}
+
+#thread-jsx-components {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    max-width: var(--content-max);
+    box-sizing: border-box;
+    flex-direction: column;
+    padding: 8px 24px 16px;
+    background-color: var(--default-background);
+    gap: 12px;
+
+    .dummy-button {
+        width: 100%;
+        padding: 6px 0 0;
+        border: none;
+        border-radius: 0;
+        border-bottom: 3px solid var(--border-color);
+        background-color: transparent;
+        box-shadow: none;
+        color: var(--minimal-fore);
+        cursor: text;
+        font-size: 16px;
+        text-align: justify;
+
+        &:hover {
+            border-color: var(--light-background);
+        }
+
+        &:focus {
+            border-color: var(--tieba-theme-color);
+        }
+    }
+}
+
+.pb_footer {
+    display: none;
+}
+
+// 特殊吧页面处理
+.svelte-zmnt4x {
+    display: none;
+}
+
+.wrap2 {
+    padding-bottom: 0 !important;
+}
+
+// 第三方😅
+.head_ad_pop {
+    display: none !important;
+}
+
+.plat_head,
+.star_nav_wrap {
+    display: none;
+}

@@ -1,0 +1,48 @@
+@use "@/stylesheets/main/animations" as *;
+
+%user-button {
+    box-sizing: border-box;
+    padding: 2px 8px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    background-color: var(--default-background);
+    box-shadow: 0 0 0 1px var(--border-color);
+    color: var(--default-fore);
+    cursor: pointer;
+    transition: $default-animation-duration;
+
+    &.theme-style {
+        background-color: var(--tieba-theme-color);
+        color: var(--default-background) !important;
+
+        &:hover {
+            background-color: var(--tieba-theme-hover);
+        }
+
+        &:active {
+            background-color: var(--tieba-theme-active);
+        }
+    }
+
+    &.unset-background {
+        background-color: unset;
+    }
+
+    &.no-border {
+        box-shadow: none;
+    }
+
+    &:hover {
+        background-color: var(--default-hover);
+    }
+
+    &:active {
+        background-color: var(--default-active);
+    }
+
+    &:focus {
+        border-color: var(--tieba-theme-color);
+        box-shadow: 0 0 0 2px var(--tieba-theme-color);
+    }
+}

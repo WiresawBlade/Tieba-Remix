@@ -1,0 +1,47 @@
+:root {
+    --myself-theme-background: rgb(25 110 153 / 20%);
+    --myself-theme-fore: rgb(16 73 101);
+    --cengzhu-theme-background: rgb(255 89 107 / 20%);
+    --cengzhu-theme-fore: rgb(178 62 90);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --myself-theme-background: rgb(34 135 204 / 20%);
+        --myself-theme-fore: rgb(40 160 242);
+        --cengzhu-theme-background: rgb(204 71 103 / 20%);
+        --cengzhu-theme-fore: rgb(255 89 118);
+    }
+}
+
+.tag-elem {
+    display: inline-block;
+}
+
+.tag-elem::after {
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin: 0 4px;
+    background-color: var(--trans-light-background);
+    color: var(--light-fore);
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.tieba-tags-me::after {
+    /* background-color: var(--myself-theme-background);
+    color: var(--myself-theme-fore); */
+    content: "我";
+}
+
+.tieba-tags-lz::after {
+    /* background-color: var(--tieba-theme-background);
+    color: var(--tieba-theme-fore); */
+    content: "楼主";
+}
+
+.tieba-tags-cz::after {
+    /* background-color: var(--cengzhu-theme-background);
+    color: var(--cengzhu-theme-fore); */
+    content: "层主";
+}

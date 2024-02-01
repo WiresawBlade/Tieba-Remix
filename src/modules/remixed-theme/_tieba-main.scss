@@ -1,0 +1,178 @@
+@use "@/stylesheets/main/remixed-main" as *;
+
+/* 动画 */
+/* 淡入动画 */
+@keyframes animation-fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade-in-elem {
+    animation: animation-fade-in ease 0.3s forwards;
+}
+
+/* 功能按钮 */
+.tbui_aside_float_bar {
+    border: none !important;
+    background: none !important;
+}
+
+.tbui_aside_float_bar li {
+    width: 40px;
+    height: 40px;
+    border-radius: 24px;
+    margin: 8px 0;
+    background-color: var(--light-background);
+}
+
+.tbui_aside_float_bar li:hover {
+    background-color: var(--default-hover);
+}
+
+.tbui_aside_float_bar li:active {
+    background-color: var(--default-active);
+}
+
+.tbui_aside_float_bar li a {
+    @extend %icon;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 24px;
+    background: none !important;
+}
+
+.tbui_aside_float_bar a {
+    /* 功能按钮 svg 容器 */
+    width: 40px !important;
+    height: 40px !important;
+    color: var(--minimal-fore);
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    /* background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(var(--minimal-fore) 0 -9999px);
+    transform: translateY(9999px); */
+}
+
+/* .tbui_aside_float_bar a:hover {
+    color: var(--default-background);
+    filter: drop-shadow(var(--default-fore) 0 -9999px);
+} */
+
+.tbui_aside_float_bar .tbui_fbar_auxiliaryCare a {
+    /* 无障碍模式 */
+    height: 40px !important;
+    background: none !important;
+}
+
+.tbui_fbar_auxiliaryCare a::after {
+    content: "accessibility_new";
+    /* background-image: var(--svg-accessibility); */
+}
+
+.tbui_fbar_top a::after {
+    /* 回到顶部 */
+    /* color: var(--tieba-theme-fore); */
+    content: "arrow_upward";
+    /* background-image: var(--svg-arrow-up);
+    filter: drop-shadow(var(--tieba-theme-fore) 0 -9999px); */
+}
+
+/* .tbui_aside_float_bar .tbui_fbar_top a {
+    background-color: var(--tieba-theme-background) !important;
+} */
+
+/* .tbui_fbar_top a:hover::after {
+    color: var(--default-background);
+} */
+
+.tbui_fbar_post a::after {
+    /* 回贴 */
+    /* color: var(--default-background); */
+    content: "chat";
+    font-size: 22px;
+    /* vertical-align: bottom; */
+    /* background-image: var(--svg-message);
+    filter: drop-shadow(var(--default-background) 0 -9999px); */
+}
+
+/* .tbui_aside_float_bar .tbui_fbar_post a,
+.tbui_aside_float_bar .tbui_fbar_post a:hover {
+    background-color: var(--tieba-theme-color) !important;
+} */
+
+.tbui_fbar_feedback a::after {
+    /* 反馈 */
+    content: "report";
+    font-size: 26px;
+    /* background-image: var(--svg-infomation-outline);
+    background-size: 24px; */
+}
+
+.tbui_aside_float_bar li.tbui_fbar_feedback a {
+    /* 部分吧反馈 */
+    background: none !important;
+}
+
+.tbui_aside_float_bar .tbui_fbar_feedback a,
+.tbui_aside_float_bar .tbui_fbar_feedback a:hover {
+    background: none !important;
+}
+
+.tbui_aside_float_bar .tbui_fbar_down,
+.tbui_aside_float_bar .tbui_fbar_props,
+.tbui_aside_float_bar .tbui_fbar_tsukkomi,
+.tbui_aside_float_bar .tbui_fbar_share,
+.tbui_aside_float_bar .tbui_fbar_favor,
+.tbui_aside_float_bar .tbui_fbar_refresh {
+    display: none;
+}
+
+/* 图片缩放控件 */
+.p_tools a {
+    padding: 0 10px;
+    background: none;
+    vertical-align: bottom;
+}
+
+.p_tools span {
+    /* 分隔线 */
+    display: none;
+}
+
+.p_tools .p_putup::before,
+.p_tools .tb_icon_ypic::before,
+.p_tools .tb_icon_turnleft::before,
+.p_tools .tb_icon_turnright::before {
+    margin-right: 4px;
+    font-family: "Material Symbols", system-ui;
+    font-size: 14px;
+    vertical-align: bottom;
+}
+
+.p_tools .p_putup::before {
+    /* 收起 */
+    content: "zoom_out";
+}
+
+.p_tools .tb_icon_ypic::before {
+    /* 查看大图 */
+    content: "zoom_out_map";
+}
+
+.p_tools .tb_icon_turnleft::before {
+    /* 左转 */
+    content: "turn_left";
+}
+
+.p_tools .tb_icon_turnright::before {
+    /* 右转 */
+    content: "turn_right";
+}

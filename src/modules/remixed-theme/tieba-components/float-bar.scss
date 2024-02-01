@@ -1,0 +1,37 @@
+@use "@/stylesheets/main/remixed-main" as *;
+
+.tbui_aside_float_bar {
+    bottom: 20px;
+    left: calc(50% + var(--content-max) / 2 + 20px);
+    display: flex;
+    overflow: hidden;
+    width: max-content;
+    flex-direction: column;
+    border-radius: 8px;
+    margin-left: 0;
+    background-color: var(--very-light-background) !important;
+    gap: 4px;
+
+    @include main-box-shadow;
+
+    @media (max-width: var(--content-max)) {
+        bottom: 0;
+        left: calc(100% - 40px);
+    }
+
+    .tbui_aside_fbar_button {
+        border-radius: 0;
+        margin: 0 !important;
+        background-color: var(--default-background);
+        transition: 0.4s;
+
+        a {
+            border-radius: 0;
+        }
+
+        &[style*="visibility: hidden"] {
+            height: 0;
+            margin-top: -4px !important;
+        }
+    }
+}

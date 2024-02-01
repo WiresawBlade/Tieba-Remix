@@ -1,0 +1,135 @@
+@use"sass:color";
+
+$blur-radius: 24px;
+
+html {
+    padding: 0;
+    margin: 0;
+    text-align: justify;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: var(--code-zh);
+
+    &[no-scrollbar] {
+        overflow: hidden;
+    }
+}
+
+div,
+p {
+    margin: 0;
+}
+
+select {
+    padding: 1px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+option {
+    cursor: pointer;
+}
+
+option:checked {
+    background-color: var(--tieba-theme-color);
+    color: var(--default-background);
+}
+
+a {
+    color: unset;
+    text-decoration: none;
+}
+
+.dialogJ {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+}
+
+// 图标
+%icon,
+%outline-icon {
+    font-family: "Material Symbols", monospace;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 40;
+    user-select: none;
+}
+
+%filled-icon {
+    font-family: "Material Symbols", monospace;
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 40;
+    user-select: none;
+}
+
+// 超链接
+%anchor {
+    color: var(--tieba-theme-fore);
+    transition: 0.4s;
+}
+
+%anchor-underline {
+    color: var(--tieba-theme-fore);
+    text-decoration: underline 1.2px;
+    transition: 0.4s;
+}
+
+%anchor:hover,
+%anchor-underline:hover {
+    background-color: var(--default-hover);
+}
+
+%anchor-underline:hover {
+    text-decoration: underline 1.2px rgba($color: #000, $alpha: 0%);
+}
+
+%anchor:active,
+%anchor-underline:active {
+    background-color: var(--default-active);
+}
+
+// 头像
+%avatar-fit {
+    object-fit: contain;
+}
+
+@mixin blur-effect($radius: $blur-radius) {
+    backdrop-filter: blur($radius);
+
+    body.dark-theme & {
+        backdrop-filter: blur($radius) brightness(0.8);
+    }
+}
+
+@mixin raster-effect($back-color: var(--trans-page-background),
+    $base-color: var(--page-background), $size: 4px, $radius: 4px) {
+    backdrop-filter: saturate(0.5) blur($radius);
+    background-color: $back-color;
+    background-image: radial-gradient(transparent 1px, $base-color 1px);
+    background-size: $size $size;
+}
+
+@mixin main-box-shadow($offset-x: 0, $offset-y: 0) {
+    box-shadow: $offset-x $offset-y 10px rgba($color: #000, $alpha: 1%);
+
+    body.dark-theme & {
+        box-shadow: $offset-x $offset-y 16px rgba($color: #000, $alpha: 20%);
+    }
+}
+
+@mixin blur-if-custom-background {
+    body.custom-background & {
+        @include blur-effect;
+    }
+}
