@@ -31,7 +31,8 @@ docs/README.lite.md
 
 @deprecated*
 @debug*
-.vscode/settings.json
 deb.ts
 index.html
 todo.md
+auto-imports.d.ts
+components.d.ts
