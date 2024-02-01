@@ -237,9 +237,9 @@ export default async function () {
         <ElPagination
             v-model:current-page={currPage.value}
             background={true}
-            page-size={PageData.pager.page_size}
+            page-size={1}
             pager-count={11}
-            total={PageData.pager.total_page * (PageData.pager.page_size ?? 0)}
+            total={PageData.pager.total_page}
             defaultCurrentPage={PageData.pager.cur_page}
             layout="prev, pager, next, jumper, ->"
             style="margin-bottom: 6px;">
