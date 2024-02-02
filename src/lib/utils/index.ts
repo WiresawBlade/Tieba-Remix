@@ -147,7 +147,9 @@ export function outputFile(filename: string, content: string) {
     URL.revokeObjectURL(url);
 }
 
-export async function selectLocalFile<T extends string | ArrayBuffer | null>(): Promise<T> {
+export async function selectLocalFile<T extends string | ArrayBuffer | null>(
+    mode: "text" | "base64" = "text"
+): Promise<T> {
     return new Promise((resolve, reject) => {
         const input = document.createElement("input");
         input.type = "file";
@@ -166,7 +168,17 @@ export async function selectLocalFile<T extends string | ArrayBuffer | null>(): 
                 reject(new Error());
             });
 
-            reader.readAsText(file);
+            switch (mode) {
+                case "text": {
+                    reader.readAsText(file);
+                    break;
+                }
+
+                case "base64": {
+                    reader.readAsDataURL(file);
+                    break;
+                }
+            }
         });
 
         input.click();

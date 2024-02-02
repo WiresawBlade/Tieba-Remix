@@ -49,7 +49,7 @@ async function clearImage() {
 }
 
 async function selectImageFile() {
-    imageData.value = await selectLocalFile();
+    imageData.value = await selectLocalFile("base64");
 }
 </script>
 
