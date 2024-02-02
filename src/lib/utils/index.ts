@@ -166,7 +166,7 @@ export async function selectLocalFile<T extends string | ArrayBuffer | null>(): 
                 reject(new Error());
             });
 
-            reader.readAsDataURL(file);
+            reader.readAsText(file);
         });
 
         input.click();
