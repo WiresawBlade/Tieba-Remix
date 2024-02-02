@@ -43,7 +43,12 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/ima
 
 :root {
     --code-zh: "Consolas", "JetBrains Mono", "Fira Code", "Menlo", sans-serif;
+    --img-tieba-icon: #{$iconMain};
 
+    color-scheme: light dark;
+}
+
+.dark-theme {
     --default-background: rgb(32 32 32);
     --default-hover: rgb(42 42 42);
     --default-active: rgb(54 54 54);
@@ -82,45 +87,45 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/ima
     --check-color: color.adjust(green, $lightness: 10%);
     --error-color: color.adjust(red, $lightness: 16%);
     --warning-color: color.adjust(orange, $blackness: 10%);
+}
 
-    .light-theme {
-        --default-background: rgb(255 255 255);
-        --default-hover: rgb(240 240 240);
-        --default-active: rgb(224 224 224);
-        --page-background: rgb(245 245 245);
-        --trans-page-background: rgb(245 245 245 / 80%);
-        --trans-default-background: rgb(255 255 255 / 80%);
-        --deep-background: rgb(228 228 228);
-        --trans-deep-background: rgb(200 200 200 / 60%);
-        --light-background: rgb(235 235 235);
-        --trans-light-background: rgb(228 228 228 / 60%);
-        --very-light-background: rgb(245 245 245);
-        --elem-color: rgb(240 240 240);
-        --default-fore: rgb(16 16 16);
-        --light-fore: rgb(64 64 64);
-        --minimal-fore: rgb(92 92 92);
-        --highlight-fore: rgb(0 0 0);
-        --border-color: rgb(210 210 210 / 60%);
-        --light-border-color: rgb(210 210 210 / 20%);
+.light-theme {
+    --default-background: rgb(255 255 255);
+    --default-hover: rgb(240 240 240);
+    --default-active: rgb(224 224 224);
+    --page-background: rgb(245 245 245);
+    --trans-page-background: rgb(245 245 245 / 80%);
+    --trans-default-background: rgb(255 255 255 / 80%);
+    --deep-background: rgb(228 228 228);
+    --trans-deep-background: rgb(200 200 200 / 60%);
+    --light-background: rgb(235 235 235);
+    --trans-light-background: rgb(228 228 228 / 60%);
+    --very-light-background: rgb(245 245 245);
+    --elem-color: rgb(240 240 240);
+    --default-fore: rgb(16 16 16);
+    --light-fore: rgb(64 64 64);
+    --minimal-fore: rgb(92 92 92);
+    --highlight-fore: rgb(0 0 0);
+    --border-color: rgb(210 210 210 / 60%);
+    --light-border-color: rgb(210 210 210 / 20%);
 
-        --tieba-theme-color: rgb(97 78 194);
-        --trans-tieba-theme-color: rgb(97 78 194 / 60%);
-        --tieba-theme-hover: rgb(119 105 194);
-        --tieba-theme-active: rgb(150 134 232);
-        --tieba-theme-background: rgb(97 78 194 / 20%);
-        --tieba-theme-fore: rgb(58 46 116);
+    --tieba-theme-color: rgb(97 78 194);
+    --trans-tieba-theme-color: rgb(97 78 194 / 60%);
+    --tieba-theme-hover: rgb(119 105 194);
+    --tieba-theme-active: rgb(150 134 232);
+    --tieba-theme-background: rgb(97 78 194 / 20%);
+    --tieba-theme-fore: rgb(58 46 116);
 
-        --level-green-background: rgb(84 130 53 / 10%);
-        --level-green-fore: rgb(51 78 32);
-        --level-blue-background: rgb(0 153 213 / 10%);
-        --level-blue-fore: rgb(0 81 111);
-        --level-yellow-background: rgb(164 139 63 / 10%);
-        --level-yellow-fore: rgb(124 105 46);
-        --level-orange-background: rgb(255 153 0 / 10%);
-        --level-orange-fore: rgb(178 104 0);
-    }
+    --level-green-background: rgb(84 130 53 / 10%);
+    --level-green-fore: rgb(51 78 32);
+    --level-blue-background: rgb(0 153 213 / 10%);
+    --level-blue-fore: rgb(0 81 111);
+    --level-yellow-background: rgb(164 139 63 / 10%);
+    --level-yellow-fore: rgb(124 105 46);
+    --level-orange-background: rgb(255 153 0 / 10%);
+    --level-orange-fore: rgb(178 104 0);
 
-    --img-tieba-icon: #{$iconMain};
-
-    color-scheme: light dark;
+    --check-color: color.adjust(green, $lightness: 10%);
+    --error-color: color.adjust(red, $lightness: 16%);
+    --warning-color: color.adjust(orange, $blackness: 10%);
 }
