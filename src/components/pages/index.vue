@@ -399,10 +399,6 @@ a {
     text-decoration: none;
 }
 
-.tbui_aside_float_bar {
-    display: none;
-}
-
 .block-wrapper {
     display: flex;
     flex-direction: column;
@@ -831,5 +827,15 @@ a {
             }
         }
     }
+}
+</style>
+
+<style lang="scss">
+.tbui_aside_float_bar {
+    display: none !important;
+}
+
+#spage-tbshare-container {
+    display: none;
 }
 </style>
