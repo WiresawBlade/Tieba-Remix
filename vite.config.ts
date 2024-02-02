@@ -45,7 +45,7 @@ const commonConfig = defineConfig({
             userscript: {
                 name: "Tieba Remix",
                 namespace: "https://github.com/WiresawBlade/Tieba-Remix",
-                version: "0.4-beta",
+                version: "0.4.1-beta",
                 description: "提升贴吧网页端的体验：新的主题样式及功能增强",
                 author: "锯条",
                 license: "MIT",
