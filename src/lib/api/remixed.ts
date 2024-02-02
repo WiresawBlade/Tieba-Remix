@@ -216,8 +216,6 @@ export function backupUserConfigs() {
 
 export async function restoreUserConfigs() {
     const backupData = JSON.parse(await selectLocalFile());
-    console.log(backupData);
-
     forEach(Object.entries(backupData), ([key, value]) => {
         GM_setValue(key, value);
     });
