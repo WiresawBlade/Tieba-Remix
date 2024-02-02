@@ -89,7 +89,7 @@
 <script lang="tsx" setup>
 import { GM_deleteValue, GM_getValue, GM_listValues, GM_setValue } from "$";
 import { setTheme } from "@/lib/api/remixed";
-import { Experimental, UpdateConfig, compactLayout, disabledModules, experimental, themeType, updateConfig, wideScreen } from "@/lib/user-values";
+import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtensions, themeType, updateConfig, wideScreen } from "@/lib/user-values";
 import { AllModules, isRealObject, outputFile, selectLocalFile } from "@/lib/utils";
 import { debounce, filter, find, forEach, includes, map, pull, zipObject } from "lodash-es";
 import type { Component, VNode } from "vue";
@@ -273,6 +273,44 @@ const settings: UserSettings = {
                     },
                 },
             },
+
+            "page-extensions": {
+                name: "页面扩展",
+                content: {
+                    "index": {
+                        title: "新版主页",
+                        description:
+                            `新版主页旨在提供纯粹的浏览体验，它通过 Vue 构建。
+                            在新版主页上我们目前会更激进地测试一些新功能，包括尚未被广泛使用的新 Web API，以及自构建的 JavaScript 库。`,
+                        widgets: [{
+                            type: "toggle",
+                            init() {
+                                return pageExtensions.get().index;
+                            },
+                            event() {
+                                pageExtensions.merge({ index: !pageExtensions.get().index });
+                                return pageExtensions.get().index;
+                            },
+                        }],
+                    },
+
+                    "thread": {
+                        title: "新版看帖页面",
+                        description:
+                            `新版看帖页面使用了全新的 UI 界面，并试图改进屏幕空间利用率。`,
+                        widgets: [{
+                            type: "toggle",
+                            init() {
+                                return pageExtensions.get().thread;
+                            },
+                            event() {
+                                pageExtensions.merge({ thread: !pageExtensions.get().thread });
+                                return pageExtensions.get().thread;
+                            },
+                        }],
+                    },
+                } as Record<keyof ReturnType<typeof pageExtensions.get>, SettingContent>,
+            },
         },
     },
     "modules": {
@@ -344,26 +382,7 @@ const settings: UserSettings = {
                             content: "lab_research",
                         }],
                     },
-
-                    "new-index": {
-                        title: "新版主页",
-                        description:
-                            `新版主页旨在提供纯粹的浏览体验，它通过 Vue 构建，拥有较高的理论性能。
-                            在新版主页上我们目前会更激进地测试一些新功能，包括尚未被广泛使用的新 Web API，以及自构建的 JavaScript 库。
-                            现阶段，新版主页仍然不稳定，同时有大量功能尚未实装。以及，未来也很有可能将其完全放弃。`,
-                        widgets: [{
-                            type: "toggle",
-                            init() {
-                                return experimentalRef.value["new-index"];
-                            },
-                            event() {
-                                experimentalRef.value["new-index"] = !experimentalRef.value["new-index"];
-                                experimental.set(experimentalRef.value);
-                                return experimentalRef.value["new-index"];
-                            },
-                        }],
-                    },
-                } as KeyMapped<Experimental, SettingContent>,
+                } /* as KeyMapped<ReturnType<typeof experimental.get>, SettingContent> */,
             },
 
             "backup-recover": {

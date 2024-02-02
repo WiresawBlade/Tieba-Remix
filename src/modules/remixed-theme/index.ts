@@ -23,6 +23,7 @@ _navBar();
 
 import thread from "./thread/thread";
 import { setCustomBackground } from "@/lib/theme";
+import { pageExtensions } from "@/lib/user-values";
 
 export default {
     id: "remixed-theme",
@@ -50,7 +51,7 @@ function main(): void {
     themeSheets.push(injectCSSList(floatBarCSS));
     themeSheets.push(injectCSSList(floatMessageCSS));
 
-    thread();
+    if (pageExtensions.get().thread) thread();
 
     // 耗时加载元素
     fadeInElems.push(".tbui_aside_float_bar .svg-container");
