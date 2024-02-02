@@ -11,13 +11,13 @@ import { injectCSSList, parseMultiCSS } from "./lib/elemental/styles";
 import { remixedObservers } from "./lib/observers";
 import { removeDefault, renderPage } from "./lib/render";
 import { parseUserModules } from "./lib/unsafe";
-import { REMIXED, experimental, themeColor, themeType, wideScreen } from "./lib/user-values";
+import { REMIXED, pageExtensions, themeColor, themeType, wideScreen } from "./lib/user-values";
 import { AllModules, waitUtil } from "./lib/utils";
 import { hexToRGBA, rgbaToHSLA } from "./lib/utils/color";
 import favicon from "/assets/images/main/favicon32.ico";
 
 (function loadNewIndex() {
-    if (!experimental.get()["new-index"]) return;
+    if (!pageExtensions.get().index) return;
     if (currentPageType() !== "index") return;
 
     afterHead(function () {
