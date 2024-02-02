@@ -88,7 +88,7 @@
 
 <script lang="tsx" setup>
 import { GM_deleteValue, GM_getValue, GM_listValues, GM_setValue } from "$";
-import { setTheme } from "@/lib/api/remixed";
+import { backupUserConfigs, restoreUserConfigs, setTheme } from "@/lib/api/remixed";
 import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtensions, themeType, updateConfig, wideScreen } from "@/lib/user-values";
 import { AllModules, isRealObject, outputFile, selectLocalFile } from "@/lib/utils";
 import { debounce, filter, find, forEach, includes, map, pull, zipObject } from "lodash-es";
@@ -396,18 +396,7 @@ const settings: UserSettings = {
                             type: "button",
                             content: "备份",
                             event() {
-                                const userKeys = filter(GM_listValues(), key => {
-                                    return !includes([
-                                        "unreadFeeds",
-                                        "latestRelease",
-                                        "showUpdateToday",
-                                    ], key);
-                                });
-                                const userValues = map(userKeys, key => {
-                                    return GM_getValue(key);
-                                });
-                                const configs = zipObject(GM_listValues(), userValues);
-                                outputFile(`tieba-remix-backup@${new Date().getTime()}.json`, JSON.stringify(configs));
+                                backupUserConfigs();
                             },
                         }],
                     },
@@ -419,11 +408,8 @@ const settings: UserSettings = {
                         widgets: [{
                             type: "button",
                             content: "恢复",
-                            async event() {
-                                const backupData = JSON.parse(await selectLocalFile());
-                                forEach(Object.entries(backupData), ([key, value]) => {
-                                    GM_setValue(key, value);
-                                });
+                            event() {
+                                restoreUserConfigs();
                             },
                         }],
                     },
