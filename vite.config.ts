@@ -46,7 +46,7 @@ const commonConfig = defineConfig({
                 name: "Tieba Remix",
                 namespace: "https://github.com/WiresawBlade/Tieba-Remix",
                 version: "0.4.1-beta",
-                description: "提升贴吧网页端的体验：新的主题样式及功能增强",
+                description: "贴吧网页端重塑",
                 author: "锯条",
                 license: "MIT",
                 updateURL: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js",
