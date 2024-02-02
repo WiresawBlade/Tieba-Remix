@@ -1,7 +1,7 @@
 import { flatMapDeep, isPlainObject, forOwn, kebabCase, assign } from "lodash-es";
 import { afterHead, mergeNodeAttrs } from ".";
 
-const defaultStyle = document.createElement("style");  // 默认默认样式
+export const defaultStyle = document.createElement("style");  // 默认默认样式
 defaultStyle.id = "default-stylesheet";
 
 // 插入默认元素
