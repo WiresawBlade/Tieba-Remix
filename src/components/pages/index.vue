@@ -829,13 +829,3 @@ a {
     }
 }
 </style>
-
-<style lang="scss">
-.tbui_aside_float_bar {
-    display: none !important;
-}
-
-#spage-tbshare-container {
-    display: none;
-}
-</style>
