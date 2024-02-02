@@ -1,18 +1,19 @@
+import { findIndex } from "lodash-es";
 import { afterHead } from "../elemental";
-import { injectCSSRule, removeCSSRule } from "../elemental/styles";
+import { defaultStyle, injectCSSRule, removeCSSRule } from "../elemental/styles";
 import { customBackground } from "../user-values";
 import { waitUtil } from "../utils";
 
 export const dynCSSRules = {
-    customBackground: -1,
+    customBackground: () => findIndex(Array.from(defaultStyle.sheet?.cssRules ?? { length: 0 }), rule => (rule as CSSStyleRule).selectorText === "body.custom-background"),
 };
 
 export function setCustomBackground() {
     afterHead(function () {
-        if (dynCSSRules.customBackground !== -1) {
-            removeCSSRule(dynCSSRules.customBackground);
+        if (dynCSSRules.customBackground() !== -1) {
+            removeCSSRule(dynCSSRules.customBackground());
         }
-        dynCSSRules.customBackground = injectCSSRule("body", {
+        injectCSSRule("body.custom-background", {
             backgroundImage: `url('${customBackground.get()}') !important`,
             backgroundRepeat: "no-repeat !important",
             backgroundAttachment: "fixed !important",

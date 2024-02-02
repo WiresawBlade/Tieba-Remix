@@ -41,7 +41,7 @@ watch(alphaValue, newValue => {
 });
 
 onMounted(async function () {
-    imageData.value = customBackground.get() ?? "";
+    imageData.value = customBackground.get();
 });
 
 async function clearImage() {
