@@ -98,12 +98,6 @@ export class UserKeyTS<T> extends UserKey<T> {
     }
 }
 
-export interface Experimental {
-    [props: string]: boolean
-
-    "new-index": boolean
-}
-
 export interface UpdateConfig {
     time: "1h" | "3h" | "6h" | "never";
     notify: boolean;
@@ -118,9 +112,7 @@ export const perfProfile = new UserKey<PerfType>("prefProfile", "performance");
 /** 未读推送 */
 export const unreadFeeds = new UserKeyTS<TiebaPost[]>("unreadFeeds", []);
 /** 实验性功能配置 */
-export const experimental = new UserKey<Experimental>("experimental", {
-    "new-index": true,
-});
+export const experimental = new UserKey("experimental", {});
 /** 最新发行版相关信息 */
 export const latestRelease = new UserKeyTS<GiteeRelease | undefined>("latestRelease", undefined);
 /** 更新配置 */
@@ -148,6 +140,11 @@ export const themeColor = new UserKey("themeColor", {
 });
 /** 用户自定义背景图 */
 export const customBackground = new UserKey<string | null>("customBackground", null);
+/** 页面扩展 */
+export const pageExtensions = new UserKey("pageExtension", {
+    index: true,
+    thread: true,
+});
 
 export const SymbolFont = "Material Symbols";
 
