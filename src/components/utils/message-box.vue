@@ -1,8 +1,8 @@
 <template>
     <div class="message-box remove-default">
-        <div ref="messageContent" class="message-content markdown">
+        <div ref="messageWrapper" class="message-wrapper">
             <div v-if="props.title" class="title">{{ props.title }}</div>
-            <div v-if="props.message" class="message">{{ props.message }}</div>
+            <div ref="messageContent" v-if="props.message" class="message markdown">{{ props.message }}</div>
             <slot></slot>
         </div>
 
@@ -45,6 +45,7 @@ const props = withDefaults(defineProps<MessageBoxProps>(), {
     type: "basic",
 });
 
+const messageWrapper = ref<HTMLDivElement>();
 const messageContent = ref<HTMLDivElement>();
 
 const emit = defineEmits(["positive", "cancel", "negative"]);
@@ -101,7 +102,7 @@ function emitAndClose(emitName: MessageBoxEvents) {
     font-size: 16px;
     transition: 0.4s ease;
 
-    .message-content {
+    .message-wrapper {
         display: flex;
         overflow: hidden auto;
         flex-direction: column;
@@ -113,11 +114,6 @@ function emitAndClose(emitName: MessageBoxEvents) {
             color: var(--highlight-fore);
             font-size: 20px;
             font-weight: bold;
-        }
-
-        .message {
-            font-size: 16px;
-            white-space: pre-wrap;
         }
     }
 
