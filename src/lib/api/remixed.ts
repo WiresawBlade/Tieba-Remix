@@ -1,9 +1,9 @@
-import { GM_info, GM_openInTab } from "$";
+import { GM_getValue, GM_info, GM_listValues, GM_openInTab, GM_setValue } from "$";
 import { messageBox } from "@/lib/render/message-box";
 import { toast } from "@/lib/render/toast";
 import { GiteeRelease, GiteeRepo, Owner, RepoName, ignoredTag, latestRelease, showUpdateToday, themeType, updateConfig } from "@/lib/user-values";
-import { spawnOffsetTS } from "@/lib/utils";
-import { includes } from "lodash-es";
+import { outputFile, selectLocalFile, spawnOffsetTS } from "@/lib/utils";
+import { filter, forEach, includes, map, zipObject } from "lodash-es";
 import { marked } from "marked";
 
 export type PageType = "index" | "thread" | "forum" | "user" | "unhandled"
@@ -202,4 +202,21 @@ export function setTheme(theme: ReturnType<typeof themeType.get>) {
         document.body.classList.remove("light-theme");
         document.documentElement.classList.add("dark");
     }
+}
+
+export function backupUserConfigs() {
+    const excluded = ["unreadFeeds", "latestRelease", "showUpdateToday"];
+    const userKeys = filter(GM_listValues(), key => !includes(excluded, key));
+    const userValues = map(userKeys, key => {
+        return GM_getValue(key);
+    });
+    const configs = zipObject(userKeys, userValues);
+    outputFile(`tieba-remix-backup@${new Date().getTime()}.json`, JSON.stringify(configs));
+}
+
+export async function restoreUserConfigs() {
+    const backupData = JSON.parse(await selectLocalFile());
+    forEach(Object.entries(backupData), ([key, value]) => {
+        GM_setValue(key, value);
+    });
 }
