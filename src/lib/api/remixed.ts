@@ -86,9 +86,11 @@ export function checkUpdateAndNotify(showLatest = false) {
         if (latestRelease && latestRelease.tag_name.slice(1) !== GM_info.script.version) {
             // 忽略当前版本
             if (ignoredTag.get() === latestRelease.tag_name) return;
+            console.log(latestRelease);
+
 
             messageBox({
-                title: "软件更新",
+                title: latestRelease.name,
                 message: marked(latestRelease.body),
                 embedded: true,
                 type: "OkCancel",
@@ -116,6 +118,7 @@ export function checkUpdateAndNotify(showLatest = false) {
         } else {
             if (showLatest)
                 messageBox({
+                    title: "检查更新",
                     message: "当前已是最新版本",
                     type: "OkCancel",
                 });
