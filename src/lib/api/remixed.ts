@@ -86,8 +86,6 @@ export function checkUpdateAndNotify(showLatest = false) {
         if (latestRelease && latestRelease.tag_name.slice(1) !== GM_info.script.version) {
             // 忽略当前版本
             if (ignoredTag.get() === latestRelease.tag_name) return;
-            console.log(latestRelease);
-
 
             messageBox({
                 title: latestRelease.name,
