@@ -1,4 +1,3 @@
-import imagesViewerVue, { ImageViewerProps } from "@/components/images-viewer.vue";
 import ThreadEditor, { ThreadEditorProps } from "@/components/thread-editor.vue";
 import togglePanelVue, { TogglePanelProps } from "@/components/toggle-panel.vue";
 import UserButton from "@/components/utils/user-button.vue";
@@ -16,9 +15,9 @@ import { compactLayout } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
 import { ElPagination } from "element-plus";
 import { find, forEach, some } from "lodash-es";
+import { ref, watch } from "vue";
 import compactCSS from "./compact.scss?inline";
 import threadCSS from "./thread.scss?inline";
-import { ref, watch } from "vue";
 
 export default async function () {
     if (currentPageType() !== "thread") return;
@@ -203,18 +202,18 @@ export default async function () {
         // });
 
         // 图片绑定组件
-        remixedObservers.postsObserver.addEvent(function () {
-            forEach(DOMS(".BDE_Image", "img"), function (el) {
-                if (!el.classList.contains("image-component")) {
-                    el.classList.add("image-component");
-                    el.onclick = function () {
-                        renderDialog<ImageViewerProps>(imagesViewerVue, {
-                            content: el.src,
-                        });
-                    };
-                }
-            });
-        });
+        // remixedObservers.postsObserver.addEvent(function () {
+        //     forEach(DOMS(".BDE_Image", "img"), function (el) {
+        //         if (!el.classList.contains("image-component")) {
+        //             el.classList.add("image-component");
+        //             el.onclick = function () {
+        //                 renderDialog<ImageViewerProps>(imagesViewerVue, {
+        //                     content: el.src,
+        //                 });
+        //             };
+        //         }
+        //     });
+        // });
 
         // 去除楼中楼用户发言的冒号
         remixedObservers.commentsObserver.addEvent(() => {
