@@ -8,7 +8,7 @@
 <script setup lang="ts">
 interface Props {
     modelValue?: string;
-    mutiLines?: true;
+    mutiLines?: boolean;
     lodashStyle?: boolean;
 }
 
