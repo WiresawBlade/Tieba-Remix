@@ -1,9 +1,10 @@
+import ThemePlus from "@/stylesheets/main/element-plus.scss?inline";
 import materialSymbols from "@/stylesheets/main/material-symbols.css?inline";
 import palette from "@/stylesheets/main/palette.scss?inline";
 import remixedMain from "@/stylesheets/main/remixed-main.scss?inline";
 import utilClassesCSS from "@/stylesheets/main/util-classes.scss?inline";
+import "element-plus/dist/index.css";
 import darkVars from "element-plus/theme-chalk/dark/css-vars.css?inline";
-import ThemePlus from "@/stylesheets/main/element-plus.scss?inline";
 import indexVue from "./components/pages/index.vue";
 import { checkUpdateAndNotify, currentPageType, setTheme } from "./lib/api/remixed";
 import { DOMS, afterHead, templateCreate } from "./lib/elemental";
