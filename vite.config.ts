@@ -3,12 +3,39 @@ import vueJSX from "@vitejs/plugin-vue-jsx";
 import deepmerge from "deepmerge";
 import { resolve } from "path";
 import postcssPresetEnv from "postcss-preset-env";
-import AutoImport from "unplugin-auto-import/vite";
-import ElementPlus from "unplugin-element-plus/vite";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
+// import AutoImport from "unplugin-auto-import/vite";
+// import ElementPlus from "unplugin-element-plus/vite";
+// import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+// import Components from "unplugin-vue-components/vite";
 import { UserConfig, defineConfig } from "vite";
-import monkey from "vite-plugin-monkey";
+import monkey, { MonkeyOption, cdn } from "vite-plugin-monkey";
+
+const scriptOptions: MonkeyOption = {
+    entry: "src/main.ts",
+    userscript: {
+        name: "Tieba Remix",
+        namespace: "https://github.com/WiresawBlade/Tieba-Remix",
+        version: "0.4.1-beta",
+        description: "贴吧网页端重塑",
+        author: "锯条",
+        license: "MIT",
+        updateURL: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js",
+        downloadURL: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js",
+        icon: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon16.png",
+        icon64: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon64.png",
+        match: [
+            "*://tieba.baidu.com/*",
+            "*://jump.bdimg.com/*",
+            "*://jump2.bdimg.com/*",
+        ],
+        "run-at": "document-start",
+    },
+    build: {
+        externalResource: {
+            "element-plus/dist/index.css": cdn.jsdelivrFastly(),
+        },
+    },
+};
 
 const commonConfig = defineConfig({
     build: {
@@ -32,39 +59,13 @@ const commonConfig = defineConfig({
     plugins: [
         vue(),
         vueJSX({}),
-        AutoImport({
-            resolvers: [ElementPlusResolver()],
-        }),
-        Components({
-            resolvers: [ElementPlusResolver()],
-        }),
-        ElementPlus({}),
-        monkey({
-            entry: "src/main.ts",
-            userscript: {
-                name: "Tieba Remix",
-                namespace: "https://github.com/WiresawBlade/Tieba-Remix",
-                version: "0.4.1-beta",
-                description: "贴吧网页端重塑",
-                author: "锯条",
-                license: "MIT",
-                updateURL: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js",
-                downloadURL: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js",
-                icon: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon16.png",
-                icon64: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon64.png",
-                match: [
-                    "*://tieba.baidu.com/*",
-                    "*://jump.bdimg.com/*",
-                    "*://jump2.bdimg.com/*",
-                ],
-                "run-at": "document-start",
-            },
-            // build: {
-            //     externalGlobals: {
-            //         vue: cdn.jsdelivr("Vue", "build/vue.global.prod.js"),
-            //     },
-            // },
-        }),
+        // AutoImport({
+        //     resolvers: [ElementPlusResolver()],
+        // }),
+        // Components({
+        //     resolvers: [ElementPlusResolver()],
+        // }),
+        // ElementPlus({}),
     ],
     resolve: {
         alias: [
@@ -97,6 +98,40 @@ const devConfig = defineConfig({
         minify: false,
         cssMinify: false,
     },
+    plugins: [
+        monkey(scriptOptions),
+    ],
+});
+
+const forkConfig = defineConfig({
+    build: {
+        minify: false,
+        cssMinify: false,
+        rollupOptions: {
+            output: {
+                globals: {
+                    "vue": "Vue",
+                    "element-plus": "ElementPlus",
+                    "marked": "marked",
+                },
+            },
+        },
+    },
+    plugins: [
+        monkey(deepmerge(scriptOptions, {
+            build: {
+                externalGlobals: {
+                    "vue": cdn.jsdelivrFastly("Vue", "dist/vue.global.prod.js").concat(
+                        `data:application/javascript,${encodeURIComponent(
+                            `;window.Vue=Vue;`,
+                        )}`,
+                    ),
+                    "element-plus": cdn.jsdelivrFastly("ElementPlus", "dist/index.full.min.js"),
+                    "marked": cdn.jsdelivrFastly("marked", "lib/marked.umd.min.js"),
+                },
+            },
+        })),
+    ],
 });
 
 const prodConfig = defineConfig({
@@ -114,12 +149,16 @@ const prodConfig = defineConfig({
             },
         },
     },
+    plugins: [
+        monkey(scriptOptions),
+    ],
 });
 
 const viteConfig = {
     build: {
         "development": () => deepmerge<UserConfig>(commonConfig, devConfig),
         "production": () => deepmerge<UserConfig>(commonConfig, prodConfig),
+        "fork": () => deepmerge<UserConfig>(commonConfig, forkConfig),
     },
     serve: {
         "development": () => deepmerge<UserConfig>(commonConfig, devConfig),
@@ -127,6 +166,5 @@ const viteConfig = {
 };
 
 export default defineConfig(({ command, mode }) => {
-    console.log(command, mode);
     return viteConfig[command][mode]();
 });
