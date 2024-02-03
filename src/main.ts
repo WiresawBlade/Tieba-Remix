@@ -12,10 +12,11 @@ import { injectCSSList, parseMultiCSS } from "./lib/elemental/styles";
 import { remixedObservers } from "./lib/observers";
 import { removeDefault, renderPage } from "./lib/render";
 import { parseUserModules } from "./lib/unsafe";
-import { REMIXED, pageExtensions, themeColor, themeType, wideScreen } from "./lib/user-values";
+import { REMIXED, pageExtensions, themeColor, themeType, userFonts, wideScreen } from "./lib/user-values";
 import { AllModules, waitUtil } from "./lib/utils";
 import { hexToRGBA, rgbaToHSLA } from "./lib/utils/color";
 import favicon from "/assets/images/main/favicon32.ico";
+import { join } from "lodash-es";
 
 (function loadNewIndex() {
     if (!pageExtensions.get().index) return;
@@ -90,6 +91,7 @@ import favicon from "/assets/images/main/favicon32.ico";
             "--content-max": wideScreen.get().noLimit
                 ? "100vw"
                 : `${wideScreen.get().maxPX}px`,
+            "--code-zh": `${join(userFonts.get(), ",")}`,
         },
 
         ":root .dark-theme": {

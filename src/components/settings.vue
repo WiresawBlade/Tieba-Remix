@@ -68,11 +68,13 @@
                         </div>
                     </div>
 
-                    <!-- Textbox -->
-                    <UserTextbox v-if="widget.type === 'textbox'" class="content-textbox"
-                        :value="widget.init ? widget.init() : ''" :placeholder="widget.placeHolder" @change="widget.event">
+                    <!-- Textbox & TextArea -->
+                    <UserTextbox v-if="includes(['textbox', 'textarea'], widget.type)" class="content-textbox"
+                        :class="{ 'textarea': widget.type === 'textarea' }" :value="widget.init ? widget.init() : ''"
+                        :muti-lines="widget.type === 'textarea'" :placeholder="widget.placeHolder" @change="widget.event">
                     </UserTextbox>
 
+                    <!-- Image -->
                     <img v-if="widget.type === 'image'" class="content-image" :src="widget.content?.toString()"
                         :alt="widget.altContent" :title="widget.altContent" @load="widget.init">
 
@@ -87,11 +89,11 @@
 </template>
 
 <script lang="tsx" setup>
-import { GM_deleteValue, GM_getValue, GM_listValues, GM_setValue } from "$";
+import { GM_deleteValue, GM_listValues } from "$";
 import { backupUserConfigs, restoreUserConfigs, setTheme } from "@/lib/api/remixed";
-import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtensions, themeType, updateConfig, wideScreen } from "@/lib/user-values";
-import { AllModules, isRealObject, outputFile, selectLocalFile } from "@/lib/utils";
-import { debounce, filter, find, forEach, includes, map, pull, zipObject } from "lodash-es";
+import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtensions, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
+import { AllModules, isRealObject } from "@/lib/utils";
+import { debounce, find, forEach, includes, join, pull, split } from "lodash-es";
 import type { Component, VNode } from "vue";
 import { markRaw, ref } from "vue";
 import { JSX } from "vue/jsx-runtime";
@@ -129,7 +131,7 @@ export interface SettingContent {
     title?: string
     description?: string
     widgets?: {
-        type: "toggle" | "icon" | "button" | "select" | "subTitle" | "desc" | "textbox" | "image" | "component"
+        type: "toggle" | "icon" | "button" | "select" | "subTitle" | "desc" | "textbox" | "textarea" | "image" | "component"
         init?: (() => any)
         event?: ((e: Event) => any)
         content?: string | LiteralObject
@@ -310,6 +312,28 @@ const settings: UserSettings = {
                         }],
                     },
                 } as Record<keyof ReturnType<typeof pageExtensions.get>, SettingContent>,
+            },
+
+            "fonts": {
+                name: "字体",
+                content: {
+                    "code-zh": {
+                        title: "主要字体组合",
+                        description:
+                            `应用在贴吧绝大多数场合的字体组合。`,
+                        widgets: [{
+                            type: "textarea",
+                            placeHolder: "写入字体名，以换行分隔。若需要中英文混排，需将英文字体写在中文字体之前。",
+                            init() {
+                                return join(userFonts.get(), "\n");
+                            },
+                            event(e) {
+                                userFonts.set(split((e.target as HTMLInputElement).value, "\n"));
+                                return join(userFonts.get(), "\n");
+                            },
+                        }],
+                    },
+                },
             },
         },
     },
@@ -733,7 +757,14 @@ $wrapper-padding: 16px;
             }
 
             .content-textbox {
+                box-sizing: content-box;
                 margin-left: auto;
+
+                &.textarea {
+                    width: 100%;
+                    height: 6em;
+                    resize: none;
+                }
             }
 
             .content-image {

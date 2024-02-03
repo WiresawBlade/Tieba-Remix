@@ -108,7 +108,7 @@ export type PerfType = "dataSaver" | "performance";
 /** 用户禁用的所有模块的 id */
 export const disabledModules = new UserKey<string[]>("disabledModules", []);
 /** 性能配置 */
-export const perfProfile = new UserKey<PerfType>("prefProfile", "performance");
+export const perfProfile = new UserKey<PerfType>("perfProfile", "performance");
 /** 未读推送 */
 export const unreadFeeds = new UserKeyTS<TiebaPost[]>("unreadFeeds", []);
 /** 实验性功能配置 */
@@ -145,6 +145,8 @@ export const pageExtensions = new UserKey("pageExtension", {
     index: true,
     thread: true,
 });
+/** 自定义 font-family */
+export const userFonts = new UserKey<string[]>("userFonts", []);
 
 export const SymbolFont = "Material Symbols";
 

@@ -42,7 +42,6 @@ $warning-color: color.adjust(orange, $blackness: 10%);
 $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon.png");
 
 :root {
-    --code-zh: "Consolas", "JetBrains Mono", "Fira Code", "Menlo", sans-serif;
     --img-tieba-icon: #{$iconMain};
 
     color-scheme: light dark;
