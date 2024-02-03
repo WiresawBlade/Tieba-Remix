@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "builddev": "vite build --mode development",
+        "build-dev": "vite build --mode development",
+        "build-fork": "vite build --mode fork",
         "preview": "vite preview"
     },
     "dependencies": {
