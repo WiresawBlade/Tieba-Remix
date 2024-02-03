@@ -20,8 +20,7 @@ const commonConfig = defineConfig({
         },
         outDir: "build",
         reportCompressedSize: false,
-        cssMinify: true,
-        cssCodeSplit: true,
+        cssCodeSplit: false,
     },
     css: {
         postcss: {
@@ -57,16 +56,6 @@ const commonConfig = defineConfig({
                     "*://tieba.baidu.com/*",
                     "*://jump.bdimg.com/*",
                     "*://jump2.bdimg.com/*",
-                ],
-                grant: [
-                    "unsafeWindow",
-                    "GM_addElement",
-                    "GM_registerMenuCommand",
-                    "GM_getValue",
-                    "GM_setValue",
-                    "GM_deleteValue",
-                    "GM_listValues",
-                    "GM_openInTab",
                 ],
                 "run-at": "document-start",
             },
@@ -106,12 +95,14 @@ const commonConfig = defineConfig({
 const devConfig = defineConfig({
     build: {
         minify: false,
+        cssMinify: false,
     },
 });
 
 const prodConfig = defineConfig({
     build: {
         minify: "terser",
+        cssMinify: true,
         terserOptions: {
             sourceMap: false,
             toplevel: true,
