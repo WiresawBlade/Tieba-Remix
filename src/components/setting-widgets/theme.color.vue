@@ -16,6 +16,7 @@
 
 <script lang="ts" setup>
 import { themeColor } from "@/lib/user-values";
+import { ElColorPicker } from "element-plus";
 import { ref } from "vue";
 import UserButton from "../utils/user-button.vue";
 
