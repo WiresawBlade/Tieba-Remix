@@ -13,7 +13,8 @@ import { floatBar } from "@/lib/tieba-components/float-bar";
 import { threadParser } from "@/lib/tieba-components/thread";
 import { compactLayout } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
-import { ElPagination } from "element-plus";
+import { ElConfigProvider, ElPagination } from "element-plus";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { find, forEach, some } from "lodash-es";
 import { ref, watch } from "vue";
 import compactCSS from "./compact.scss?inline";
@@ -233,16 +234,18 @@ export default async function () {
     // pager 相关
     const currPage = ref(PageData.pager.cur_page);
     const createPager = () =>
-        <ElPagination
-            v-model:current-page={currPage.value}
-            background={true}
-            page-size={1}
-            pager-count={11}
-            total={PageData.pager.total_page}
-            defaultCurrentPage={PageData.pager.cur_page}
-            layout="prev, pager, next, jumper, ->"
-            style="margin-bottom: 6px;">
-        </ElPagination>;
+        <ElConfigProvider locale={zhCn}>
+            <ElPagination
+                v-model:current-page={currPage.value}
+                background={true}
+                page-size={1}
+                pager-count={11}
+                total={PageData.pager.total_page}
+                defaultCurrentPage={PageData.pager.cur_page}
+                layout="prev, pager, next, jumper, ->"
+                style="margin-bottom: 6px;">
+            </ElPagination>
+        </ElConfigProvider>;
     watch(currPage, newValue => {
         const search = new URLSearchParams(location.search);
         search.set("pn", newValue.toString());
