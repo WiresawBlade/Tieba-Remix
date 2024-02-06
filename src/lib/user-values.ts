@@ -141,7 +141,7 @@ export const themeColor = new UserKey("themeColor", {
 /** 用户自定义背景图 */
 export const customBackground = new UserKey<string | null>("customBackground", null);
 /** 页面扩展 */
-export const pageExtensions = new UserKey("pageExtension", {
+export const pageExtension = new UserKey("pageExtension", {
     index: true,
     thread: true,
 });

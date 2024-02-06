@@ -91,7 +91,7 @@
 <script lang="tsx" setup>
 import { GM_deleteValue, GM_listValues } from "$";
 import { backupUserConfigs, restoreUserConfigs, setTheme } from "@/lib/api/remixed";
-import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtensions, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
+import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtension, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
 import { AllModules, isRealObject } from "@/lib/utils";
 import { debounce, find, forEach, includes, join, pull, split } from "lodash-es";
 import type { Component, VNode } from "vue";
@@ -276,7 +276,7 @@ const settings: UserSettings = {
                 },
             },
 
-            "page-extensions": {
+            "page-extension": {
                 name: "页面扩展",
                 content: {
                     "index": {
@@ -287,11 +287,11 @@ const settings: UserSettings = {
                         widgets: [{
                             type: "toggle",
                             init() {
-                                return pageExtensions.get().index;
+                                return pageExtension.get().index;
                             },
                             event() {
-                                pageExtensions.merge({ index: !pageExtensions.get().index });
-                                return pageExtensions.get().index;
+                                pageExtension.merge({ index: !pageExtension.get().index });
+                                return pageExtension.get().index;
                             },
                         }],
                     },
@@ -303,15 +303,15 @@ const settings: UserSettings = {
                         widgets: [{
                             type: "toggle",
                             init() {
-                                return pageExtensions.get().thread;
+                                return pageExtension.get().thread;
                             },
                             event() {
-                                pageExtensions.merge({ thread: !pageExtensions.get().thread });
-                                return pageExtensions.get().thread;
+                                pageExtension.merge({ thread: !pageExtension.get().thread });
+                                return pageExtension.get().thread;
                             },
                         }],
                     },
-                } as Record<keyof ReturnType<typeof pageExtensions.get>, SettingContent>,
+                } as Record<keyof ReturnType<typeof pageExtension.get>, SettingContent>,
             },
 
             "fonts": {
