@@ -49,7 +49,7 @@ export async function loadDynamicCSS() {
             "--code-zh": `${join(userFonts.get(), ",")}`,
         },
 
-        ":root .dark-theme": {
+        "html.dark-theme": {
             "--tieba-theme-color": theme.dark,
             "--trans-tieba-theme-color": `rgb(${darkRGBA.r} ${darkRGBA.g} ${darkRGBA.b} / 80%)`,
             "--tieba-theme-hover": `hsl(${darkHSLA.h}deg ${parseInt(darkHSLA.s) + 40}% ${parseInt(darkHSLA.l) + 10}%)`,
@@ -58,7 +58,7 @@ export async function loadDynamicCSS() {
             "--tieba-theme-fore": `hsl(${darkHSLA.h}deg 100% 75%)`,
         },
 
-        ":root .light-theme": {
+        "html.light-theme": {
             "--tieba-theme-color": theme.light,
             "--trans-tieba-theme-color": `rgb(${lightRGBA.r} ${lightRGBA.g} ${lightRGBA.b} / 80%)`,
             "--tieba-theme-hover": `hsl(${lightHSLA.h}deg ${parseInt(lightHSLA.s) - 40}% ${parseInt(lightHSLA.l) - 10}%)`,
