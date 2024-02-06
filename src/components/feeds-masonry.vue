@@ -184,7 +184,7 @@ function refreshAndMove() {
 .masonry-wrapper {
     display: flex;
     width: 100%;
-    min-width: var(--content-max);
+    max-width: var(--content-max);
     flex-direction: column;
     align-items: center;
     gap: 12px;

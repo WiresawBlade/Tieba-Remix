@@ -171,7 +171,6 @@ const feedsIntersecting = ref(false);
 let signedForums = 0;
 
 initFeeds.value = unreadFeeds.get();
-console.log("🚀 ~ file: index.vue:197 ~ initFeeds.value:", initFeeds.value);
 
 // 初始化
 onMounted(async () => {
@@ -209,7 +208,6 @@ async function init() {
             });
         }
     })();
-    console.log("user info", userInfo.value);
 
     // 配置菜单
     configMenu.value = [
@@ -756,6 +754,7 @@ a {
 
     .masonry-container {
         display: flex;
+        width: 100%;
         box-sizing: border-box;
         flex-direction: column;
         align-items: center;
