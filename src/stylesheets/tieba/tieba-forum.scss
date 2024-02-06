@@ -1,3 +1,5 @@
+@use "@/stylesheets/main/remixed-main" as *;
+
 .threadlist_title a,
 .threadlist_title a:hover,
 .threadlist_title a:visited {
@@ -152,9 +154,9 @@
 }
 
 .search_internal_btn::after {
+    @extend %icon;
     color: var(--default-background);
     content: "search";
-    font-family: "Material Symbols";
     font-size: 18px;
     font-weight: bold;
     line-height: 26px;
@@ -342,8 +344,8 @@
 }
 
 .icon_author::after {
+    @extend %icon;
     content: "person";
-    font-family: "Material Symbols";
     font-style: normal;
 }
 
@@ -353,7 +355,7 @@
 }
 
 .icon_replyer::after {
+    @extend %icon;
     content: "comment";
-    font-family: "Material Symbols";
     font-style: normal;
 }
