@@ -8,12 +8,6 @@ import { assignCSSRule, injectCSSList, injectCSSRule, parseMultiCSS } from "@/li
 import { remixedObservers } from "@/lib/observers";
 import { defaults } from "lodash-es";
 
-import mainCSS from "./_tieba-main.scss?inline";
-import homeCSS from "./_tieba-home.css?inline";
-import postsCSS from "./_tieba-post.css?inline";
-import barCSS from "./_tieba-bar.css?inline";
-import errorCSS from "./_tieba-error.css?inline";
-
 import userButtonCSS from "@/stylesheets/components/user-button.scss?inline";
 import floatBarCSS from "./tieba-components/float-bar.scss?inline";
 import floatMessageCSS from "@/stylesheets/components/float-message.scss?inline";
@@ -21,9 +15,8 @@ import floatMessageCSS from "@/stylesheets/components/float-message.scss?inline"
 import _navBar from "./tieba-components/nav-bar";
 _navBar();
 
-import thread from "./thread/thread";
 import { setCustomBackground } from "@/lib/theme";
-import { pageExtensions } from "@/lib/user-values";
+import { pageExtension } from "@/lib/user-values";
 
 export default {
     id: "remixed-theme",
@@ -41,17 +34,15 @@ const themeSheets: HTMLStyleElement[] = [];
 
 function main(): void {
     // 全局加载
-    themeSheets.push(injectCSSList(mainCSS));
-    themeSheets.push(injectCSSList(postsCSS));
-    themeSheets.push(injectCSSList(homeCSS));
-    themeSheets.push(injectCSSList(errorCSS));
+    // themeSheets.push(injectCSSList(mainCSS));
+    // themeSheets.push(injectCSSList(postsCSS));
+    // themeSheets.push(injectCSSList(homeCSS));
+    // themeSheets.push(injectCSSList(errorCSS));
 
     // 组件
     themeSheets.push(injectCSSList(userButtonCSS));
     themeSheets.push(injectCSSList(floatBarCSS));
     themeSheets.push(injectCSSList(floatMessageCSS));
-
-    if (pageExtensions.get().thread) thread();
 
     // 耗时加载元素
     fadeInElems.push(".tbui_aside_float_bar .svg-container");
@@ -67,9 +58,9 @@ function main(): void {
     setCustomBackground();
 
     // 进吧页面
-    if (location.href.indexOf("kw=") !== -1) {
-        themeSheets.push(injectCSSList(barCSS));
-    }
+    // if (location.href.indexOf("kw=") !== -1) {
+    //     themeSheets.push(injectCSSList(barCSS));
+    // }
 
     document.addEventListener("DOMContentLoaded", () => {
         // 修改元素
