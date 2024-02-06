@@ -1,6 +1,6 @@
 <template>
     <component :is="isAnchor ? 'a' : 'button'" class="user-button"
-        :class="{ 'shadow-border': props.shadowBorder, 'unset-background': props.unsetBackground, 'theme-style': props.themeStyle, 'no-border': props.noBorder }"
+        :class="{ 'shadow-border': props.shadowBorder, 'unset-background': props.unsetBackground, 'theme-style': props.themeStyle, 'no-border': props.noBorder, 'no-border-all': props.noBorder === 'all' }"
         type="button">
         <slot></slot>
     </component>
@@ -12,7 +12,7 @@ interface Props {
     shadowBorder?: true
     unsetBackground?: true
     themeStyle?: boolean
-    noBorder?: boolean
+    noBorder?: boolean | "all"
 }
 
 const props = defineProps<Props>();

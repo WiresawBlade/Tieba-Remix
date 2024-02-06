@@ -33,7 +33,8 @@
         </UserButton>
 
         <div class="control-panel bottom-controls">
-            <UserButton v-for="image, index in imageArray" class="bottom-btn" :class="{ 'selected': index === curr }">
+            <UserButton v-for="image, index in imageArray" class="bottom-btn" :class="{ 'selected': index === curr }"
+                no-border="all">
                 <img class="image-list" :src="image" alt="" @click="changeCurr(index)">
             </UserButton>
         </div>

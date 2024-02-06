@@ -14,7 +14,8 @@
         </div>
 
         <div v-if="props.post.images.length > 0" class="img-container">
-            <UserButton v-for="image, index in props.post.images" class="img-button" @click="showImage($event, index)">
+            <UserButton v-for="image, index in props.post.images" class="img-button" @click="showImage($event, index)"
+                no-border="all">
                 <img class="post-img" :src="isIntersecting ? image.original : ''" @load="addLoadedPost">
             </UserButton>
         </div>

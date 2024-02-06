@@ -33,6 +33,15 @@
         box-shadow: none;
     }
 
+    &.no-border-all {
+        box-shadow: none;
+
+        &:hover,
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
     &:hover {
         background-color: var(--default-hover);
     }
