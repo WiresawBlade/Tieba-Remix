@@ -227,9 +227,11 @@ export default async function () {
             });
         });
 
-        // 由于容器移动，需要重启 observer
-        // remixedObservers.postsObserver.observe();
-        // remixedObservers.commentsObserver.observe();
+        // 开发模式需要重启 observer
+        if (import.meta.env.DEV) {
+            remixedObservers.postsObserver.observe();
+            remixedObservers.commentsObserver.observe();
+        }
     }
 
     // pager 相关
