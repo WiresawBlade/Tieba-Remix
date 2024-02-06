@@ -84,14 +84,14 @@
                 </div>
             </div>
         </div>
-        <div v-else class="empty-container icon">settings</div>
+        <div v-else class="empty-container filled-icon">settings</div>
     </div>
 </template>
 
 <script lang="tsx" setup>
 import { GM_deleteValue, GM_listValues } from "$";
 import { backupUserConfigs, restoreUserConfigs, setTheme } from "@/lib/api/remixed";
-import { UpdateConfig, compactLayout, disabledModules, experimental, pageExtension, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
+import { UpdateConfig, compactLayout, disabledModules, experimental, monospaceFonts, pageExtension, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
 import { AllModules, isRealObject } from "@/lib/utils";
 import { debounce, find, forEach, includes, join, pull, split } from "lodash-es";
 import type { Component, VNode } from "vue";
@@ -320,7 +320,7 @@ const settings: UserSettings = {
                     "code-zh": {
                         title: "主要字体组合",
                         description:
-                            `应用在贴吧绝大多数场合的字体组合。`,
+                            `应用在贴吧绝大多数场景的字体组合。`,
                         widgets: [{
                             type: "textarea",
                             placeHolder: "写入字体名，以换行分隔。若需要中英文混排，需将英文字体写在中文字体之前。",
@@ -330,6 +330,22 @@ const settings: UserSettings = {
                             event(e) {
                                 userFonts.set(split((e.target as HTMLInputElement).value, "\n"));
                                 return join(userFonts.get(), "\n");
+                            },
+                        }],
+                    },
+
+                    "code-monospace": {
+                        title: "等宽字体组合",
+                        description: `应用在数据显示等场景的等宽字体组合。`,
+                        widgets: [{
+                            type: "textarea",
+                            placeHolder: "写入字体名，以换行分隔。建议在此处写入等宽字体。",
+                            init() {
+                                return join(monospaceFonts.get(), "\n");
+                            },
+                            event(e) {
+                                monospaceFonts.set(split((e.target as HTMLInputElement).value, "\n"));
+                                return join(monospaceFonts.get(), "\n");
                             },
                         }],
                     },

@@ -145,8 +145,12 @@ export const pageExtension = new UserKey("pageExtension", {
     index: true,
     thread: true,
 });
-/** 自定义 font-family */
+/** 自定义主要字体组合 */
 export const userFonts = new UserKey<string[]>("userFonts", []);
+/** 自定义等宽字体组合 */
+export const monospaceFonts = new UserKey<string[]>("monospaceFonts", [
+    "Consolas", "JetBrains Mono", "Fira Code", "Menlo", "monospace",
+]);
 
 export const SymbolFont = "Material Symbols";
 

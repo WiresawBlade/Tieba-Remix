@@ -3,7 +3,7 @@ import { findIndex, join } from "lodash-es";
 import { currentPageType, getResource } from "../api/remixed";
 import { afterHead, templateCreate } from "../elemental";
 import { defaultStyle, injectCSSRule, parseMultiCSS, removeCSSRule } from "../elemental/styles";
-import { customBackground, themeColor, userFonts, wideScreen } from "../user-values";
+import { customBackground, monospaceFonts, themeColor, userFonts, wideScreen } from "../user-values";
 import { waitUtil } from "../utils";
 import { hexToRGBA, rgbaToHSLA } from "../utils/color";
 
@@ -47,6 +47,7 @@ export async function loadDynamicCSS() {
                 ? "100vw"
                 : `${wideScreen.get().maxPX}px`,
             "--code-zh": `${join(userFonts.get(), ",")}`,
+            "--code-monospace": `${join(monospaceFonts.get(), ",")}`,
         },
 
         "html.dark-theme": {
@@ -75,12 +76,9 @@ export async function loadTiebaCSS() {
     GM_addStyle(tiebaCSS);
     GM_addStyle(homeCSS);
     GM_addStyle(errorCSS);
+    GM_addStyle(threadCSS);
 
     switch (currentPageType()) {
-        case "thread":
-            GM_addStyle(threadCSS);
-            break;
-
         case "forum":
             GM_addStyle(forumCSS);
             break;

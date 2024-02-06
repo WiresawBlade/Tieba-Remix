@@ -131,7 +131,7 @@ onMounted(async () => {
         }
 
         .up-name {
-            font-family: monospace;
+            font-family: var(--code-monospace);
         }
     }
 }

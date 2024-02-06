@@ -96,6 +96,8 @@ function addLoadedPost() {
 </script>
 
 <style scoped lang="scss">
+@use "@/stylesheets/main/remixed-main" as *;
+
 a {
     color: unset;
     text-decoration: none;
@@ -238,14 +240,15 @@ img::before {
             border-radius: 24px;
             margin-left: auto;
             color: var(--light-fore);
-            font-family: monospace;
+            font-family: var(--code-monospace);
+            font-size: 13px;
             font-weight: bold;
         }
 
         .replies::before {
+            @extend %icon;
             margin-right: 6px;
             content: "forum";
-            font-family: "Material Symbols", monospace;
             font-size: 16px;
             font-weight: normal;
         }

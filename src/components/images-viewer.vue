@@ -222,7 +222,7 @@ $panel-radius: 12px;
 
         span {
             color: var(--minimal-fore);
-            font-family: var(--code-zh);
+            font-family: var(--code-monospace);
         }
 
         .zoom-size {
