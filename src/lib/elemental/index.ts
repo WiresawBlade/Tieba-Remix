@@ -1,5 +1,5 @@
 import { isRealObject } from "@/lib/utils";
-import { forOwn, merge } from "lodash-es";
+import { forEach, forOwn, merge } from "lodash-es";
 
 export const fadeInElems: string[] = [];
 const fadeInClass = "fade-in-elem";
@@ -19,20 +19,48 @@ export function DOMS(selector: string, parent?: Element): HTMLElement[];
 export function DOMS<T extends keyof HTMLElementTagNameMap>(
     selector: string, type: T, parent?: Element
 ): HTMLElementTagNameMap[T][];
+/**
+ * 使用 CSS 选择器查找单个元素
+ * @param single 只查询单个元素
+ * @param selector 选择器字符串
+ * @param parent 从哪个元素开始查找
+ */
+export function DOMS(single: true, selector: string, parent?: Element): HTMLElement;
+/**
+ * 该函数会根据 `type` 参数返回对应类型的元素数组，而不是 `NodeList` 
+ * @param single 只查询单个元素
+ * @param selector 选择器字符串
+ * @param type 选择的元素的标签名
+ * @param parent 从哪个元素开始查找
+ */
+export function DOMS<T extends keyof HTMLElementTagNameMap>
+    (single: true, selector: string, type: T, parent?: Element)
+    : HTMLElementTagNameMap[T];
 
 export function DOMS<_T extends keyof HTMLElementTagNameMap>(...args: any[]): any {
-    const selector = args[0];
+    const single = args[0] === true;
+    const selector = single ? args[1] : args[0];
     switch (args.length) {
         case 1:
             return document.querySelectorAll(selector);
         case 2:
+            if (single)
+                return document.querySelector(selector);
+
             if (args[1] instanceof Element) {
                 return (args[1] as Element).querySelectorAll(selector);
-            } else {
-                return document.querySelectorAll(selector);
             }
+            return document.querySelectorAll(selector);
         case 3:
+            if (single) {
+                if (args[2] instanceof Element)
+                    return (args[2]).querySelector(selector);
+                return document.querySelector(selector);
+            }
+
             return (args[2] as Element).querySelectorAll(selector);
+        case 4:
+            return (args[3] as Element).querySelector(selector);
     }
 }
 
@@ -41,16 +69,18 @@ export function DOMS<_T extends keyof HTMLElementTagNameMap>(...args: any[]): an
  * @param callbackfn 回调函数
  */
 export function afterHead(callbackfn: () => void) {
-    new Promise<void>((_resolve, reject) => {
-        try {
-            const head = document.getElementsByTagName("head");
-            if (head && head.length) {
-                callbackfn();
-            }
-        } catch (error) {
-            reject(error);
-        }
-    });
+    // return new Promise<void>((resolve, reject) => {
+    //     try {
+    //         const head = document.head;
+    //         if (head) {
+    //             callbackfn();
+    //             resolve();
+    //         }
+    //     } catch (error) {
+    //         reject(error);
+    //     }
+    // });
+    callbackfn();
 }
 
 /**
@@ -138,7 +168,7 @@ export function mergeNodeAttrsDeeply<T extends HTMLElement>(
  * @returns 被创建的节点
  */
 export function templateCreate<T extends keyof HTMLElementTagNameMap>(
-    tag: T, attrs?: LiteralObject, children?: HTMLElement[], doc?: Document,
+    tag: T, attrs?: LiteralObject, children: Node[] | string = [], doc?: Document,
 ): HTMLElementTagNameMap[T] {
     const DOC = doc ? doc : document;
     const elem = DOC.createElement(tag);
@@ -147,10 +177,12 @@ export function templateCreate<T extends keyof HTMLElementTagNameMap>(
         mergeNodeAttrs(elem, attrs);
     }
 
-    if (children) {
-        for (const child of children) {
+    if (typeof children === "string") {
+        elem.appendChild(document.createTextNode(children));
+    } else {
+        forEach(children, child => {
             elem.appendChild(child);
-        }
+        });
     }
 
     return elem;
