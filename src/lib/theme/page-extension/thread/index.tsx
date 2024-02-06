@@ -10,7 +10,6 @@ import { renderDialog } from "@/lib/render";
 import { bindFloatMessage } from "@/lib/render/common-widgets";
 import { appendJSX, insertJSX } from "@/lib/render/jsx-extension";
 import { floatBar } from "@/lib/tieba-components/float-bar";
-import { threadParser } from "@/lib/tieba-components/thread";
 import { compactLayout } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
 import { ElConfigProvider, ElPagination } from "element-plus";
@@ -18,6 +17,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { find, forEach, some } from "lodash-es";
 import { ref, watch } from "vue";
 import compactCSS from "./compact.scss?inline";
+import { threadParser } from "./parser";
 import threadCSS from "./thread.scss?inline";
 
 export default async function () {
@@ -86,13 +86,13 @@ export default async function () {
 
         threadList.classList.add("content-wrapper");
 
-        let thread = threadParser(document);
+        const thread = threadParser();
 
         const forumIconLink = (thread.forum.components.iconContainer.children[0] as HTMLImageElement).src;  // 分辨率比从 PageData 中获取到的更高
 
         insertJSX(
             <div id="title-wrapper" class="title-wrapper">
-                <h3 class="thread-title">{thread.title}</h3>
+                <h3 class="thread-title">{PageData.thread.title}</h3>
 
                 <div class="forum-container">
                     <img class="forum-icon" src={forumIconLink} alt="" />
@@ -118,7 +118,7 @@ export default async function () {
         remixedObservers.postsObserver.addEvent(function () {
             if (DOMS(".d_author").length === 0) return;
 
-            thread = threadParser(document);
+            // thread = threadParser(document);
             forEach(DOMS(".d_post_content_main", "div", threadList), (floor, i) => {
                 const authorContainer = createAuthorContainer(i);
                 floor.insertBefore(authorContainer, floor.firstChild);
