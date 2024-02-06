@@ -25,6 +25,7 @@ const scriptOptions: MonkeyOption = {
         icon64: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon64.png",
         match: [
             "*://tieba.baidu.com",
+            "*://tieba.baidu.com/?*",
             "*://tieba.baidu.com/p/*",
             "*://tieba.baidu.com/f?*",
             "*://jump.bdimg.com/safecheck/*",
