@@ -5,8 +5,9 @@ import { loadBaseCSS, loadDynamicCSS, loadExtensionCSS, loadTiebaCSS } from "./l
 import index from "./lib/theme/page-extension/index";
 import thread from "./lib/theme/page-extension/thread";
 import { parseUserModules } from "./lib/unsafe";
-import { REMIXED, themeType } from "./lib/user-values";
-import { AllModules } from "./lib/utils";
+import { REMIXED, perfProfile, themeType, wideScreen } from "./lib/user-values";
+import { AllModules, waitUtil } from "./lib/utils";
+import { throttle } from "lodash-es";
 
 setTheme(themeType.get());
 loadBaseCSS();
@@ -48,5 +49,31 @@ Promise.all([
 window.addEventListener("load", function () {
     checkUpdateAndNotify();
 });
+
+// 收缩视图检测
+waitUtil(() => document.body !== null).then(function () {
+    if (wideScreen.get().noLimit) {
+        document.body.classList.add("shrink-view");
+    } else {
+        const shrinkListener = throttle(function () {
+            if (window.innerWidth <= wideScreen.get().maxPX) {
+                document.body.classList.add("shrink-view");
+            } else {
+                document.body.classList.remove("shrink-view");
+            }
+        }, 200);
+
+        shrinkListener();
+        window.addEventListener("resize", shrinkListener);
+    }
+});
+
+if (perfProfile.get() === "performance") {
+    if (currentPageType() === "thread") {
+        waitUtil(() => typeof datalazyload !== "undefined").then(function () {
+            datalazyload.userConfig.diff = 9999;
+        });
+    }
+}
 
 console.info(REMIXED);

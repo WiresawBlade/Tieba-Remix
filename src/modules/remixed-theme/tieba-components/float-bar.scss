@@ -14,7 +14,7 @@
 
     @include main-box-shadow;
 
-    @media (max-width: var(--content-max)) {
+    .shrink-view & {
         bottom: 0;
         left: calc(100% - 40px);
     }

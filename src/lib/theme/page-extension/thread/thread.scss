@@ -259,7 +259,7 @@ body.special_conf_skin {
     margin: 36px 0;
     gap: 8px;
 
-    @media (max-width: var(--content-max)) {
+    .shrink-view & {
         padding: 0 24px;
     }
 
