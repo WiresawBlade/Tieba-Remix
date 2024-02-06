@@ -10,7 +10,7 @@ import { renderDialog } from "@/lib/render";
 import { bindFloatMessage } from "@/lib/render/common-widgets";
 import { appendJSX, insertJSX } from "@/lib/render/jsx-extension";
 import { floatBar } from "@/lib/tieba-components/float-bar";
-import { compactLayout } from "@/lib/user-values";
+import { compactLayout, pageExtension } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
 import { ElConfigProvider, ElPagination } from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
@@ -21,6 +21,7 @@ import { threadParser } from "./parser";
 import threadCSS from "./thread.scss?inline";
 
 export default async function () {
+    if (!pageExtension.get().thread) return;
     if (currentPageType() !== "thread") return;
 
     injectCSSList(threadCSS);
