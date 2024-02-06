@@ -27,6 +27,14 @@
 
         a {
             border-radius: 0;
+
+            &:hover {
+                color: var(--tieba-theme-color);
+            }
+
+            &:active {
+                color: var(--tieba-theme-fore);
+            }
         }
 
         &[style*="visibility: hidden"] {
