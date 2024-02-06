@@ -4,6 +4,9 @@ import { afterHead, mergeNodeAttrs } from ".";
 export const defaultStyle = document.createElement("style");  // 默认默认样式
 defaultStyle.id = "default-stylesheet";
 
+export type CSSRule = Partial<CSSStyleDeclaration> | Record<string, string>;
+export type CSSObject = Record<string, CSSRule>;
+
 // 插入默认元素
 afterHead(() => {
     document.head.appendChild(defaultStyle);
@@ -13,7 +16,7 @@ afterHead(() => {
  * 将多组 CSS 规则解析为样式字符串
  * @param cssObject 描述 CSS 选择器 + 规则 的对象
  */
-export function parseMultiCSS(cssObject: LiteralObject) {
+export function parseMultiCSS(cssObject: CSSObject) {
     return flatMapDeep(cssObject, (value, key) => {
         if (isPlainObject(value)) {
             return [
@@ -28,11 +31,9 @@ export function parseMultiCSS(cssObject: LiteralObject) {
     }).join("\n");
 }
 
-export function parseCSSRule(
-    cssObject: Partial<CSSStyleDeclaration>,
-): string {
+export function parseCSSRule(cssRule: CSSRule): string {
     let css = "";
-    forOwn(cssObject, (value, key) => {
+    forOwn(cssRule, (value, key) => {
         css += `${kebabCase(key)}:${value};`;
     });
     return css;
@@ -72,15 +73,15 @@ export function injectCSSFile(filename: string): HTMLLinkElement {
 /**
  * 
  * @param selector 选择器
- * @param cssObject 包含 CSS 规则的对象，属性默认使用驼峰命名法
+ * @param cssRule 包含 CSS 规则的对象，属性默认使用驼峰命名法
  * @returns 该规则的 index 或 `undefined`
  */
-export function injectCSSRule(selector: string, cssObject: Partial<CSSStyleDeclaration>) {
+export function injectCSSRule(selector: string, cssRule: CSSRule) {
     if (selector === "") return;
-    if (cssObject.length === 0) return;
+    if (cssRule.length === 0) return;
     if (!defaultStyle.sheet) return;
 
-    const css = `${selector}{${parseCSSRule(cssObject)}}`;
+    const css = `${selector}{${parseCSSRule(cssRule)}}`;
     return defaultStyle.sheet.insertRule(css);
 }
 
@@ -98,6 +99,6 @@ export function removeCSSRule(index: number) {
  * @param el 待操作 DOM
  * @param cssRule CSS 规则
  */
-export function assignCSSRule(el: Element, cssRule: Partial<CSSStyleDeclaration>) {
+export function assignCSSRule(el: Element, cssRule: CSSRule) {
     assign((el as HTMLElement).style, cssRule);
 }
