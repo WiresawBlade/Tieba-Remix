@@ -1,5 +1,7 @@
 <template>
-    <div ref="headerProgress" id="header-progress" :style="`width: ${valueRef}vw;`"></div>
+    <div ref="headerProgress" id="header-progress" :class="{ 'complete': valueRef >= 100 }"
+        :style="`width: ${valueRef}vw;`">
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -31,6 +33,8 @@ function calcValue() {
 </script>
 
 <style lang="scss" scoped>
+@use "@/stylesheets/main/animations" as *;
+
 #header-progress {
     position: fixed;
     z-index: 99999;
@@ -39,5 +43,9 @@ function calcValue() {
     height: 4px;
     background-color: var(--tieba-theme-color);
     transition: 0.4s;
+
+    &.complete {
+        animation: kf-fade-out $xslow-animation-duration forwards;
+    }
 }
 </style>
