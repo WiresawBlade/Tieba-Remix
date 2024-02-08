@@ -43,8 +43,6 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/ima
 
 :root {
     --img-tieba-icon: #{$iconMain};
-
-    color-scheme: light dark;
 }
 
 .dark-theme {
@@ -86,6 +84,8 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/ima
     --check-color: color.adjust(green, $lightness: 10%);
     --error-color: color.adjust(red, $lightness: 16%);
     --warning-color: color.adjust(orange, $blackness: 10%);
+
+    color-scheme: dark;
 }
 
 .light-theme {
@@ -127,4 +127,6 @@ $iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/ima
     --check-color: color.adjust(green, $lightness: 10%);
     --error-color: color.adjust(red, $lightness: 16%);
     --warning-color: color.adjust(orange, $blackness: 10%);
+
+    color-scheme: "light";
 }
