@@ -13,7 +13,7 @@
             </div>
 
             <div class="about-desc">
-                <div v-for="line in `本开源项目使用 ${GM_info.script.license} 协议`.split('\n')" class="line">{{ line }}</div>
+                <div v-for="line in `本开源项目使用 MIT 协议`.split('\n')" class="line">{{ line }}</div>
             </div>
         </div>
 
@@ -37,6 +37,7 @@ import { GithubRepo, MainTitle } from "@/lib/user-values";
 import UserButton from "../utils/user-button.vue";
 import { GM_info } from "$";
 import { getResource } from "@/lib/api/remixed";
+import { forEach, split } from "lodash-es";
 
 const scriptInfo = GM_info;
 
