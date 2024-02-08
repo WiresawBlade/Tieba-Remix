@@ -87,7 +87,7 @@ export default async function () {
 
         threadList.classList.add("content-wrapper");
 
-        const thread = threadParser();
+        let thread = threadParser();
 
         const forumIconLink = (thread.forum.components.iconContainer.children[0] as HTMLImageElement).src;  // 分辨率比从 PageData 中获取到的更高
 
@@ -119,7 +119,8 @@ export default async function () {
         remixedObservers.postsObserver.addEvent(function () {
             if (DOMS(".d_author").length === 0) return;
 
-            // thread = threadParser(document);
+            // TODO: performance
+            thread = threadParser();
             forEach(DOMS(".d_post_content_main", "div", threadList), (floor, i) => {
                 const authorContainer = createAuthorContainer(i);
                 floor.insertBefore(authorContainer, floor.firstChild);
