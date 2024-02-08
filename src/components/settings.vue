@@ -91,7 +91,7 @@
 
 <script lang="tsx" setup>
 import { GM_deleteValue, GM_listValues } from "$";
-import { backupUserConfigs, restoreUserConfigs, setTheme } from "@/lib/api/remixed";
+import { backupUserConfigs, restoreUserConfigs } from "@/lib/api/remixed";
 import { UpdateConfig, compactLayout, disabledModules, experimental, monospaceFonts, pageExtension, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
 import { AllModules, isRealObject } from "@/lib/utils";
 import { debounce, find, forEach, includes, join, pull, split } from "lodash-es";
@@ -173,7 +173,6 @@ const settings: UserSettings = {
                             event(e) {
                                 const newValue = (e.target as HTMLSelectElement).value;
                                 themeType.set(newValue as ReturnType<typeof themeType.get>);
-                                setTheme(newValue as ReturnType<typeof themeType.get>);
                             },
                         }],
                     },

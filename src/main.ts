@@ -1,15 +1,19 @@
 import "element-plus/dist/index.css";
+import { throttle } from "lodash-es";
 import { checkUpdateAndNotify, currentPageType, setTheme } from "./lib/api/remixed";
 import { remixedObservers } from "./lib/observers";
-import { loadBaseCSS, loadDynamicCSS, loadExtensionCSS, loadTiebaCSS } from "./lib/theme";
+import { darkPrefers, loadBaseCSS, loadDynamicCSS, loadExtensionCSS, loadTiebaCSS } from "./lib/theme";
 import index from "./lib/theme/page-extension/index";
 import thread from "./lib/theme/page-extension/thread";
 import { parseUserModules } from "./lib/unsafe";
 import { REMIXED, perfProfile, themeType, wideScreen } from "./lib/user-values";
 import { AllModules, waitUtil } from "./lib/utils";
-import { throttle } from "lodash-es";
 
+// 尽早完成主题设置，降低闪屏概率
 setTheme(themeType.get());
+darkPrefers.addEventListener("change", () => setTheme(themeType.get()));
+
+// 基本样式加载
 loadBaseCSS();
 
 Promise.all([

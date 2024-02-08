@@ -5,6 +5,7 @@ import { GiteeRelease, GiteeRepo, Owner, RepoName, ignoredTag, latestRelease, sh
 import { outputFile, selectLocalFile, spawnOffsetTS } from "@/lib/utils";
 import { filter, forEach, includes, map, zipObject } from "lodash-es";
 import { marked } from "marked";
+import { darkPrefers } from "../theme";
 
 export type PageType = "index" | "thread" | "forum" | "user" | "unhandled"
 
@@ -162,33 +163,19 @@ export function getResource(path: string) {
 }
 
 export function setTheme(theme: ReturnType<typeof themeType.get>) {
-    requestAnimationFrame(autoTheme);
-
     switch (theme) {
-        case "dark": {
+        case "dark":
             darkTheme();
             break;
-        }
 
-        case "light": {
+        case "light":
             lightTheme();
             break;
-        }
 
         case "auto":
-        default: {
+        default:
+            darkPrefers.matches ? darkTheme() : lightTheme();
             break;
-        }
-    }
-
-    function autoTheme() {
-        if (themeType.get() === "auto") {
-            if (matchMedia && matchMedia("(prefers-color-scheme: dark)").matches)
-                darkTheme();
-            else
-                lightTheme();
-        }
-        requestAnimationFrame(autoTheme);
     }
 
     function lightTheme() {
