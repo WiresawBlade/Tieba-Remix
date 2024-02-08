@@ -3,6 +3,7 @@ import { isRealObject, spawnOffsetTS } from "./utils";
 // import meta from "/meta.json";
 import { GM_getValue, GM_setValue, GM_deleteValue } from "$";
 import { setTheme } from "./api/remixed";
+import { setCustomBackground } from "./theme";
 
 // export const META: Meta = meta;
 export const MainTitle = "Tieba Remix";
@@ -181,7 +182,15 @@ export const themeColor = new UserKey("themeColor", {
     dark: "#7161c1",
 });
 /** 用户自定义背景图 */
-export const customBackground = new UserKey<string | null>("customBackground", null);
+export const customBackground = new UserKey<string | null>(
+    "customBackground",
+    null,
+    {
+        setter() {
+            setCustomBackground();
+        },
+    }
+);
 /** 页面扩展 */
 export const pageExtension = new UserKey("pageExtension", {
     index: true,

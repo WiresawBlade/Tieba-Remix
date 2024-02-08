@@ -3,7 +3,7 @@ import { findIndex, join } from "lodash-es";
 import { currentPageType, getResource } from "../api/remixed";
 import { afterHead, templateCreate } from "../elemental";
 import { defaultStyle, injectCSSRule, parseMultiCSS, removeCSSRule } from "../elemental/styles";
-import { customBackground, monospaceFonts, themeColor, themeType, userFonts, wideScreen } from "../user-values";
+import { customBackground, monospaceFonts, themeColor, userFonts, wideScreen } from "../user-values";
 import { waitUtil } from "../utils";
 import { hexToRGBA, rgbaToHSLA } from "../utils/color";
 
@@ -20,11 +20,10 @@ import errorCSS from "@/stylesheets/tieba/tieba-error.scss?inline";
 
 import darkVarsCSS from "element-plus/theme-chalk/dark/css-vars.css?inline";
 import themePlusCSS from "@/stylesheets/main/element-plus.scss?inline";
-import { ref } from "vue";
 
 export const darkPrefers = matchMedia("(prefers-color-scheme: dark)");
 
-export const dynCSSRules = {
+const dynCSSRules = {
     customBackground: () => findIndex(Array.from(defaultStyle.sheet?.cssRules ?? { length: 0 }), rule => (rule as CSSStyleRule).selectorText === "body.custom-background"),
 };
 

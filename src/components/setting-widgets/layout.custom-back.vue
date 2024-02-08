@@ -20,7 +20,6 @@
 <script lang="ts" setup>
 import UserButton from "@/components/utils/user-button.vue";
 import UserTextbox from "@/components/utils/user-textbox.vue";
-import { setCustomBackground } from "@/lib/theme";
 import { customBackground } from "@/lib/user-values";
 import { selectLocalFile } from "@/lib/utils";
 import { onMounted, ref, watch } from "vue";
@@ -31,7 +30,6 @@ const imageAlphaInput = ref<InstanceType<typeof UserTextbox>>();
 
 watch(imageData, newValue => {
     customBackground.set(newValue);
-    setCustomBackground();
 });
 
 watch(alphaValue, newValue => {
