@@ -1,7 +1,8 @@
-import { keys, merge } from "lodash-es";
+import { forEach, keys, merge } from "lodash-es";
 import { isRealObject, spawnOffsetTS } from "./utils";
 // import meta from "/meta.json";
 import { GM_getValue, GM_setValue, GM_deleteValue } from "$";
+import { setTheme } from "./api/remixed";
 
 // export const META: Meta = meta;
 export const MainTitle = "Tieba Remix";
@@ -20,41 +21,64 @@ export const REMIXED =
     "██║  ██║███████╗██║ ╚═╝ ██║██║██╔╝ ██╗███████╗██████╔╝\n" +
     "╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ \n";
 
+const userKeyEvents = ["getter", "setter"] as const;
+type UserKeyEvent = typeof userKeyEvents[number];
+type UserKeyEventsListener<T> = Record<UserKeyEvent, ((value: T) => unknown)>;
+type UserKeyEventsListeners<T> = Record<UserKeyEvent, Array<((value: T) => unknown)>>;
 export class UserKey<T> {
     public key: string;
     public defaultValue: T;
+    private listeners: UserKeyEventsListeners<T>;
 
-    constructor(key: string, defaultValue: T) {
+    constructor(
+        key: string,
+        defaultValue: T,
+        listeners?: Partial<UserKeyEventsListener<T>>
+    ) {
         this.key = key;
         this.defaultValue = defaultValue;
+        this.listeners = {
+            getter: listeners?.getter ? [listeners.getter] : [],
+            setter: listeners?.setter ? [listeners.setter] : [],
+        };
+    }
+
+    protected dispatchEvent(event: UserKeyEvent, value: T) {
+        forEach(this.listeners[event], listener => listener(value));
     }
 
     public get() {
-        let payload = GM_getValue<T>(this.key, this.defaultValue);
-        if (isRealObject(payload) &&
-            keys(payload).length < keys(this.defaultValue).length) {
-            payload = { ...this.defaultValue, ...payload };
+        let value = GM_getValue<T>(this.key, this.defaultValue);
+        if (isRealObject(value) &&
+            keys(value).length < keys(this.defaultValue).length) {
+            value = merge(this.defaultValue, value);
         }
-        return payload;
+        this.dispatchEvent("getter", value);
+        return value;
     }
 
     public set(value: T) {
         GM_setValue(this.key, value);
+        this.dispatchEvent("setter", value);
     }
 
     public remove() {
         GM_deleteValue(this.key);
     }
 
-    public merge(value: OptionalMapped<T>) {
+    public merge(value: Partial<T>) {
         if (isRealObject(value)) {
-            this.set({ ...this.get(), ...value });
+            const merged = { ...this.get(), ...value };
+            this.set(merged);
+            this.dispatchEvent("setter", merged);
         }
     }
 
-    public mergeDeeply(value: OptionalMapped<T>) {
+    public mergeDeeply(value: Partial<T>) {
         if (isRealObject(value)) {
-            this.set(merge(this.get(), value));
+            const merged = merge(this.get(), value);
+            this.set(merged);
+            this.dispatchEvent("setter", merged);
         }
     }
 }
@@ -62,18 +86,24 @@ export class UserKey<T> {
 export class UserKeyTS<T> extends UserKey<T> {
     private defaultInvalid = () => spawnOffsetTS(0, 0, 0, 12);
 
-    constructor(key: string, defaultValue: T, invalidfn?: (() => number)) {
-        super(key, defaultValue);
+    constructor(
+        key: string,
+        defaultValue: T,
+        invalidfn?: (() => number),
+        listeners?: Partial<UserKeyEventsListener<T>>,
+    ) {
+        super(key, defaultValue, listeners);
         this.defaultInvalid = invalidfn ? invalidfn : this.defaultInvalid;
     }
 
     public get() {
-        let payload = getUserValueTS<T>(this.key, this.defaultValue);
-        if (isRealObject(payload) &&
-            keys(payload).length < keys(this.defaultValue).length) {
-            payload = { ...this.defaultValue, ...payload };
+        let value = getUserValueTS<T>(this.key, this.defaultValue);
+        if (isRealObject(value) &&
+            keys(value).length < keys(this.defaultValue).length) {
+            value = merge(this.defaultValue, value);
         }
-        return payload;
+        this.dispatchEvent("getter", value);
+        return value;
     }
 
     /**
@@ -83,17 +113,22 @@ export class UserKeyTS<T> extends UserKey<T> {
      */
     public set(value: T, invalidTime?: number) {
         setUserValueTS(this.key, value, invalidTime ? invalidTime : this.defaultInvalid());
+        this.dispatchEvent("setter", value);
     }
 
-    public merge(value: OptionalMapped<T>, invalidTime?: number) {
+    public merge(value: Partial<T>, invalidTime?: number) {
         if (isRealObject(value)) {
-            this.set({ ...this.get(), ...value }, invalidTime ? invalidTime : this.defaultInvalid());
+            const merged = { ...this.get(), ...value };
+            this.set(merged, invalidTime ? invalidTime : this.defaultInvalid());
+            this.dispatchEvent("setter", merged);
         }
     }
 
-    public mergeDeeply(value: OptionalMapped<T>, invalidTime?: number) {
+    public mergeDeeply(value: Partial<T>, invalidTime?: number) {
         if (isRealObject(value)) {
-            this.set(merge(this.get(), value), invalidTime ? invalidTime : this.defaultInvalid());
+            const merged = merge(this.get(), value);
+            this.set(merged, invalidTime ? invalidTime : this.defaultInvalid());
+            this.dispatchEvent("setter", merged);
         }
     }
 }
@@ -125,7 +160,14 @@ export const showUpdateToday = new UserKeyTS("showUpdateToday", true, () => new 
 /** 用户决定跳过更新的版本的标签 */
 export const ignoredTag = new UserKey("ignoredTag", "");
 /** 用户主题设置 */
-export const themeType = new UserKey<"auto" | "dark" | "light">("themeType", "auto");
+export const themeType = new UserKey<"auto" | "dark" | "light">(
+    "themeType",
+    "auto",
+    {
+        setter(value) {
+            setTheme(value);
+        },
+    });
 /** 紧凑布局 */
 export const compactLayout = new UserKey("compactLayout", false);
 /** 宽屏设置 */
