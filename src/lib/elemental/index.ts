@@ -1,4 +1,4 @@
-import { isRealObject } from "@/lib/utils";
+import { isLiteralObject } from "@/lib/utils";
 import { forEach, forOwn, merge } from "lodash-es";
 
 export const fadeInElems: string[] = [];
@@ -112,7 +112,7 @@ export function getNodeAttrsDeeply(node: HTMLElement) {
         if (typeof attr.value === "string") {
             try {
                 const obj = JSON.parse(attr.value);
-                if (isRealObject(obj)) {
+                if (isLiteralObject(obj)) {
                     des[attr.name] = obj;
                 }
             } catch (error) {
@@ -137,7 +137,7 @@ export function mergeNodeAttrs<T extends HTMLElement>(
 ) {
     forOwn(attrs, (value, key) => {
         if (value !== node.getAttribute(key)) {
-            if (isRealObject(value)) {
+            if (isLiteralObject(value)) {
                 node.setAttribute(key, JSON.stringify(attrs[key]));
             } else {
                 node.setAttribute(key, attrs[key]);
@@ -168,7 +168,7 @@ export function mergeNodeAttrsDeeply<T extends HTMLElement>(
  * @returns 被创建的节点
  */
 export function templateCreate<T extends keyof HTMLElementTagNameMap>(
-    tag: T, attrs?: LiteralObject, children: Node[] | string = [], doc?: Document,
+    tag: T, attrs?: LiteralObject, children: (Node | string)[] | string = [], doc?: Document,
 ): HTMLElementTagNameMap[T] {
     const DOC = doc ? doc : document;
     const elem = DOC.createElement(tag);
@@ -181,7 +181,11 @@ export function templateCreate<T extends keyof HTMLElementTagNameMap>(
         elem.appendChild(document.createTextNode(children));
     } else {
         forEach(children, child => {
-            elem.appendChild(child);
+            if (typeof child === "string") {
+                elem.appendChild(document.createTextNode(child));
+            } else {
+                elem.appendChild(child);
+            }
         });
     }
 
