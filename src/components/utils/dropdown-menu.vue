@@ -87,7 +87,7 @@ a {
     box-shadow: 0 0 20px rgb(0 0 0 / 8%);
     font-size: 14px;
 
-    @include fade-in(0.1s);
+    @include fade-in($fast-animation-duration);
 
     .menu-item {
         display: flex;
@@ -96,7 +96,7 @@ a {
         padding: $item-padding;
         border: none;
         border-radius: 6px;
-        animation: stretch 0.1s cubic-bezier(0.22, 0.61, 0.36, 1);
+        animation: stretch $fast-animation-duration cubic-bezier(0.22, 0.61, 0.36, 1);
         background: none;
         color: var(--default-fore);
         gap: 6px;
