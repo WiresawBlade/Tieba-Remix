@@ -1,5 +1,5 @@
 import { forEach, keys, merge } from "lodash-es";
-import { isRealObject, spawnOffsetTS } from "./utils";
+import { isLiteralObject, spawnOffsetTS } from "./utils";
 // import meta from "/meta.json";
 import { GM_getValue, GM_setValue, GM_deleteValue } from "$";
 import { setTheme } from "./api/remixed";
@@ -50,7 +50,7 @@ export class UserKey<T> {
 
     public get() {
         let value = GM_getValue<T>(this.key, this.defaultValue);
-        if (isRealObject(value) &&
+        if (isLiteralObject(value) &&
             keys(value).length < keys(this.defaultValue).length) {
             value = merge(this.defaultValue, value);
         }
@@ -68,7 +68,7 @@ export class UserKey<T> {
     }
 
     public merge(value: Partial<T>) {
-        if (isRealObject(value)) {
+        if (isLiteralObject(value)) {
             const merged = { ...this.get(), ...value };
             this.set(merged);
             this.dispatchEvent("setter", merged);
@@ -76,7 +76,7 @@ export class UserKey<T> {
     }
 
     public mergeDeeply(value: Partial<T>) {
-        if (isRealObject(value)) {
+        if (isLiteralObject(value)) {
             const merged = merge(this.get(), value);
             this.set(merged);
             this.dispatchEvent("setter", merged);
@@ -99,7 +99,7 @@ export class UserKeyTS<T> extends UserKey<T> {
 
     public get() {
         let value = getUserValueTS<T>(this.key, this.defaultValue);
-        if (isRealObject(value) &&
+        if (isLiteralObject(value) &&
             keys(value).length < keys(this.defaultValue).length) {
             value = merge(this.defaultValue, value);
         }
@@ -118,7 +118,7 @@ export class UserKeyTS<T> extends UserKey<T> {
     }
 
     public merge(value: Partial<T>, invalidTime?: number) {
-        if (isRealObject(value)) {
+        if (isLiteralObject(value)) {
             const merged = { ...this.get(), ...value };
             this.set(merged, invalidTime ? invalidTime : this.defaultInvalid());
             this.dispatchEvent("setter", merged);
@@ -126,7 +126,7 @@ export class UserKeyTS<T> extends UserKey<T> {
     }
 
     public mergeDeeply(value: Partial<T>, invalidTime?: number) {
-        if (isRealObject(value)) {
+        if (isLiteralObject(value)) {
             const merged = merge(this.get(), value);
             this.set(merged, invalidTime ? invalidTime : this.defaultInvalid());
             this.dispatchEvent("setter", merged);

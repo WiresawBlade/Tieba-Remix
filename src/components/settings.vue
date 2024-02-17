@@ -53,7 +53,7 @@
                         {{ widget.content }}</UserButton>
 
                     <!-- Select -->
-                    <select v-if="widget.type === 'select' && isRealObject(widget.content)" @change="widget.event">
+                    <select v-if="widget.type === 'select' && isLiteralObject(widget.content)" @change="widget.event">
                         <option v-for="(value, key) in widget.content" :value="value"
                             :selected="widget.init && value === widget.init()">
                             {{ key }}</option>
@@ -93,7 +93,7 @@
 import { GM_deleteValue, GM_listValues } from "$";
 import { backupUserConfigs, restoreUserConfigs } from "@/lib/api/remixed";
 import { UpdateConfig, compactLayout, disabledModules, experimental, monospaceFonts, pageExtension, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
-import { AllModules, isRealObject } from "@/lib/utils";
+import { AllModules, isLiteralObject } from "@/lib/utils";
 import { debounce, find, forEach, includes, join, pull, split } from "lodash-es";
 import type { Component, VNode } from "vue";
 import { markRaw, ref } from "vue";

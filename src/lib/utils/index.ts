@@ -132,7 +132,7 @@ export function waitUtil(condition: (() => boolean), timeout = 10000, interval =
     });
 }
 
-export function isRealObject(obj: any): boolean {
+export function isLiteralObject(obj: any): boolean {
     return obj && typeof obj === "object" && !Array.isArray(obj);
 }
 
