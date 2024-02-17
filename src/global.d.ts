@@ -1,7 +1,7 @@
 declare module "*.json";
 
-interface LiteralObject {
-    [prop: string]: any
+interface LiteralObject<T = any> {
+    [prop: string]: T
 }
 
 type ValueOf<T> = T[keyof T]
