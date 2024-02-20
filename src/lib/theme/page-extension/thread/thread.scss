@@ -41,6 +41,8 @@ body.special_conf_skin {
         .pb_content {
             position: relative;
             width: 100%;
+            box-sizing: border-box;
+            padding: 24px;
             border-top: 6px solid var(--tieba-theme-color);
             background-color: var(--default-background);
             box-shadow: 0 12px 80px -32px rgb(0 0 0 / 40%);
@@ -115,7 +117,6 @@ body.special_conf_skin {
     display: flex;
     box-sizing: border-box;
     flex-direction: column;
-    padding: 24px;
     gap: 16px;
 
     // 楼层右上角 badge
