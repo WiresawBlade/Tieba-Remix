@@ -1,6 +1,5 @@
-import { flatMapDeep, isPlainObject, forOwn, kebabCase, assign } from "lodash-es";
+import { assign, flatMapDeep, forOwn, kebabCase, startsWith } from "lodash-es";
 import { afterHead, mergeNodeAttrs } from ".";
-import { isLiteralObject } from "../utils";
 
 export const defaultStyle = document.createElement("style");  // 默认默认样式
 defaultStyle.id = "default-stylesheet";
@@ -19,16 +18,12 @@ afterHead(() => {
  */
 export function parseMultiCSS(cssObject: CSSObject) {
     return flatMapDeep(cssObject, (value, key) => {
-        if (isLiteralObject(value)) {
-            return [
-                `${key} {`,
-                ...flatMapDeep(value, (v, k) => `${kebabCase(k)}: ${v};`),
-                "}",
-                "",
-            ];
-        } else {
-            return `${key} {${value}}`;
-        }
+        return [
+            `${key} {`,
+            ...flatMapDeep(value, (v, k) => `${startsWith(k, "--") ? k : kebabCase(k)}: ${v};`),
+            "}",
+            "",
+        ];
     }).join("\n");
 }
 
