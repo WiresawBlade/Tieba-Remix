@@ -1,7 +1,7 @@
 import { TiebaComponent } from "../api/abstract";
 import { DOMS } from "../elemental";
 
-export type PagerType = "prev" | "next" | "first" | "last" | "page";
+export type PagerType = "prev" | "next" | "head" | "tail" | "page";
 
 export class Pager extends TiebaComponent<"li"> {
     public allPagerButtons(): Array<HTMLAnchorElement | HTMLSpanElement> {
@@ -20,11 +20,11 @@ export class Pager extends TiebaComponent<"li"> {
                 return this.findMatchingButton(allButtons, "下一页", true);
             }
 
-            case "first": {
+            case "head": {
                 return this.findMatchingButton(allButtons, "首页");
             }
 
-            case "last": {
+            case "tail": {
                 return this.findMatchingButton(allButtons, "尾页", true);
             }
 
@@ -44,6 +44,17 @@ export class Pager extends TiebaComponent<"li"> {
             default:
                 return null; // 未知的 pagerType
         }
+    }
+
+    public getByPage(page: number) {
+        return this.findMatchingButton(this.allPagerButtons(), page.toString());
+    }
+
+    public jumpTo(page: number) {
+        const jumperBox = DOMS(true, "#jumpPage4, #jumpPage6", "input");
+        const jumperButton = DOMS(true, "#pager_go4, #pager_go6", "button");
+        jumperBox.value = page.toString();
+        jumperButton.click();
     }
 
     private findMatchingButton(buttons: HTMLElement[], text: string, reverse = false) {
