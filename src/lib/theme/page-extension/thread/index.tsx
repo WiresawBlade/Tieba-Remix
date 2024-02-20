@@ -1,21 +1,20 @@
+import PagerVue from "@/components/pager.vue";
 import ThreadEditor, { ThreadEditorProps } from "@/components/thread-editor.vue";
 import togglePanelVue, { TogglePanelProps } from "@/components/toggle-panel.vue";
 import UserButton from "@/components/utils/user-button.vue";
 import { currentPageType } from "@/lib/api/remixed";
 import { levelToClass } from "@/lib/api/tieba";
 import { DOMS, templateCreate } from "@/lib/elemental";
-import { injectCSSList } from "@/lib/elemental/styles";
+import { injectCSSList, parseCSSRule } from "@/lib/elemental/styles";
 import { remixedObservers } from "@/lib/observers";
 import { renderDialog } from "@/lib/render";
 import { bindFloatMessage } from "@/lib/render/common-widgets";
 import { appendJSX, insertJSX } from "@/lib/render/jsx-extension";
 import { floatBar } from "@/lib/tieba-components/float-bar";
+import { pager } from "@/lib/tieba-components/pager";
 import { compactLayout, pageExtension } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
-import { ElConfigProvider, ElPagination } from "element-plus";
-import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { find, forEach, some } from "lodash-es";
-import { ref, watch } from "vue";
 import compactCSS from "./compact.scss?inline";
 import { threadParser } from "./parser";
 import threadCSS from "./thread.scss?inline";
@@ -236,26 +235,38 @@ export default async function () {
     }
 
     // pager 相关
-    const currPage = ref(PageData.pager.cur_page);
-    const createPager = () =>
-        <ElConfigProvider locale={zhCn}>
-            <ElPagination
-                v-model:current-page={currPage.value}
-                background={true}
-                page-size={1}
-                pager-count={11}
-                total={PageData.pager.total_page}
-                defaultCurrentPage={PageData.pager.cur_page}
-                layout="prev, pager, next, jumper, ->"
-                style="margin-bottom: 6px;">
-            </ElPagination>
-        </ElConfigProvider>;
-    watch(currPage, newValue => {
-        const search = new URLSearchParams(location.search);
-        search.set("pn", newValue.toString());
-        location.href = `${location.pathname}?${search.toString()}`;
-    });
-    insertJSX(createPager(), postList, postList.firstChild);
+    const createPager = (marginBottom: number) =>
+        <PagerVue
+            showPagers={PageData.pager.total_page > 1}
+            total={PageData.pager.total_page}
+            current={PageData.pager.cur_page}
+            pagerClick={function (page) {
+                pager.getByPage(page)?.click();
+            }}
+            headClick={function () {
+                pager.getPagerButton("head")?.click();
+            }}
+            tailClick={function () {
+                pager.getPagerButton("tail")?.click();
+            }}
+            prevClick={function () {
+                pager.getPagerButton("prev")?.click();
+            }}
+            nextClick={function () {
+                pager.getPagerButton("next")?.click();
+            }}
+            jumperEnter={function (page) {
+                pager.jumpTo(page);
+            }}
+            style={parseCSSRule({
+                width: "100%",
+                marginBottom: `${marginBottom}px`,
+            })}>
+            {{
+                tailSlot: () => `回帖 ${PageData.thread.reply_num}`,
+            }}
+        </PagerVue>;
+    insertJSX(createPager(24), pbContent, pbContent.firstChild);
 
     createTextbox();
     async function createTextbox() {
@@ -274,7 +285,7 @@ export default async function () {
         // 添加末尾帖子回复入口
         appendJSX(
             <div id="thread-jsx-components">
-                {createPager()}
+                {createPager(4)}
                 {/* @ts-ignore */}
                 <UserButton class="dummy-button" noBorder onClick={showEditor}>回复帖子</UserButton>
             </div>, content);
