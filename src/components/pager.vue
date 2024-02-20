@@ -1,68 +1,134 @@
 <template>
     <div class="pager-wrapper">
-        <div class="pager-button-container">
-            <UserButton v-show="currIndex !== range[0]" class="pager-button pager-back-button icon" shadow-border>
+        <div v-if="showPagers" class="pager-button-container">
+            <UserButton v-show="current > Math.ceil(pagerCount / 2) && current > 1 && total > pagerCount"
+                class="pager-button pager-head-button " no-border @click="pagerChange('head', 1)">1</UserButton>
+            <UserButton v-show="current > Math.ceil(pagerCount / 2) && current > 1 && total > pagerCount"
+                class="pager-button pager-back-button icon" no-border @click="pagerChange('prev', current - 1)">
                 keyboard_arrow_left
             </UserButton>
 
-            <UserButton v-for="(displayNumber, i) in Array.from({ length: pagerCount }, (_, k) => range[0] + k)"
-                class="pager-button" :class="i === currIndex ? 'curr-pager-button' : undefined"
-                @click="click ? currIndex = click(displayNumber, i) : void 0" shadow-border :theme-style="i === currIndex"
-                :disabled="i === currIndex">
+            <UserButton v-for="displayNumber in range(pagerStart, pagerEnd)" class="pager-button"
+                :class="{ 'fill': fill, 'curr-pager-button': displayNumber === current }"
+                @click="pagerChange('page', displayNumber)" no-border="all" :disabled="displayNumber === current">
                 {{ displayNumber }}
             </UserButton>
 
-            <UserButton v-show="currIndex !== range[1]" class="pager-button pager-forward-button icon" shadow-border>
+            <UserButton v-show="total - pagerCount > 1 && total - current > pagerCount / 2"
+                class="pager-button pager-forward-button icon" no-border @click="pagerChange('next', current + 1)">
                 keyboard_arrow_right
             </UserButton>
-            <UserButton v-if="tailButton" class="pager-button pager-tail-button icon" shadow-border>
-                keyboard_double_arrow_right
-            </UserButton>
-
+            <UserButton v-show="tail && total - pagerCount > 1 && total - current > pagerCount / 2"
+                class="pager-button pager-tail-button" no-border @click="pagerChange('tail', total)">
+                {{ total }}</UserButton>
         </div>
 
-        <div v-if="jumperBox" class="jumper-container">
-            <UserTextbox class="jumper"></UserTextbox>
-            <UserButton class="pager-button jumper-button icon">display_external_input</UserButton>
+        <div v-if="showPagers && jumper" class="pager-separactor">|</div>
+
+        <div v-if="showPagers && jumper" class="jumper-container">
+            转到
+            <UserTextbox v-model="jumperValue" class="jumper" @keydown.enter="handleJumperEnter"></UserTextbox>
+            页
+        </div>
+
+        <div class="tail-slot">
+            <slot name="tailSlot"></slot>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { PagerType } from "@/lib/tieba-components/pager";
+import { range } from "lodash-es";
+import { computed } from "vue";
 import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 
 interface Props {
-    range: [number, number];
+    total: number;
     maxDisplay?: number;
-    defaultIndex?: number;
-    click?: ((value: number, index: number) => number);
-    tailButton?: boolean;
-    jumperBox?: boolean;
+    fill?: boolean;
+    showPagers?: boolean;
+    head?: boolean;
+    tail?: boolean;
+    jumper?: boolean;
+    pagerClick?(page: number): void;
+    headClick?(): void;
+    tailClick?(): void;
+    prevClick?(): void;
+    nextClick?(): void;
+    pagerChange?(page: number): void;
+    jumperEnter?(page: number): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    maxDisplay: 10,
-    defaultIndex: 0,
-    tailButton: true,
-    jumperBox: false,
+    maxDisplay: 9,
+    fill: false,
+    showPagers: true,
+    head: true,
+    tail: true,
+    jumper: true,
 });
 
-const pagerCount = Math.min(props.maxDisplay, props.range[1] - props.range[0] + 1);
+const pagerCount = Math.min(props.maxDisplay, props.total);
 
-const currIndex = ref(props.defaultIndex);
+const current = defineModel<number>("current", { required: true });
+const jumperValue = defineModel<string>("jumperValue", { default: "" });
+
+const pagerStart = computed(
+    () =>
+        current.value + pagerCount / 2 > props.total
+            ? props.total - pagerCount + 1
+            : Math.max(1, current.value - Math.floor(props.maxDisplay / 2))
+);
+const pagerEnd = computed(() => Math.min(props.total, pagerStart.value + props.maxDisplay - 1) + 1);
+
+function pagerChange(type: PagerType | null, page: number) {
+    if (props.pagerChange && page !== current.value)
+        props.pagerChange(page);
+    current.value = page;
+
+    switch (type) {
+        case "page":
+            if (props.pagerClick) props.pagerClick(page);
+            break;
+        case "head":
+            if (props.headClick) props.headClick();
+            break;
+        case "tail":
+            if (props.tailClick) props.tailClick();
+            break;
+        case "prev":
+            if (props.prevClick) props.prevClick();
+            break;
+        case "next":
+            if (props.nextClick) props.nextClick();
+            break;
+    }
+}
+
+function handleJumperEnter() {
+    if (!jumperValue.value) return;
+
+    const page = +jumperValue.value;
+    if (page < 1 || page > props.total) return;
+
+    pagerChange(null, page);
+    if (props.jumperEnter) props.jumperEnter(page);
+    jumperValue.value = "";
+}
 </script>
 
 <style lang="scss" scoped>
+@use "@/stylesheets/main/remixed-main" as *;
+
 .pager-wrapper {
     display: flex;
     width: fit-content;
-    justify-content: center;
+    box-sizing: border-box;
+    align-items: center;
     padding: 4px;
-    border-radius: 8px;
-    margin: auto;
-    background-color: var(--trans-light-background);
+    font-size: 16px;
     gap: 6px;
 
     .pager-button-container {
@@ -72,21 +138,52 @@ const currIndex = ref(props.defaultIndex);
 
         .pager-button {
             color: var(--default-fore);
-        }
+            font-family: var(--code-monospace);
 
-        .curr-pager-button {
-            font-weight: bold;
+            &:not(:hover, :active, :focus) {
+                background-color: transparent;
+            }
+
+            &.fill:not(:hover, :active, :focus) {
+                background-color: var(--defualt-background);
+            }
+
+            &.curr-pager-button {
+                border-radius: 0;
+                box-shadow: 0 3px 0 var(--tieba-theme-color);
+                color: var(--tieba-theme-color);
+                font-weight: bold;
+            }
+
+            &.icon {
+                @extend %icon;
+            }
         }
+    }
+
+    .pager-separactor {
+        color: var(--minimal-fore);
+        font-family: var(--code-monospace);
     }
 
     .jumper-container {
         display: flex;
         align-items: center;
-        gap: 4px;
+        color: var(--light-fore);
+        gap: 6px;
 
         .jumper {
             width: 36px;
+            width: 3em;
+            padding: 2px 4px;
+            color: var(--default-fore);
+            font-family: var(--code-monospace);
         }
+    }
+
+    .tail-slot {
+        margin-left: auto;
+        color: var(--minimal-fore);
     }
 }
 </style>
