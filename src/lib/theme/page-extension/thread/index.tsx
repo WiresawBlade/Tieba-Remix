@@ -15,6 +15,7 @@ import { pager } from "@/lib/tieba-components/pager";
 import { compactLayout, pageExtension } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
 import { find, forEach, some } from "lodash-es";
+import { ref } from "vue";
 import compactCSS from "./compact.scss?inline";
 import { threadParser } from "./parser";
 import threadCSS from "./thread.scss?inline";
@@ -235,27 +236,14 @@ export default async function () {
     }
 
     // pager 相关
+    const current = ref(PageData.pager.cur_page);
     const createPager = (marginBottom: number) =>
         <PagerVue
-            showPagers={PageData.pager.total_page > 1}
             total={PageData.pager.total_page}
-            current={PageData.pager.cur_page}
-            pagerClick={function (page) {
-                pager.getByPage(page)?.click();
-            }}
-            headClick={function () {
-                pager.getPagerButton("head")?.click();
-            }}
-            tailClick={function () {
-                pager.getPagerButton("tail")?.click();
-            }}
-            prevClick={function () {
-                pager.getPagerButton("prev")?.click();
-            }}
-            nextClick={function () {
-                pager.getPagerButton("next")?.click();
-            }}
-            jumperEnter={function (page) {
+            current={current.value}
+            v-model:current={current.value}
+            showPagers={PageData.pager.total_page > 1}
+            pagerChange={function (page) {
                 pager.jumpTo(page);
             }}
             style={parseCSSRule({
@@ -285,7 +273,7 @@ export default async function () {
         // 添加末尾帖子回复入口
         appendJSX(
             <div id="thread-jsx-components">
-                {createPager(4)}
+                {/* {createPager(4)} */}
                 {/* @ts-ignore */}
                 <UserButton class="dummy-button" noBorder onClick={showEditor}>回复帖子</UserButton>
             </div>, content);

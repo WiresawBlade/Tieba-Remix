@@ -1,24 +1,26 @@
 <template>
     <div class="pager-wrapper">
         <div v-if="showPagers" class="pager-button-container">
-            <UserButton v-show="current > Math.ceil(pagerCount / 2) && current > 1 && total > pagerCount"
+            <UserButton v-show="currentRef > Math.ceil(pagerCount / 2) && currentRef > 1 && total > pagerCount"
                 class="pager-button pager-head-button " no-border @click="pagerChange('head', 1)">1</UserButton>
-            <UserButton v-show="current > Math.ceil(pagerCount / 2) && current > 1 && total > pagerCount"
-                class="pager-button pager-back-button icon" no-border @click="pagerChange('prev', current - 1)">
-                keyboard_arrow_left
+            <UserButton v-show="currentRef > Math.ceil(pagerCount / 2) && currentRef > 1 && total > pagerCount"
+                class="pager-button pager-back-button icon" no-border
+                @click="pagerChange('prev', Math.max(1, currentRef - pagerCount))">
+                keyboard_double_arrow_left
             </UserButton>
 
-            <UserButton v-for="displayNumber in range(pagerStart, pagerEnd)" class="pager-button"
-                :class="{ 'fill': fill, 'curr-pager-button': displayNumber === current }"
-                @click="pagerChange('page', displayNumber)" no-border="all" :disabled="displayNumber === current">
+            <UserButton v-for="(displayNumber, i) in range(pagerStart, pagerEnd)" :key="i" class="pager-button"
+                :class="{ 'fill': fill, 'curr-pager-button': displayNumber === currentRef }"
+                @click="pagerChange('page', displayNumber)" no-border="all" :disabled="displayNumber === currentRef">
                 {{ displayNumber }}
             </UserButton>
 
-            <UserButton v-show="total - pagerCount > 1 && total - current > pagerCount / 2"
-                class="pager-button pager-forward-button icon" no-border @click="pagerChange('next', current + 1)">
-                keyboard_arrow_right
+            <UserButton v-show="total - pagerCount > 1 && total - currentRef > pagerCount / 2"
+                class="pager-button pager-forward-button icon" no-border
+                @click="pagerChange('next', Math.min(total, currentRef + pagerCount))">
+                keyboard_double_arrow_right
             </UserButton>
-            <UserButton v-show="tail && total - pagerCount > 1 && total - current > pagerCount / 2"
+            <UserButton v-show="tail && total - pagerCount > 1 && total - currentRef > pagerCount / 2"
                 class="pager-button pager-tail-button" no-border @click="pagerChange('tail', total)">
                 {{ total }}</UserButton>
         </div>
@@ -40,7 +42,7 @@
 <script lang="ts" setup>
 import { PagerType } from "@/lib/tieba-components/pager";
 import { range } from "lodash-es";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 
@@ -55,8 +57,8 @@ interface Props {
     pagerClick?(page: number): void;
     headClick?(): void;
     tailClick?(): void;
-    prevClick?(): void;
-    nextClick?(): void;
+    prevClick?(page: number): void;
+    nextClick?(page: number): void;
     pagerChange?(page: number): void;
     jumperEnter?(page: number): void;
 }
@@ -70,23 +72,26 @@ const props = withDefaults(defineProps<Props>(), {
     jumper: true,
 });
 
-const pagerCount = Math.min(props.maxDisplay, props.total);
-
 const current = defineModel<number>("current", { required: true });
 const jumperValue = defineModel<string>("jumperValue", { default: "" });
 
+const pagerCount = Math.min(props.maxDisplay, props.total);
+
+// 额外维护一个内部使用
+const currentRef = ref(current.value);
 const pagerStart = computed(
     () =>
-        current.value + pagerCount / 2 > props.total
+        currentRef.value + pagerCount / 2 > props.total
             ? props.total - pagerCount + 1
-            : Math.max(1, current.value - Math.floor(props.maxDisplay / 2))
+            : Math.max(1, currentRef.value - Math.floor(props.maxDisplay / 2))
 );
 const pagerEnd = computed(() => Math.min(props.total, pagerStart.value + props.maxDisplay - 1) + 1);
 
 function pagerChange(type: PagerType | null, page: number) {
-    if (props.pagerChange && page !== current.value)
+    if (props.pagerChange && page !== currentRef.value)
         props.pagerChange(page);
     current.value = page;
+    currentRef.value = page;
 
     switch (type) {
         case "page":
@@ -99,10 +104,10 @@ function pagerChange(type: PagerType | null, page: number) {
             if (props.tailClick) props.tailClick();
             break;
         case "prev":
-            if (props.prevClick) props.prevClick();
+            if (props.prevClick) props.prevClick(page);
             break;
         case "next":
-            if (props.nextClick) props.nextClick();
+            if (props.nextClick) props.nextClick(page);
             break;
     }
 }
