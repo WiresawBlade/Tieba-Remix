@@ -22,9 +22,9 @@ const props = withDefaults(defineProps<DialogWrapperProps>(), {
 });
 
 const emit = defineEmits(["RequestClose"]);
+const dialog = createApp(props.dialog, props.childProps);
 
 onMounted(() => {
-    const dialog = createApp(props.dialog, props.childProps);
     dialog.mount(".dialog-wrapper");
 });
 
@@ -33,6 +33,7 @@ function onClick(e: Event) {
     if (!includes((e.target as HTMLElement).classList, "dialog-toggle")) return;
     if (!props.forced) {
         emit("RequestClose");
+        dialog.unmount();
         unloadDialog();
     }
 }
@@ -60,6 +61,6 @@ function onClick(e: Event) {
 }
 
 .blur-effect {
-    @include blur-effect;
+    @include blur-effect(4px);
 }
 </style>
