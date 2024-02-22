@@ -2,6 +2,7 @@ import toastVue, { ToastProps } from "@/components/utils/toast.vue";
 import { App, createApp } from "vue";
 import { templateCreate } from "../elemental";
 import { Queue } from "../utils/queue";
+import { perfProfile } from "../user-values";
 
 /** toast 组件实例 */
 export let publicToastInstance: App<Element>;
@@ -14,7 +15,10 @@ const toastsQueue = new Queue<[ToastProps, number]>();
  * @param props `toast` 通知的属性
  */
 export function toast(props: ToastProps) {
-    toastsQueue.enqueue([props, -1]);
+    toastsQueue.enqueue([{
+        blurEffect: perfProfile.get() === "performance",
+        ...props,
+    }, -1]);
     const interval = setInterval(() => {
         if (!isToasting) {
             const peek = toastsQueue.peek();

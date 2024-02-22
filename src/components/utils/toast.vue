@@ -22,7 +22,7 @@ export interface ToastProps {
     duration?: number
     icon?: string
     type?: "basic" | "check" | "warning" | "error"
-    blurEffect?: true
+    blurEffect?: boolean
 }
 const props = withDefaults(defineProps<ToastProps>(), {
     duration: 6000,
