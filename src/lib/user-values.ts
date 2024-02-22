@@ -1,8 +1,9 @@
 import { forEach, keys, merge } from "lodash-es";
 import { isLiteralObject, spawnOffsetTS } from "./utils";
 // import meta from "/meta.json";
-import { GM_getValue, GM_setValue, GM_deleteValue } from "$";
+import { GM_deleteValue, GM_getValue, GM_setValue } from "$";
 import { setTheme } from "./api/remixed";
+import { setPerfAttr } from "./perf";
 import { setCustomBackground } from "./theme";
 
 // export const META: Meta = meta;
@@ -139,12 +140,16 @@ export interface UpdateConfig {
     notify: boolean;
 }
 
-export type PerfType = "dataSaver" | "performance";
+export type PerfType = "default" | "saver" | "performance";
 
+/** 性能配置 */
+export const perfProfile = new UserKey<PerfType>("perfProfile", "performance", {
+    setter() {
+        setPerfAttr();
+    },
+});
 /** 用户禁用的所有模块的 id */
 export const disabledModules = new UserKey<string[]>("disabledModules", []);
-/** 性能配置 */
-export const perfProfile = new UserKey<PerfType>("perfProfile", "performance");
 /** 未读推送 */
 export const unreadFeeds = new UserKeyTS<TiebaPost[]>("unreadFeeds", []);
 /** 实验性功能配置 */

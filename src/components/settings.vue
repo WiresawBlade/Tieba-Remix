@@ -92,7 +92,7 @@
 <script lang="tsx" setup>
 import { GM_deleteValue, GM_listValues } from "$";
 import { backupUserConfigs, restoreUserConfigs } from "@/lib/api/remixed";
-import { UpdateConfig, compactLayout, disabledModules, experimental, monospaceFonts, pageExtension, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
+import { PerfType, UpdateConfig, compactLayout, disabledModules, experimental, monospaceFonts, pageExtension, perfProfile, themeType, updateConfig, userFonts, wideScreen } from "@/lib/user-values";
 import { AllModules, isLiteralObject } from "@/lib/utils";
 import { debounce, find, forEach, includes, join, pull, split } from "lodash-es";
 import type { Component, VNode } from "vue";
@@ -353,6 +353,7 @@ const settings: UserSettings = {
             },
         },
     },
+
     "modules": {
         name: "模块",
         icon: "deployed_code",
@@ -401,6 +402,38 @@ const settings: UserSettings = {
             accu[curr.name] = toSubSettingKey(curr);
             return accu;
         }) as MainSettingKey["sub"],
+    },
+
+    "performance": {
+        name: "性能",
+        icon: "speed",
+        description: "硬件性能与流量相关",
+        sub: {
+            "perfPresets": {
+                name: "性能预设",
+                content: {
+                    "persets": {
+                        title: "性能预设",
+                        description: "从以下预设性能等级选择其一，将会自动对相关场景进行行为调整。",
+                        widgets: [{
+                            type: "select",
+                            content: {
+                                "默认": "default",
+                                "节能": "saver",
+                                "高性能": "performance",
+                            } as Record<string, PerfType>,
+                            init() {
+                                return perfProfile.get();
+                            },
+                            event(e) {
+                                const newValue = (e.target as HTMLSelectElement).value as PerfType;
+                                perfProfile.set(newValue);
+                            },
+                        }],
+                    },
+                },
+            },
+        },
     },
 
     "enhanced": {
