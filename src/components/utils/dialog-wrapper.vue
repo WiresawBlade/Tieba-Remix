@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 import { unloadDialog } from "@/lib/render";
+import { perfProfile } from "@/lib/user-values";
 import { includes } from "lodash-es";
 import { Component, createApp, onMounted } from "vue";
 
@@ -17,6 +18,7 @@ export interface DialogWrapperProps {
     darker?: boolean
 }
 const props = withDefaults(defineProps<DialogWrapperProps>(), {
+    blurEffect: perfProfile.get() === "performance",
     forced: false,
     darker: true,
 });

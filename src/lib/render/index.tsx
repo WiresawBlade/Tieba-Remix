@@ -4,7 +4,6 @@ import { assignCSSRule, injectCSSRule } from "@/lib/elemental/styles";
 import { Queue } from "@/lib/utils/queue";
 import { forEach, includes, once } from "lodash-es";
 import { App, Component, createApp } from "vue";
-import { perfProfile } from "../user-values";
 
 /** dialog 组件实例 */
 export let publicDialogInstance: App<Element>;
@@ -91,7 +90,6 @@ export async function renderDialog<T extends LiteralObject, U extends LiteralObj
         publicDialogInstance = createApp(dialogWrapperVue, {
             dialog: dialog,
             childProps: dialogProps,
-            blurEffect: perfProfile.get() === "performance",
             ...wrapperProps,
         } as DialogWrapperProps as any);
 
