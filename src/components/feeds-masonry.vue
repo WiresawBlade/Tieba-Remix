@@ -17,16 +17,14 @@
 <script lang="ts" setup>
 import { FlexMasonry } from "@/layouts/flex-masonry";
 import { FeedListResponse, parsePostsFromString, tiebaAPI } from "@/lib/api/tieba";
-import { renderDialog } from "@/lib/render";
-import { headerProgress } from "@/lib/render/common-widgets";
 import { toast } from "@/lib/render/toast";
+import { headerProgress, imagesViewer } from "@/lib/render/universal";
 import { unreadFeeds } from "@/lib/user-values";
 import { requestInstance, spawnOffsetTS } from "@/lib/utils";
 import { debounce, throttle } from "lodash-es";
 import { ComponentPublicInstance, nextTick, onMounted, ref, watch } from "vue";
 
 import BlockPanel from "./block-panel.vue";
-import ImagesViewer from "./images-viewer.vue";
 import PostContainer from "./post-container.vue";
 import UserButton from "./utils/user-button.vue";
 
@@ -160,7 +158,7 @@ function addToLoaded(payload: ComponentPublicInstance) {
 
 /** 展示图片 */
 function showImages(images: string[], index: number) {
-    renderDialog(ImagesViewer, {
+    imagesViewer({
         content: images,
         defaultIndex: index,
     });
