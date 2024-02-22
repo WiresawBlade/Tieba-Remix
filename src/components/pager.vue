@@ -1,26 +1,26 @@
 <template>
     <div class="pager-wrapper">
         <div v-if="showPagers" class="pager-button-container">
-            <UserButton v-show="currentRef > Math.ceil(pagerCount / 2) && currentRef > 1 && total > pagerCount"
+            <UserButton v-show="current > Math.ceil(pagerCount / 2) && current > 1 && total > pagerCount"
                 class="pager-button pager-head-button " no-border @click="pagerChange('head', 1)">1</UserButton>
-            <UserButton v-show="currentRef > Math.ceil(pagerCount / 2) && currentRef > 1 && total > pagerCount"
+            <UserButton v-show="current > Math.ceil(pagerCount / 2) && current > 1 && total > pagerCount"
                 class="pager-button pager-back-button icon" no-border
-                @click="pagerChange('prev', Math.max(1, currentRef - pagerCount))">
+                @click="pagerChange('prev', Math.max(1, current - pagerCount))">
                 keyboard_double_arrow_left
             </UserButton>
 
             <UserButton v-for="(displayNumber, i) in range(pagerStart, pagerEnd)" :key="i" class="pager-button"
-                :class="{ 'fill': fill, 'curr-pager-button': displayNumber === currentRef }"
-                @click="pagerChange('page', displayNumber)" no-border="all" :disabled="displayNumber === currentRef">
+                :class="{ 'fill': fill, 'curr-pager-button': displayNumber === current }"
+                @click="pagerChange('page', displayNumber)" no-border="all" :disabled="displayNumber === current">
                 {{ displayNumber }}
             </UserButton>
 
-            <UserButton v-show="total - pagerCount > 1 && total - currentRef > pagerCount / 2"
+            <UserButton v-show="total - pagerCount > 1 && total - current > pagerCount / 2"
                 class="pager-button pager-forward-button icon" no-border
-                @click="pagerChange('next', Math.min(total, currentRef + pagerCount))">
+                @click="pagerChange('next', Math.min(total, current + pagerCount))">
                 keyboard_double_arrow_right
             </UserButton>
-            <UserButton v-show="tail && total - pagerCount > 1 && total - currentRef > pagerCount / 2"
+            <UserButton v-show="tail && total - pagerCount > 1 && total - current > pagerCount / 2"
                 class="pager-button pager-tail-button" no-border @click="pagerChange('tail', total)">
                 {{ total }}</UserButton>
         </div>
@@ -29,7 +29,9 @@
 
         <div v-if="showPagers && jumper" class="jumper-container">
             转到
-            <UserTextbox v-model="jumperValue" class="jumper" @keydown.enter="handleJumperEnter"></UserTextbox>
+            <UserTextbox v-model="jumperValue" class="jumper" @update:model-value="emit('update:jumperValue', jumperValue)"
+                @keydown.enter="handleJumperEnter">
+            </UserTextbox>
             页
         </div>
 
@@ -48,6 +50,8 @@ import UserTextbox from "./utils/user-textbox.vue";
 
 interface Props {
     total: number;
+    current: number;
+    jumperValue?: string;
     maxDisplay?: number;
     fill?: boolean;
     showPagers?: boolean;
@@ -72,26 +76,33 @@ const props = withDefaults(defineProps<Props>(), {
     jumper: true,
 });
 
-const current = defineModel<number>("current", { required: true });
-const jumperValue = defineModel<string>("jumperValue", { default: "" });
+const current = ref(props.current);
+const jumperValue = ref(props.jumperValue ?? "");
+
+const emit = defineEmits([
+    "update:current",
+    "update:jumperValue",
+]);
+
+// const currentModel = defineModel<number>("current", { default: 0 });
+// const jumperValue = defineModel<string>("jumperValue", { default: "" });
 
 const pagerCount = Math.min(props.maxDisplay, props.total);
 
 // 额外维护一个内部使用
-const currentRef = ref(current.value);
 const pagerStart = computed(
     () =>
-        currentRef.value + pagerCount / 2 > props.total
+        current.value + pagerCount / 2 > props.total
             ? props.total - pagerCount + 1
-            : Math.max(1, currentRef.value - Math.floor(props.maxDisplay / 2))
+            : Math.max(1, current.value - Math.floor(props.maxDisplay / 2))
 );
 const pagerEnd = computed(() => Math.min(props.total, pagerStart.value + props.maxDisplay - 1) + 1);
 
 function pagerChange(type: PagerType | null, page: number) {
-    if (props.pagerChange && page !== currentRef.value)
+    if (props.pagerChange && page !== current.value)
         props.pagerChange(page);
     current.value = page;
-    currentRef.value = page;
+    emit("update:current", page);
 
     switch (type) {
         case "page":
