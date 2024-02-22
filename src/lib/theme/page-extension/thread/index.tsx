@@ -5,7 +5,7 @@ import UserButton from "@/components/utils/user-button.vue";
 import { currentPageType } from "@/lib/api/remixed";
 import { levelToClass } from "@/lib/api/tieba";
 import { DOMS, templateCreate } from "@/lib/elemental";
-import { injectCSSList, parseCSSRule } from "@/lib/elemental/styles";
+import { CSSRule, injectCSSList, parseCSSRule } from "@/lib/elemental/styles";
 import { remixedObservers } from "@/lib/observers";
 import { renderDialog } from "@/lib/render";
 import { bindFloatMessage } from "@/lib/render/common-widgets";
@@ -15,7 +15,6 @@ import { pager } from "@/lib/tieba-components/pager";
 import { compactLayout, pageExtension } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
 import { find, forEach, some } from "lodash-es";
-import { ref } from "vue";
 import compactCSS from "./compact.scss?inline";
 import { threadParser } from "./parser";
 import threadCSS from "./thread.scss?inline";
@@ -236,25 +235,27 @@ export default async function () {
     }
 
     // pager 相关
-    const current = ref(PageData.pager.cur_page);
-    const createPager = (marginBottom: number) =>
+    const createPager = (additionalStyles?: CSSRule) =>
         <PagerVue
             total={PageData.pager.total_page}
-            current={current.value}
-            v-model:current={current.value}
+            current={PageData.pager.cur_page}
             showPagers={PageData.pager.total_page > 1}
             pagerChange={function (page) {
                 pager.jumpTo(page);
             }}
             style={parseCSSRule({
                 width: "100%",
-                marginBottom: `${marginBottom}px`,
+                ...additionalStyles,
             })}>
             {{
                 tailSlot: () => `回帖 ${PageData.thread.reply_num}`,
             }}
         </PagerVue>;
-    insertJSX(createPager(24), pbContent, pbContent.firstChild);
+    insertJSX(createPager({
+        marginBottom: "24px",
+        position: PageData.pager.total_page <= 1 ? "absolute" : "",
+        right: PageData.pager.total_page <= 1 ? "24px" : "",
+    }), pbContent, pbContent.firstChild);
 
     createTextbox();
     async function createTextbox() {
@@ -273,7 +274,7 @@ export default async function () {
         // 添加末尾帖子回复入口
         appendJSX(
             <div id="thread-jsx-components">
-                {/* {createPager(4)} */}
+                {createPager()}
                 {/* @ts-ignore */}
                 <UserButton class="dummy-button" noBorder onClick={showEditor}>回复帖子</UserButton>
             </div>, content);
