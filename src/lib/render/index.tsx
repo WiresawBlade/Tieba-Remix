@@ -3,20 +3,27 @@ import { templateCreate } from "@/lib/elemental";
 import { assignCSSRule, injectCSSRule } from "@/lib/elemental/styles";
 import { Queue } from "@/lib/utils/queue";
 import { forEach, includes, once } from "lodash-es";
-import { App, Component, createApp } from "vue";
+import { App, Component, ComponentPublicInstance, createApp } from "vue";
 
 /** dialog 组件实例 */
 export let publicDialogInstance: App<Element>;
 
 const dialogQueue = new Queue<[Component, LiteralObject?, LiteralObject?]>();
 
+export interface RenderedComponent<T extends Element = Element> {
+    app: App<T>;
+    instance: ComponentPublicInstance;
+}
+
 export function renderComponent<T extends LiteralObject>(
     root: Component,
     container: string | Element,
-    rootProps?: T) {
+    rootProps?: T): RenderedComponent {
     const app = createApp(root, rootProps);
-    app.mount(container);
-    return app;
+    return {
+        app: app,
+        instance: app.mount(container),
+    };
 }
 
 export const scrollbarWidth = once(function () {

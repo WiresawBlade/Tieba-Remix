@@ -10,7 +10,6 @@ export interface RenderedJSX<T extends Element = Element> {
 
 export function renderJSX<T extends Element>(jsxel: JSX.Element, parent: Element): RenderedJSX<T> {
     const vnode = createVNode(jsxel);
-    vnode.props && (vnode.props.once = true);
     render(vnode, parent);
     return { el: parent.firstChild as T, vnode: vnode };
 }
