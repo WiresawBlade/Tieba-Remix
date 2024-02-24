@@ -48,7 +48,7 @@ import { computed, ref } from "vue";
 import UserButton from "./utils/user-button.vue";
 import UserTextbox from "./utils/user-textbox.vue";
 
-interface Props {
+export interface PagerProps {
     total: number;
     current: number;
     jumperValue?: string;
@@ -67,7 +67,7 @@ interface Props {
     jumperEnter?(page: number): void;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PagerProps>(), {
     maxDisplay: 9,
     fill: false,
     showPagers: true,
@@ -79,13 +79,13 @@ const props = withDefaults(defineProps<Props>(), {
 const current = ref(props.current);
 const jumperValue = ref(props.jumperValue ?? "");
 
+// const current = defineModel<number>("current", { default: 0 });
+// const jumperValue = defineModel<string>("jumperValue", { default: "" });
+
 const emit = defineEmits([
     "update:current",
     "update:jumperValue",
 ]);
-
-// const currentModel = defineModel<number>("current", { default: 0 });
-// const jumperValue = defineModel<string>("jumperValue", { default: "" });
 
 const pagerCount = Math.min(props.maxDisplay, props.total);
 
@@ -97,6 +97,11 @@ const pagerStart = computed(
             : Math.max(1, current.value - Math.floor(props.maxDisplay / 2))
 );
 const pagerEnd = computed(() => Math.min(props.total, pagerStart.value + props.maxDisplay - 1) + 1);
+
+defineExpose({
+    current,
+    jumperValue,
+});
 
 function pagerChange(type: PagerType | null, page: number) {
     if (props.pagerChange && page !== current.value)

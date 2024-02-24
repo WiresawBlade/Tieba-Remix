@@ -15,6 +15,7 @@ import { pager } from "@/lib/tieba-components/pager";
 import { compactLayout, pageExtension } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
 import { find, forEach, some } from "lodash-es";
+import { VNode } from "vue";
 import compactCSS from "./compact.scss?inline";
 import { threadParser } from "./parser";
 import threadCSS from "./thread.scss?inline";
@@ -235,27 +236,40 @@ export default async function () {
     }
 
     // pager 相关
-    const createPager = (additionalStyles?: CSSRule) =>
-        <PagerVue
-            total={PageData.pager.total_page}
-            current={PageData.pager.cur_page}
-            showPagers={PageData.pager.total_page > 1}
-            pagerChange={function (page) {
-                pager.jumpTo(page);
-            }}
-            style={parseCSSRule({
-                width: "100%",
-                ...additionalStyles,
-            })}>
-            {{
-                tailSlot: () => `回帖 ${PageData.thread.reply_num}`,
-            }}
-        </PagerVue>;
-    insertJSX(createPager({
+    const pagerVNodes: VNode[] = [];
+    const insertPager = (parent: Element, position: Node | null, additionalStyles?: CSSRule) => {
+        const { vnode: pagerVNode } = insertJSX(createPager(additionalStyles), parent, position);
+        pagerVNodes.push(pagerVNode);
+
+        function createPager(additionalStyles?: CSSRule) {
+            const pagerComponent =
+                <PagerVue
+                    total={PageData.pager.total_page}
+                    current={PageData.pager.cur_page}
+                    showPagers={PageData.pager.total_page > 1}
+                    pagerChange={function (page) {
+                        pager.jumpTo(page);
+                        forEach(pagerVNodes, pagerVNode => {
+                            // @ts-ignore
+                            pagerVNode.component.exposeProxy.current = page;
+                        });
+                    }}
+                    style={parseCSSRule({
+                        width: "100%",
+                        ...additionalStyles,
+                    })}>
+                    {{
+                        tailSlot: () => `回帖 ${PageData.thread.reply_num}`,
+                    }}
+                </PagerVue>;
+            return pagerComponent;
+        }
+    };
+    insertPager(pbContent, pbContent.firstChild, {
         marginBottom: "24px",
         position: PageData.pager.total_page <= 1 ? "absolute" : "",
         right: PageData.pager.total_page <= 1 ? "24px" : "",
-    }), pbContent, pbContent.firstChild);
+    });
 
     createTextbox();
     async function createTextbox() {
@@ -272,9 +286,11 @@ export default async function () {
         postButton?.el.addEventListener("click", showEditor);
 
         // 添加末尾帖子回复入口
+        insertPager(pbContent, pbContent.lastChild, {
+            paddingTop: "24px",
+        });
         appendJSX(
             <div id="thread-jsx-components">
-                {createPager()}
                 {/* @ts-ignore */}
                 <UserButton class="dummy-button" noBorder onClick={showEditor}>回复帖子</UserButton>
             </div>, content);
