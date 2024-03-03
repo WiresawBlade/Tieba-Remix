@@ -1,3 +1,4 @@
+import { includes } from "lodash-es";
 import { TiebaComponent } from "../api/abstract";
 import { DOMS } from "../elemental";
 
@@ -51,6 +52,18 @@ export class Pager extends TiebaComponent<"li"> {
     }
 
     public jumpTo(page: number) {
+        const permKeys = ["pn", "see_lz"];
+        const params = new URLSearchParams(location.search);
+        const newParams = new URLSearchParams();
+        for (const [key, value] of params) {
+            if (includes(permKeys, key)) {
+                newParams.set(key, value);
+            }
+        }
+        const url = new URL(location.href);
+        url.search = newParams.toString();
+        history.pushState({}, "", url);
+
         const jumperBox = DOMS(true, "#jumpPage4, #jumpPage6", "input");
         const jumperButton = DOMS(true, "#pager_go4, #pager_go6", "button");
         jumperBox.value = page.toString();
