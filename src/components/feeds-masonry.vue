@@ -117,19 +117,21 @@ async function addFeeds(newFeeds?: TiebaPost[]) {
 
     feeds.value.push(...newFeeds);
 
-    const interval = setInterval(() => {
+    requestAnimationFrame(checkFeedsLoaded);
+
+    function checkFeedsLoaded() {
         if (!newFeeds) return;
 
-        if (currentLoadedFeeds.length >= newFeeds.length) {
+        if (currentLoadedFeeds.length < newFeeds.length) {
+            requestAnimationFrame(checkFeedsLoaded);
+        } else {
             renderMasonry().then(function () {
                 unreadFeeds.set(newFeeds ? newFeeds : [], spawnOffsetTS(0, 0, 0, unreadTTL));
-
                 currentLoadedFeeds.length = 0;
-                clearInterval(interval);
                 isFetchingFeeds = false;
             });
         }
-    }, 10);
+    }
 }
 
 /** 创建布局，若布局已存在则追加资源 */
