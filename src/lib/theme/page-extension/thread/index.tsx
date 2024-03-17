@@ -1,6 +1,6 @@
-import PagerVue from "@/components/pager.vue";
+import Pager from "@/components/pager.vue";
 import ThreadEditor, { ThreadEditorProps } from "@/components/thread-editor.vue";
-import togglePanelVue, { TogglePanelProps } from "@/components/toggle-panel.vue";
+import TogglePanel, { TogglePanelProps } from "@/components/toggle-panel.vue";
 import UserButton from "@/components/utils/user-button.vue";
 import { currentPageType } from "@/lib/api/remixed";
 import { levelToClass } from "@/lib/api/tieba";
@@ -36,26 +36,26 @@ export default async function () {
 
     waitUtil(() => floatBar.get() !== undefined).then(function () {
         floatBar.add("other", function () {
-            renderDialog<TogglePanelProps>(togglePanelVue, {
+            renderDialog<TogglePanelProps>(TogglePanel, {
                 toggles: [
                     {
                         icon: "favorite",
                         name: "收藏",
                         defaultValue: (function () {
-                            return DOMS(".j_favor, #j_favthread .p_favthr_main")[0].innerText === "收藏" ? false : true;
+                            return DOMS(true, ".j_favor, #j_favthread .p_favthr_main").innerText === "收藏" ? false : true;
                         })(),
                         event() {
-                            DOMS(".j_favor, #j_favthread .p_favthr_main")[0].click();
+                            DOMS(true, ".j_favor, #j_favthread .p_favthr_main").click();
                         },
                     },
                     {
                         icon: "face_6",
                         name: "只看楼主",
                         defaultValue: (function () {
-                            return DOMS("#lzonly_cntn")[0].innerText === "只看楼主" ? false : true;
+                            return DOMS(true, "#lzonly_cntn").innerText === "只看楼主" ? false : true;
                         })(),
                         event() {
-                            DOMS("#lzonly_cntn")[0].click();
+                            DOMS(true, "#lzonly_cntn").click();
                         },
                     },
                     {
@@ -77,13 +77,12 @@ export default async function () {
         }), document.body.firstChild);
     });
 
-    const content = DOMS(".content", "div")[0];
-    const pbContent = DOMS("#pb_content", "div")[0];
-    const postList = DOMS("#j_p_postlist")[0];
+    const content = DOMS(true, ".content", "div");
+    const pbContent = DOMS(true, "#pb_content", "div");
 
     createContents();
     async function createContents() {
-        const threadList = (await waitUtil(() => DOMS("#j_p_postlist").length > 0).then(() => DOMS("#j_p_postlist")))[0];
+        const threadList = (await waitUtil(() => DOMS("#j_p_postlist").length > 0).then(() => DOMS(true, "#j_p_postlist")));
 
         threadList.classList.add("content-wrapper");
 
@@ -95,25 +94,25 @@ export default async function () {
             <div id="title-wrapper" class="title-wrapper">
                 <h3 class="thread-title">{PageData.thread.title}</h3>
 
-                <div class="forum-container">
+                <UserButton class="forum-wrapper-button" noBorder>
                     <img class="forum-icon" src={forumIconLink} alt="" />
                     <a class="forum-name" href={`/f?kw=${PageData.forum.name_url}`} target="_blank">{PageData.forum.forum_name} 吧</a>
 
                     <div class="button-container">
-                        <UserButton class="icon forum-button add-forum-button" shadow-border>{PageData.user.is_like ? "check" : "add"}</UserButton>
+                        <UserButton class="icon forum-button add-forum-button" noBorder>{PageData.user.is_like ? "check" : "add"}</UserButton>
                         {/* {PageData.user.is_like ? <UserButton class="outline-icon forum-button sign-in-button" shadow-border>{PageData.is_sign_in ? "assignment_turned_in" : "assignment"}</UserButton> : null} */}
                     </div>
-                </div>
-            </div>, DOMS(".content")[0], DOMS("#pb_content")[0]);
+                </UserButton>
+            </div>, DOMS(true, ".content"), DOMS(true, "#pb_content"));
 
         // 绑定事件
-        bindFloatMessage(DOMS(".forum-container")[0],
+        bindFloatMessage(DOMS(true, ".forum-wrapper-button"),
             `关注 ${PageData.forum.member_count}，帖子 ${PageData.forum.post_num}`);
-        DOMS(".add-forum-button", "button")[0].addEventListener("click", function () {
-            DOMS("#j_head_focus_btn", "button")[0].click();
+        DOMS(true, ".add-forum-button", "button").addEventListener("click", function () {
+            DOMS(true, "#j_head_focus_btn", "button").click();
         });
-        DOMS(".sign-in-button", "button")[0]?.addEventListener("click", function () {
-            DOMS(".j_signbtn", "button")[0].click();
+        DOMS(true, ".sign-in-button", "button")?.addEventListener("click", function () {
+            DOMS(true, ".j_signbtn", "button").click();
         });
 
         remixedObservers.postsObserver.addEvent(function () {
@@ -243,7 +242,7 @@ export default async function () {
 
         function createPager(additionalStyles?: CSSRule) {
             const pagerComponent =
-                <PagerVue
+                <Pager
                     total={PageData.pager.total_page}
                     current={PageData.pager.cur_page}
                     showPagers={PageData.pager.total_page > 1}
@@ -261,7 +260,7 @@ export default async function () {
                     {{
                         tailSlot: () => `回帖 ${PageData.thread.reply_num}`,
                     }}
-                </PagerVue>;
+                </Pager>;
             return pagerComponent;
         }
     };
@@ -298,8 +297,8 @@ export default async function () {
         function showEditor() {
             const ueditor = (function () {
                 if (DOMS(".edui-container").length > 0)
-                    return DOMS(".edui-container")[0];
-                return DOMS("#ueditor_replace")[0];
+                    return DOMS(true, ".edui-container");
+                return DOMS(true, "#ueditor_replace");
             })();
             renderDialog<ThreadEditorProps>(ThreadEditor, {
                 ueditor: ueditor,

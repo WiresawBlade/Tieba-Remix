@@ -272,14 +272,15 @@ body.special_conf_skin {
         text-decoration: underline 3px var(--tieba-theme-color);
     }
 
-    .forum-container {
+    .forum-wrapper-button {
         display: flex;
         overflow: hidden;
         width: max-content;
         height: max-content;
         align-items: center;
+        padding: 0;
         border-radius: 8px;
-        background-color: var(--trans-light-background);
+        background-color: var(--trans-light-background) !important;
         gap: 8px;
 
         @include blur-if-custom-background;
@@ -316,13 +317,12 @@ body.special_conf_skin {
 
             .forum-button {
                 padding: 0 4px;
-                background-color: transparent;
                 color: var(--tieba-theme-color);
                 font-size: 16px;
                 font-weight: bold;
 
                 &:not(:hover, :active, :focus) {
-                    box-shadow: none;
+                    background-color: transparent;
                 }
             }
         }
