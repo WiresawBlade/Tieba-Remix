@@ -9,6 +9,14 @@
     @extend %filled-icon;
 }
 
+.anchor {
+    @extend %anchor;
+}
+
+.anchor-underline {
+    @extend %anchor-underline;
+}
+
 .markdown {
     font-family: sans-serif;
 
