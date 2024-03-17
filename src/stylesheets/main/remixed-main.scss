@@ -1,4 +1,5 @@
-@use"sass:color";
+@use "./animations.scss" as *;
+@use "sass:color";
 
 $blur-radius: 24px;
 
@@ -76,13 +77,14 @@ a {
 // 超链接
 %anchor {
     color: var(--tieba-theme-fore);
-    transition: 0.4s;
+    cursor: pointer;
+    text-decoration: none;
+    transition: $default-animation-duration;
 }
 
 %anchor-underline {
-    color: var(--tieba-theme-fore);
+    @extend %anchor;
     text-decoration: underline 1.2px;
-    transition: 0.4s;
 }
 
 %anchor:hover,
