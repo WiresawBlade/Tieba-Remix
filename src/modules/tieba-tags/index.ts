@@ -1,6 +1,6 @@
 import { DOMS, findParentByClass, templateCreate } from "@/lib/elemental";
 import { injectCSSList } from "@/lib/elemental/styles";
-import { remixedObservers } from "@/lib/observers";
+import { threadCommentsObserver } from "@/lib/observers";
 import { forEach, indexOf, split } from "lodash-es";
 import tagCSS from "./stylesheet.css?inline";
 
@@ -48,7 +48,7 @@ function main(): void {
         }
     })().then(() => {
         // 开启监控
-        remixedObservers.commentsObserver.addEvent(createTagsAll);
+        threadCommentsObserver.addEvent(createTagsAll);
     });
 
     function getLouzhuPortrait(doc: Document): string | undefined {

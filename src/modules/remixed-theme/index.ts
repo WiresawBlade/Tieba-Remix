@@ -3,20 +3,19 @@
  * @WiresawBlade
 */
 
-import { DOMS, afterHead, fadeInElems, fadeInLoad } from "@/lib/elemental";
-import { assignCSSRule, injectCSSList, injectCSSRule, parseMultiCSS } from "@/lib/elemental/styles";
-import { remixedObservers } from "@/lib/observers";
+import { DOMS, fadeInElems, fadeInLoad } from "@/lib/elemental";
+import { injectCSSList, injectCSSRule } from "@/lib/elemental/styles";
+import { threadFloorsObserver } from "@/lib/observers";
 import { defaults } from "lodash-es";
 
+import floatMessageCSS from "@/stylesheets/components/float-message.scss?inline";
 import userButtonCSS from "@/stylesheets/components/user-button.scss?inline";
 import floatBarCSS from "./tieba-components/float-bar.scss?inline";
-import floatMessageCSS from "@/stylesheets/components/float-message.scss?inline";
 
 import _navBar from "./tieba-components/nav-bar";
 _navBar();
 
 import { setCustomBackground } from "@/lib/theme";
-import { pageExtension } from "@/lib/user-values";
 
 export default {
     id: "remixed-theme",
@@ -70,7 +69,7 @@ function main(): void {
         });
 
         // 远古用户没有等级则隐藏等级标签
-        remixedObservers.postsObserver.addEvent(() => {
+        threadFloorsObserver.addEvent(() => {
             DOMS(".d_badge_lv").forEach(elem => {
                 if (elem.textContent === "") {
                     let parent = elem;
@@ -89,7 +88,7 @@ function main(): void {
         fadeInLoad(".tbui_aside_float_bar .svg-container");
 
         // 为吧务和自己的等级染色
-        remixedObservers.postsObserver.addEvent(() => {
+        threadFloorsObserver.addEvent(() => {
             const lvlClassHead = "tieba-lvl-";
             const lvlGreen = `${lvlClassHead}green`;
             const lvlBlue = `${lvlClassHead}blue`;

@@ -1,6 +1,6 @@
 import { forEach, startsWith } from "lodash-es";
 import { currentPageType } from "./api/remixed";
-import { remixedObservers } from "./observers";
+import { threadFloorsObserver } from "./observers";
 import { PerfType, perfProfile } from "./user-values";
 import { waitUtil } from "./utils";
 
@@ -41,7 +41,7 @@ export async function setThreadLazyload() {
     };
     await waitUtil(() => typeof datalazyload !== "undefined");
 
-    remixedObservers.postsObserver.addEvent(setDiff);
+    threadFloorsObserver.addEvent(setDiff);
 
     function setDiff() {
         // 立即生效可能会被贴吧再次覆盖为原始值，所以延迟一段时间

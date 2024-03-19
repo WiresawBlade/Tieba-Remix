@@ -6,7 +6,7 @@ import { currentPageType } from "@/lib/api/remixed";
 import { levelToClass } from "@/lib/api/tieba";
 import { DOMS, templateCreate } from "@/lib/elemental";
 import { CSSRule, injectCSSList, parseCSSRule } from "@/lib/elemental/styles";
-import { remixedObservers } from "@/lib/observers";
+import { threadCommentsObserver, threadFloorsObserver } from "@/lib/observers";
 import { renderDialog } from "@/lib/render";
 import { appendJSX, insertJSX } from "@/lib/render/jsx-extension";
 import { bindFloatMessage } from "@/lib/render/universal";
@@ -115,7 +115,7 @@ export default async function () {
             DOMS(true, ".j_signbtn", "button").click();
         });
 
-        remixedObservers.postsObserver.addEvent(function () {
+        threadFloorsObserver.addEvent(function () {
             if (DOMS(".d_author").length === 0) return;
 
             // TODO: performance
@@ -218,7 +218,7 @@ export default async function () {
         // });
 
         // 去除楼中楼用户发言的冒号
-        remixedObservers.commentsObserver.addEvent(() => {
+        threadCommentsObserver.addEvent(() => {
             forEach(DOMS(".lzl_cnt"), el => {
                 forEach(el.childNodes, node => {
                     if (node)
@@ -229,8 +229,8 @@ export default async function () {
 
         // 开发模式需要重启 observer
         if (import.meta.env.DEV) {
-            remixedObservers.postsObserver.observe();
-            remixedObservers.commentsObserver.observe();
+            threadFloorsObserver.observe();
+            threadCommentsObserver.observe();
         }
     }
 

@@ -1,5 +1,5 @@
 import { DOMS } from "@/lib/elemental";
-import { remixedObservers } from "@/lib/observers";
+import { forumThreadsObserver, legacyIndexFeedsObserver, threadCommentsObserver } from "@/lib/observers";
 import { forEach, includes } from "lodash-es";
 
 export default {
@@ -75,7 +75,7 @@ function main() {
     ];
 
     // 看贴页面
-    remixedObservers.commentsObserver.addEvent(() => {
+    threadCommentsObserver.addEvent(() => {
         try {
             forEach(DOMS(`
                 .p_author_name:has(.nicknameEmoji),
@@ -94,7 +94,7 @@ function main() {
     });
 
     // 首页
-    remixedObservers.newListObserver.addEvent(() => {
+    legacyIndexFeedsObserver.addEvent(() => {
         try {
             forEach(DOMS(`
                 .new_list .post_author:has(.nicknameEmoji),
@@ -111,7 +111,8 @@ function main() {
         }
     });
 
-    remixedObservers.threadListObserver.addEvent(() => {
+    // 进吧页面
+    forumThreadsObserver.addEvent(() => {
         try {
             forEach(DOMS(".threadlist_author a:has(.nicknameEmoji)"), (el) => {
                 updateEmojis(el);

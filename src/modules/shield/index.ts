@@ -1,6 +1,6 @@
 import { UserModuleExtended } from "@/global.module";
 import { DOMS } from "@/lib/elemental";
-import { TbObserver, remixedObservers } from "@/lib/observers";
+import { TbObserver, forumThreadsObserver, legacyIndexFeedsObserver, threadCommentsObserver, threadFloorsObserver } from "@/lib/observers";
 import { join, map } from "lodash-es";
 import { markRaw } from "vue";
 import moduleShieldVue from "./module.shield.vue";
@@ -103,13 +103,13 @@ function shieldElementsBySelector(
 
 function main() {
     // 看贴页面
-    shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_post_content");
-    shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_name a");
-    shieldElementsBySelector(remixedObservers.commentsObserver, ".lzl_single_post", ".lzl_cnt .j_user_card");
+    shieldElementsBySelector(threadFloorsObserver, ".l_post_bright", ".d_post_content");
+    shieldElementsBySelector(threadFloorsObserver, ".l_post_bright", ".d_name a");
+    shieldElementsBySelector(threadCommentsObserver, ".lzl_single_post", ".lzl_cnt .j_user_card");
     // 首页动态
-    shieldElementsBySelector(remixedObservers.newListObserver, ".j_feed_li", ".title, .n_txt");
-    shieldElementsBySelector(remixedObservers.newListObserver, ".j_feed_li", ".post_author");
+    shieldElementsBySelector(legacyIndexFeedsObserver, ".j_feed_li", ".title, .n_txt");
+    shieldElementsBySelector(legacyIndexFeedsObserver, ".j_feed_li", ".post_author");
     // 进吧页面
-    shieldElementsBySelector(remixedObservers.threadListObserver, ".j_thread_list", ".threadlist_title a");
-    shieldElementsBySelector(remixedObservers.threadListObserver, ".j_thread_list", ".frs-author-name-wrap");
+    shieldElementsBySelector(forumThreadsObserver, ".j_thread_list", ".threadlist_title a");
+    shieldElementsBySelector(forumThreadsObserver, ".j_thread_list", ".frs-author-name-wrap");
 }

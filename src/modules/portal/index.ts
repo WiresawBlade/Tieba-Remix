@@ -1,5 +1,5 @@
 import { DOMS } from "@/lib/elemental";
-import { remixedObservers } from "@/lib/observers";
+import { threadCommentsObserver } from "@/lib/observers";
 import { forEach } from "lodash-es";
 
 export default {
@@ -20,11 +20,11 @@ function main(): void {
     const BVRegExp = /(?<!:\/\/www.bilibili.com\/video\/)BV[A-Za-z0-9]{10}/g;
 
     document.addEventListener("DOMContentLoaded", () => {
-        remixedObservers.commentsObserver.addEvent(biliEnhanced);
+        threadCommentsObserver.addEvent(biliPortal);
     });
 
     /* av/BV 快速跳转 */
-    function biliEnhanced() {
+    function biliPortal() {
         addBiliLinks(".d_post_content");
         addBiliLinks(".lzl_cnt .lzl_content_main");
 

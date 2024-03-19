@@ -46,13 +46,22 @@ export class TbObserver {
 }
 
 /** 贴吧监控 */
-export const remixedObservers = Object.freeze({
-    /** 楼层监控 */
-    postsObserver: new TbObserver("#j_p_postlist", { childList: true }),
-    /** 楼中楼监控 */
-    commentsObserver: new TbObserver("#j_p_postlist", { childList: true, subtree: true }),
-    /** 首页动态监控 */
-    newListObserver: new TbObserver("#new_list", { childList: true }),
-    /** 进吧页面贴子监控 */
-    threadListObserver: new TbObserver("#pagelet_frs-list\\/pagelet\\/thread", { attributes: true }, "load"),
-});
+// export const remixedObservers = Object.freeze({
+//     /** 楼层监控 */
+//     postsObserver: new TbObserver("#j_p_postlist", { childList: true }),
+//     /** 楼中楼监控 */
+//     commentsObserver: new TbObserver("#j_p_postlist", { childList: true, subtree: true }),
+//     /** 首页动态监控 */
+//     newListObserver: new TbObserver("#new_list", { childList: true }),
+//     /** 进吧页面贴子监控 */
+//     threadListObserver: new TbObserver("#pagelet_frs-list\\/pagelet\\/thread", { attributes: true }, "load"),
+// });
+
+/** 帖子页面 楼层监控 */
+export const threadFloorsObserver = new TbObserver("#j_p_postlist", { childList: true });
+/** 帖子页面 楼中楼监控 */
+export const threadCommentsObserver = new TbObserver("#j_p_postlist", { childList: true, subtree: true });
+/** 旧版主页 推送监控 */
+export const legacyIndexFeedsObserver = new TbObserver("#new_list", { childList: true });
+/** 进吧页面 贴子监控 */
+export const forumThreadsObserver = new TbObserver("#pagelet_frs-list\\/pagelet\\/thread", { attributes: true }, "load");
