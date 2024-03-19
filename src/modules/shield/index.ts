@@ -1,8 +1,9 @@
+import { UserModuleExtended } from "@/global.module";
 import { DOMS } from "@/lib/elemental";
 import { TbObserver, remixedObservers } from "@/lib/observers";
-import moduleShieldVue from "./module.shield.vue";
+import { join, map } from "lodash-es";
 import { markRaw } from "vue";
-import { UserModuleExtended } from "@/global.module";
+import moduleShieldVue from "./module.shield.vue";
 import { ShieldObject, shieldList } from "./shield";
 
 export default {
@@ -27,8 +28,6 @@ export default {
     },
     entry: main,
 } as UserModuleExtended;
-
-
 
 /**
  * 匹配字符串是否和屏蔽对象规则符合
@@ -78,12 +77,15 @@ function matchShield(obj: ShieldObject, str: string): boolean {
  * @param parentSelector 父元素选择器
  * @param subSelector 子元素选择器
  */
-function shieldElementsBySelector(observer: TbObserver, parentSelector: string, subSelector: string) {
+function shieldElementsBySelector(
+    observer: TbObserver,
+    parentSelector: string,
+    subSelector: string
+) {
     observer.addEvent(() => {
         DOMS(parentSelector).forEach(elem => {
             let isMatch = false;
-            const content = elem.querySelector(subSelector)?.textContent;
-            if (content === null || content === undefined) return;
+            const content = join(map(DOMS(subSelector, elem), el => el.textContent ?? ""), "\n");
 
             for (const sh of shieldList.get()) {
                 if (matchShield(sh, content)) {
@@ -100,12 +102,14 @@ function shieldElementsBySelector(observer: TbObserver, parentSelector: string, 
 }
 
 function main() {
-    // 看贴楼层
+    // 看贴页面
     shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_post_content");
-    // 首页动态
-    shieldElementsBySelector(remixedObservers.newListObserver, ".new_list li", ".n_txt");
-    // 发帖用户
     shieldElementsBySelector(remixedObservers.postsObserver, ".l_post_bright", ".d_name a");
     shieldElementsBySelector(remixedObservers.commentsObserver, ".lzl_single_post", ".lzl_cnt .j_user_card");
-    shieldElementsBySelector(remixedObservers.threadListObserver, ".j_feed_li", ".post_author");
+    // 首页动态
+    shieldElementsBySelector(remixedObservers.newListObserver, ".j_feed_li", ".title, .n_txt");
+    shieldElementsBySelector(remixedObservers.newListObserver, ".j_feed_li", ".post_author");
+    // 进吧页面
+    shieldElementsBySelector(remixedObservers.threadListObserver, ".j_thread_list", ".threadlist_title a");
+    shieldElementsBySelector(remixedObservers.threadListObserver, ".j_thread_list", ".frs-author-name-wrap");
 }
