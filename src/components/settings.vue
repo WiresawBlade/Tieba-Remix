@@ -11,7 +11,8 @@
 
             <div class="left-panel">
                 <UserButton v-for="setting in settings" class="key-button main-key"
-                    :class="{ 'selected': selectedKey?.name === setting.name }" @click="selectMainKey(setting)" no-border>
+                    :class="{ 'selected': selectedKey?.name === setting.name }" @click="selectMainKey(setting)"
+                    no-border="all">
                     <div class="icon">{{ setting.icon }}</div>
 
                     <div class="key-info">
@@ -24,7 +25,8 @@
 
         <div class="middle-container">
             <UserButton v-for="setting in selectedKey?.sub" class="key-button sub-key"
-                :class="{ 'selected': selectedSubKey?.name === setting.name }" @click="selectSubKey(setting)" no-border>
+                :class="{ 'selected': selectedSubKey?.name === setting.name }" @click="selectSubKey(setting)"
+                no-border="all">
                 <div class="key-title">{{ setting.name }}</div>
             </UserButton>
         </div>
@@ -33,7 +35,8 @@
             <div v-if="selectedSubKey?.name" v-for="content in selectedSubKey.content" class="setting-content">
                 <div v-if="content?.title" class="content-title">{{ content?.title }}</div>
                 <div v-if="content?.description" class="content-desc">
-                    <div v-if="content?.description" v-for="line in content.description.split('\n')" class="line">{{ line }}
+                    <div v-if="content?.description" v-for="line in content.description.split('\n')" class="line">
+                        {{ line }}
                     </div>
                 </div>
 
@@ -72,7 +75,8 @@
                     <!-- Textbox & TextArea -->
                     <UserTextbox v-if="includes(['textbox', 'textarea'], widget.type)" class="content-textbox"
                         :class="{ 'textarea': widget.type === 'textarea' }" :value="widget.init ? widget.init() : ''"
-                        :muti-lines="widget.type === 'textarea'" :placeholder="widget.placeHolder" @change="widget.event">
+                        :muti-lines="widget.type === 'textarea'" :placeholder="widget.placeHolder"
+                        @change="widget.event">
                     </UserTextbox>
 
                     <!-- Image -->
@@ -779,6 +783,7 @@ $wrapper-padding: 16px;
         padding: $wrapper-padding;
         animation: content-in 0.2s cubic-bezier(0, 0, 0.2, 1);
         background-color: var(--default-background);
+        font-size: 14px;
         gap: 32px;
 
         .setting-content {
