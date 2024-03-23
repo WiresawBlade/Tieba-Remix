@@ -9,14 +9,14 @@
         <div ref="masonryContainer" class="masonry-container"></div>
 
         <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" dynamic shadow-border
-            @-click-image="showImages" @-assets-loaded="addToLoaded">
+            @click-image="showImages" @assets-loaded="addToLoaded">
         </PostContainer>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { FlexMasonry } from "@/layouts/flex-masonry";
 import { FeedListResponse, parsePostsFromString, tiebaAPI } from "@/lib/api/tieba";
+import { FlexMasonry } from "@/lib/render/layout/flex-masonry";
 import { toast } from "@/lib/render/toast";
 import { headerProgress, imagesViewer } from "@/lib/render/universal";
 import { unreadFeeds } from "@/lib/user-values";

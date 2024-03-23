@@ -1,5 +1,6 @@
 <template>
-    <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id" target="_blank"
+    <UserButton ref="postContainer" :is-anchor="true" class="post-container" :href="'/p/' + props.post.id"
+        target="_blank"
         :class="{ 'dynamic': props.dynamic, 'assets-loaded': loadedAssets === props.post.images.length }">
         <div>
             <UserButton :is-anchor="true" class="forum-btn" :shadow-border="true" :href="props.post.forum.href"
@@ -23,7 +24,8 @@
         <div class="bottom-controls">
             <UserButton class="author" :is-anchor="true" :href="props.post.author.href" target="_blank"
                 :shadow-border="true">
-                <img class="author-portrait" :src="isIntersecting ? tiebaAPI.URL_profile(props.post.author.portrait) : ''">
+                <img class="author-portrait"
+                    :src="isIntersecting ? tiebaAPI.URL_profile(props.post.author.portrait) : ''">
                 <div class="author-info">
                     <div class="author-name">{{ props.post.author.name }}</div>
                     <div class="post-time">{{ props.post.time }}</div>
@@ -35,9 +37,9 @@
 </template>
 
 <script setup lang="ts">
-import { ComponentPublicInstance, onMounted, ref } from "vue";
-import { map } from "lodash-es";
 import { tiebaAPI } from "@/lib/api/tieba";
+import { map } from "lodash-es";
+import { onMounted, ref } from "vue";
 import UserButton from "./utils/user-button.vue";
 
 interface Props {
@@ -50,9 +52,9 @@ const props = withDefaults(defineProps<Props>(), {
     dynamic: false,
 });
 
-const emit = defineEmits(["ClickImage", "AssetsLoaded"]);
+const emit = defineEmits(["clickImage", "assetsLoaded"]);
 
-const postContainer = ref<ComponentPublicInstance>();
+const postContainer = ref<InstanceType<typeof UserButton>>();
 const isIntersecting = ref(!props.lazyLoad);
 const loadedAssets = ref(0);
 
@@ -60,7 +62,7 @@ onMounted(() => {
     if (!postContainer.value) return;
 
     if (props.post.images.length === 0) {
-        emit("AssetsLoaded", postContainer.value);
+        emit("assetsLoaded", postContainer.value);
     }
 
     if (!props.lazyLoad) return;
@@ -79,7 +81,7 @@ onMounted(() => {
 
 function showImage(e: MouseEvent, index: number) {
     e.preventDefault();
-    emit("ClickImage", (() => {
+    emit("clickImage", (() => {
         const output: string[] = [];
         map(props.post.images, (value) => {
             output.push(value.original);
@@ -91,7 +93,7 @@ function showImage(e: MouseEvent, index: number) {
 function addLoadedPost() {
     loadedAssets.value += 1;
     if (loadedAssets.value === props.post.images.length) {
-        emit("AssetsLoaded", postContainer.value);
+        emit("assetsLoaded", postContainer.value);
     }
 }
 </script>
@@ -159,8 +161,10 @@ img::before {
         }
 
         .content {
+            overflow: hidden;
             color: var(--light-fore);
             font-size: 14px;
+            text-overflow: ellipsis;
         }
     }
 
