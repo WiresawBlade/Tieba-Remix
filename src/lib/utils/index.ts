@@ -1,7 +1,6 @@
 import { GM_info } from "$";
 import { toast } from "@/lib/render/toast";
-import { find, forEach, forOwn } from "lodash-es";
-import { hexToRGBA } from "./color";
+import { every, find, forEach, forOwn } from "lodash-es";
 
 export function cookies(): LiteralObject;
 export function cookies(key: string): string | undefined;
@@ -183,4 +182,14 @@ export async function selectLocalFile<T extends string | ArrayBuffer | null>(
 
         input.click();
     });
+}
+
+/**
+ * 判断一个集合是否为另一个集合的超集
+ * @param superset 超集
+ * @param subset 子集
+ * @returns 若 参数 1 为 参数 2 的超集，返回 `true`
+ */
+export function isSuperset<T>(superset: Set<T>, subset: Set<T>) {
+    return every([...subset], element => superset.has(element));
 }
