@@ -3,10 +3,6 @@ import vueJSX from "@vitejs/plugin-vue-jsx";
 import deepmerge from "deepmerge";
 import { resolve } from "path";
 import postcssPresetEnv from "postcss-preset-env";
-// import AutoImport from "unplugin-auto-import/vite";
-// import ElementPlus from "unplugin-element-plus/vite";
-// import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-// import Components from "unplugin-vue-components/vite";
 import { UserConfig, defineConfig } from "vite";
 import monkey, { MonkeyOption, cdn } from "vite-plugin-monkey";
 
@@ -25,6 +21,7 @@ const scriptOptions: MonkeyOption = {
         icon64: "https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon64.png",
         match: [
             "*://tieba.baidu.com",
+            "*://tieba.baidu.com/index.*",
             "*://tieba.baidu.com/?*",
             "*://tieba.baidu.com/p/*",
             "*://tieba.baidu.com/f?*",
