@@ -64,19 +64,6 @@ interface TiebaPost {
     }[]
 }
 
-/** 用户模块其他信息 */
-interface UserModulesInfo {
-    /** 本次被解析的模块数 */
-    length: number
-    /** 当前被解析的模块信息 */
-    current: {
-        /** 模块是否被允许运行 */
-        runnable: boolean
-        /** 模块所在位置 */
-        url: string
-    }
-}
-
 type DropdownMenu = {
     title: string
     href?: string
@@ -109,4 +96,9 @@ interface Meta {
     "run-at": string;
     updateURL: string;
     version: string;
+}
+
+interface Coord {
+    x: number;
+    y: number;
 }

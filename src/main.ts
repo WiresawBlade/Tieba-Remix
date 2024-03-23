@@ -1,12 +1,12 @@
 import "element-plus/dist/index.css";
 import { throttle } from "lodash-es";
 import { checkUpdateAndNotify, currentPageType, setTheme } from "./lib/api/remixed";
+import { parseUserModules } from "./lib/common/packer";
 import { forumThreadsObserver, legacyIndexFeedsObserver, threadCommentsObserver, threadFloorsObserver } from "./lib/observers";
 import { loadPerf } from "./lib/perf";
 import { darkPrefers, loadBaseCSS, loadDynamicCSS, loadExtensionCSS, loadTiebaCSS } from "./lib/theme";
 import index from "./lib/theme/page-extension/index";
 import thread from "./lib/theme/page-extension/thread";
-import { parseUserModules } from "./lib/unsafe";
 import { REMIXED, pageExtension, themeType, wideScreen } from "./lib/user-values";
 import { AllModules, waitUtil } from "./lib/utils";
 
@@ -24,12 +24,10 @@ Promise.all([
     index(),
     thread(),
     (async function loadUserModules(): Promise<void> {
-        let index = 0;
         parseUserModules(
             import.meta.glob("./modules/**/index.ts"),
-            (_, module) => {
+            module => {
                 AllModules().push(module);
-                index++;
             }
         );
     })(),
@@ -62,7 +60,7 @@ waitUtil(() => document.body !== null).then(function () {
         document.body.classList.add("shrink-view");
     } else {
         const shrinkListener = throttle(function () {
-            if (window.innerWidth <= wideScreen.get().maxPX) {
+            if (window.innerWidth <= wideScreen.get().maxWidth) {
                 document.body.classList.add("shrink-view");
             } else {
                 document.body.classList.remove("shrink-view");
