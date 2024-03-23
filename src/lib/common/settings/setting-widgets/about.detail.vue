@@ -22,7 +22,8 @@
                 target="_balnk">开放源代码
             </UserButton>
 
-            <UserButton class="about-button update" :shadow-border="true" @click="emit('changeView', 'about', 'update')">
+            <UserButton class="about-button update" :shadow-border="true"
+                @click="emit('changeView', 'about', 'update')">
                 检查更新
             </UserButton>
         </div>
@@ -33,11 +34,10 @@
 </template>
 
 <script lang="ts" setup>
-import { GithubRepo, MainTitle } from "@/lib/user-values";
-import UserButton from "../utils/user-button.vue";
 import { GM_info } from "$";
+import UserButton from "@/components/utils/user-button.vue";
 import { getResource } from "@/lib/api/remixed";
-import { forEach, split } from "lodash-es";
+import { GithubRepo, MainTitle } from "@/lib/user-values";
 
 const scriptInfo = GM_info;
 

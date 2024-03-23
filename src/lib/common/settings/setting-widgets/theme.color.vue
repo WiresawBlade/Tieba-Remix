@@ -17,11 +17,11 @@
 </template>
 
 <script lang="ts" setup>
+import UserButton from "@/components/utils/user-button.vue";
 import { themeColor } from "@/lib/user-values";
 import { ElColorPicker, ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import { ref } from "vue";
-import UserButton from "../utils/user-button.vue";
 
 const lightTheme = ref(themeColor.get().light);
 const darkTheme = ref(themeColor.get().dark);

@@ -31,12 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-import { GiteeRelease } from "@/lib/user-values";
-import { getLatestReleaseFromGitee } from "@/lib/api/remixed";
-import { onMounted, ref } from "vue";
-import { marked } from "marked";
-import UserButton from "../utils/user-button.vue";
 import { GM_info } from "$";
+import UserButton from "@/components/utils/user-button.vue";
+import { getLatestReleaseFromGitee } from "@/lib/api/remixed";
+import { GiteeRelease } from "@/lib/user-values";
+import { marked } from "marked";
+import { onMounted, ref } from "vue";
 
 const release = ref<GiteeRelease>();
 const forbidden = ref(false);
