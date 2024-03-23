@@ -1,6 +1,7 @@
 import HeaderProgress, { HeaderProgressProps } from "@/components/header-progress.vue";
 import imagesViewerVue, { ImageViewerProps } from "@/components/images-viewer.vue";
-import { renderDialog, scrollbarWidth } from ".";
+import { getFloatCoord } from "@/lib/render/layout/float";
+import { renderDialog } from ".";
 import { DOMS } from "../elemental";
 import { waitUtil } from "../utils";
 import { appendJSX, insertJSX } from "./jsx-extension";
@@ -31,6 +32,8 @@ export function headerProgress(props: HeaderProgressProps, delay = 2000, timeout
  * @param delay 展示延迟。默认为 500
  */
 export function bindFloatMessage(target: HTMLElement, message: string, delay = 500) {
+    const CursorMargin = 4;
+
     if (DOMS(".float-message").length <= 0) {
         appendJSX(
             <div class="float-message">
@@ -59,27 +62,18 @@ export function bindFloatMessage(target: HTMLElement, message: string, delay = 5
         timeout = setTimeout(() => {
             if (floatMessage.style.display !== "block") {
                 floatMessage.innerText = message;
-                floatMessage.style.visibility = "hidden";
                 floatMessage.style.display = "block";
                 floatMessage.style.top = "0";
                 floatMessage.style.left = "0";
 
-                const clientRect = floatMessage.getClientRects()[0];
-                const PointerMargin = 10;
+                const coord = getFloatCoord(floatMessage, {
+                    x: e.clientX + CursorMargin,
+                    y: e.clientY + CursorMargin,
+                }, "baseline");
+                console.log(coord);
 
-                const x = Math.min(
-                    e.clientX + PointerMargin,
-                    window.innerWidth - scrollbarWidth()
-                    - Math.ceil(clientRect.width) // 修正误差
-                );
-                const y =
-                    e.clientY + PointerMargin + clientRect.height > window.innerHeight
-                        ? e.clientY - PointerMargin - clientRect.height
-                        : e.clientY + PointerMargin;
-
-                floatMessage.style.left = `${x}px`;
-                floatMessage.style.top = `${y}px`;
-                floatMessage.style.visibility = "";
+                floatMessage.style.left = `${coord.x}px`;
+                floatMessage.style.top = `${coord.y < e.clientY ? coord.y - CursorMargin * 2 : coord.y}px`;
             }
         }, delay);
     });

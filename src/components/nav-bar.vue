@@ -1,28 +1,34 @@
 <template>
-    <div id="nav-bar" class="nav-bar">
-        <div class="left-container">
-            <UserButton class="nav-button nav-title-container" is-anchor href="/" no-border>
-                <img :src="getResource('/assets/images/main/icon64.png')" alt="" class="nav-icon">
-                <p class="nav-title">贴吧</p>
-            </UserButton>
-        </div>
-
-        <div class="right-container">
-            <div class="middle-container">
-                <UserButton v-for="(menu, key) in middleMenu" class="menu-container middle-menu-container" no-border>
-                    {{ key }}
-                    <DropdownMenu :menu-items="menu"></DropdownMenu>
+    <div id="nav-bar" class="nav-bar remove-default">
+        <div id="nav-container">
+            <div class="left-container">
+                <UserButton class="nav-button nav-title-container" is-anchor href="/" no-border="all">
+                    <img :src="getResource('/assets/images/main/icon64.png')" alt="" class="nav-icon">
+                    <p class="nav-title">贴吧</p>
                 </UserButton>
             </div>
-            <UserButton class="nav-button menu-container avatar-button" shadow-border>
-                <img ref="navAvatar" class="nav-avatar">
-                <DropdownMenu :menu-items="userMenu!"></DropdownMenu>
-            </UserButton>
 
-            <UserButton class="nav-button menu-container nav-menu icon" shadow-border no-border>
-                menu
-                <DropdownMenu :menu-items="extendMenu!" style="font-family: initial;"></DropdownMenu>
-            </UserButton>
+            <div class="right-container">
+                <div class="middle-container">
+                    <template v-for="(menu, key) in middleMenu" :key="key">
+                        <UserButton class="menu-trigger middle-menu-trigger" no-border="all">
+                            {{ key }}
+                            <DropdownMenu class="nav-menu" :menu-items="menu"></DropdownMenu>
+                        </UserButton>
+                    </template>
+                </div>
+
+                <UserButton class="nav-button menu-trigger avatar-button" no-border="all">
+                    <img ref="navAvatar" class="nav-avatar">
+                    <DropdownMenu class="nav-menu" :menu-items="userMenu!"></DropdownMenu>
+                </UserButton>
+
+                <UserButton class="nav-button menu-trigger menu-button icon" shadow-border no-border="all">
+                    menu
+                    <DropdownMenu class="nav-menu" :menu-items="extendMenu!" style="font-family: initial;">
+                    </DropdownMenu>
+                </UserButton>
+            </div>
         </div>
     </div>
 </template>
@@ -32,10 +38,12 @@ import { checkUpdateAndNotify, getResource } from "@/lib/api/remixed";
 import { tiebaAPI } from "@/lib/api/tieba";
 import { DOMS } from "@/lib/elemental";
 import { renderDialog } from "@/lib/render";
+import { getFloatCoord } from "@/lib/render/layout/float";
 import { messageBox } from "@/lib/render/message-box";
 import { toast } from "@/lib/render/toast";
 import { GiteeRepo, GithubRepo } from "@/lib/user-values";
 import { waitUtil } from "@/lib/utils";
+import { forEach } from "lodash-es";
 import { onMounted, ref } from "vue";
 import Settings from "./settings.vue";
 import DropdownMenu from "./utils/dropdown-menu.vue";
@@ -62,6 +70,18 @@ async function init() {
     await waitUtil(() => PageData !== undefined).then(() => {
         userPortrait.value = PageData.user.portrait;
         loadNavMenuContent();
+    });
+
+    forEach(DOMS(".menu-trigger", "button", DOMS(true, "#nav-bar")), el => {
+        el.addEventListener("mousemove", function (e) {
+            e.stopPropagation();
+            const menu = el.lastElementChild as HTMLElement;
+
+            const elRect = el.getBoundingClientRect();
+            const menuCoord = getFloatCoord(menu, { x: elRect.left + elRect.width / 2, y: 0 }, "middle");
+            menu.style.left = `${menuCoord.x}px`;
+            menu.style.top = "48px";
+        });
     });
 }
 
@@ -220,117 +240,140 @@ $nav-height: 48px;
     top: 0;
     left: 0;
     display: flex;
-    width: 100vw;
+    width: 100%;
     height: $nav-height;
-    box-sizing: border-box;
     align-items: center;
-    justify-content: space-around;
-    padding: 4px;
+    justify-content: center;
     border-bottom: 1px solid var(--border-color);
     background-color: var(--trans-page-background);
 
     @include blur-effect;
     @include main-box-shadow(0, 10px);
 
-    .nav-button:not(:hover, :active, :focus) {
-        background-color: rgba($color: #000, $alpha: 0%);
-    }
-
-    .left-container {
-        .nav-title-container {
-            display: flex;
-            align-items: center;
-            border: none;
-            background: none;
-            gap: 8px;
-            text-decoration: underline 3px var(--tieba-theme-color);
-
-            .nav-icon {
-                width: 36px;
-            }
-
-            .nav-title {
-                color: var(--default-fore);
-                font-size: 20px;
-                font-style: italic;
-                font-weight: bold;
-                transition: 0.2s;
-            }
-
-            &:hover .nav-title,
-            &:active .nav-title,
-            &:focus .nav-title {
-                color: var(--highlight-fore);
-            }
-        }
-    }
-
-    .middle-container {
+    #nav-container {
         display: flex;
+        width: 100%;
+        max-width: var(--content-max);
         height: 100%;
-        justify-content: center;
+        justify-content: space-between;
 
-        .middle-menu-container {
+        .shrink-view & {
+            justify-content: space-around;
+        }
+
+        .left-container {
+            .nav-title-container {
+                display: flex;
+                height: 100%;
+                align-items: center;
+                padding: 0;
+                border: none;
+                background: none;
+                gap: 8px;
+                text-decoration: underline 3px var(--tieba-theme-color);
+
+                .nav-icon {
+                    width: 36px;
+                }
+
+                .nav-title {
+                    color: var(--default-fore);
+                    font-size: 20px;
+                    font-style: italic;
+                    font-weight: bold;
+                    transition: 0.2s;
+                }
+
+                &:hover .nav-title,
+                &:active .nav-title,
+                &:focus .nav-title {
+                    color: var(--highlight-fore);
+                }
+            }
+        }
+
+        .middle-container {
+            display: flex;
             height: 100%;
-            padding: 0 10px;
-            border: none;
-            background: none;
-            color: var(--default-fore);
-            font-size: 15px;
-            font-weight: bold;
-            text-decoration: underline 2px rgba($color: #000, $alpha: 0%);
+            justify-content: center;
 
-            &:hover {
-                text-decoration: underline 2px var(--tieba-theme-color);
-            }
-        }
-    }
+            .middle-menu-trigger {
+                height: 100%;
+                padding: 0 10px;
+                border: none;
+                color: var(--default-fore);
+                font-size: 15px;
+                font-weight: bold;
+                text-decoration: underline 2px rgba($color: #000, $alpha: 0%);
 
-    .right-container {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .avatar-button {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            border: 4px;
-            border-radius: 32px;
-
-            .nav-avatar {
-                width: 100%;
-                border-radius: 24px;
+                &:hover {
+                    text-decoration: underline 2px var(--tieba-theme-color);
+                }
             }
         }
 
-        .nav-menu {
-            padding: 2px 8px;
-            border: none;
-            border-radius: 24px;
-            color: var(--highlight-fore);
-            font-size: 26px;
+        .right-container {
+            display: flex;
+            gap: 6px;
 
-            &:not(:active, :focus) {
-                box-shadow: none;
+            .avatar-button {
+                display: flex;
+                height: 100%;
+                align-items: center;
+                padding: 0;
+                padding: 0 2px;
+                border: 4px;
+
+                .nav-avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 24px;
+                    box-shadow: 0 0 0 1px var(--border-color);
+                    transition: 0.4s;
+                }
+
+                &:hover > .nav-avatar {
+                    box-shadow: 0 0 0 2px var(--tieba-theme-color);
+                }
+            }
+
+            .menu-button {
+                padding: 2px 8px;
+                border: none;
+                color: var(--highlight-fore);
+                font-size: 26px;
+
+                &:hover {
+                    color: var(--tieba-theme-color);
+                }
             }
         }
     }
 }
 
-.menu-container:hover > .dropdown-menu,
-.menu-container:active > .dropdown-menu {
-    display: block;
+.menu-trigger {
+    border-radius: 0;
+    background-color: transparent;
 
-    @include fade-in(0.2s);
+    &:hover {
+        background-color: var(--default-hover);
+    }
+
+    &:hover > .nav-menu,
+    &:active > .nav-menu {
+        display: block;
+    }
 }
 
-.dropdown-menu {
+.nav-menu {
+    position: absolute;
     z-index: 1201;
     display: none;
     cursor: default;
     font-weight: normal;
 
-    @include fade-out(0.2s);
+    &:hover {
+        display: block;
+    }
 }
 </style>
