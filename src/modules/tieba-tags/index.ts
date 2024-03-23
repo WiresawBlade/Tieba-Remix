@@ -1,4 +1,4 @@
-import { DOMS, findParentByClass, templateCreate } from "@/lib/elemental";
+import { DOMS, findParent, templateCreate } from "@/lib/elemental";
 import { injectCSSList } from "@/lib/elemental/styles";
 import { threadCommentsObserver } from "@/lib/observers";
 import { forEach, indexOf, split } from "lodash-es";
@@ -54,7 +54,7 @@ function main(): void {
     function getLouzhuPortrait(doc: Document): string | undefined {
         const j_tags = doc.getElementsByClassName("j_louzhubiaoshi");
         if (j_tags.length > 0) {
-            const targetFloor = findParentByClass(j_tags[0], "l_post_bright");
+            const targetFloor = findParent(j_tags[0], "l_post_bright");
             if (targetFloor) {
                 const dataAttr = targetFloor.getAttribute("data-field");
                 if (dataAttr !== null) {
@@ -93,7 +93,7 @@ function main(): void {
 
             // 层主，如果我/楼主是层主则不显示
             if (!isMe && !isLouzhu) {
-                const floor = findParentByClass(elem, "l_post_bright");
+                const floor = findParent(elem, "l_post_bright");
                 if (floor !== null) {
                     const cengzhuCard = floor.getElementsByClassName("p_author_name")[0];
                     const cengzhu = cengzhuCard.textContent;

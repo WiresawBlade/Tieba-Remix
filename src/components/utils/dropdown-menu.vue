@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { findParentByClass } from "@/lib/elemental";
+import { findParent } from "@/lib/elemental";
 import { onMounted } from "vue";
 import UserButton from "./user-button.vue";
 
@@ -43,7 +43,7 @@ onMounted(() => {
         });
 
         window.addEventListener("focusin", (ev) => {
-            if (!findParentByClass((ev.target as HTMLElement), "dropdown-menu")) {
+            if (!findParent((ev.target as HTMLElement), "dropdown-menu")) {
                 emit("RequestClose");
             }
         });
@@ -85,9 +85,9 @@ a {
     border-radius: 8px;
     background-color: var(--default-background);
     box-shadow: 0 0 20px rgb(0 0 0 / 8%);
-    font-size: 14px;
 
     @include fade-in($fast-animation-duration);
+    font-size: 14px;
 
     .menu-item {
         display: flex;
@@ -99,6 +99,7 @@ a {
         animation: stretch $fast-animation-duration cubic-bezier(0.22, 0.61, 0.36, 1);
         background: none;
         color: var(--default-fore);
+        font-size: 14px;
         gap: 6px;
         transition: 0.2s;
 

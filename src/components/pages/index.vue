@@ -59,7 +59,8 @@
                     </BlockPanel>
 
                     <BlockPanel class="followed">
-                        <UserButton class="panel-btn icon sign-btn" @click="oneKeySignInstance" unset-background no-border>
+                        <UserButton class="panel-btn icon sign-btn" @click="oneKeySignInstance" unset-background
+                            no-border>
                             task_alt</UserButton>
                         <UserButton class="panel-btn icon settings" unset-background no-border>settings</UserButton>
                     </BlockPanel>
@@ -84,8 +85,10 @@
 
                     <BlockPanel class="topics">
                         <UserButton class="panel-btn icon switch" :unset-background="true" no-border>tune</UserButton>
-                        <UserButton class="panel-btn icon more" :unset-background="true" no-border>more_horiz</UserButton>
-                        <UserButton class="panel-btn icon settings" :unset-background="true" no-border>settings</UserButton>
+                        <UserButton class="panel-btn icon more" :unset-background="true" no-border>more_horiz
+                        </UserButton>
+                        <UserButton class="panel-btn icon settings" :unset-background="true" no-border>settings
+                        </UserButton>
                     </BlockPanel>
                 </div>
 
@@ -132,7 +135,7 @@ import {
 import { debounce, forEach, map, take } from "lodash-es";
 import { onMounted, ref } from "vue";
 
-import { findParentByClass } from "@/lib/elemental";
+import { findParent } from "@/lib/elemental";
 import { renderDialog } from "@/lib/render";
 import { messageBox } from "@/lib/render/message-box";
 import { toast } from "@/lib/render/toast";
@@ -279,7 +282,7 @@ async function init() {
 
 function toggleSuggControls(e: Event) {
     const el = e.target as HTMLElement;
-    const pt = findParentByClass(el, "search-controls");
+    const pt = findParent(el, "search-controls");
     if (pt) {
         suggToggle.value = true;
     } else {
