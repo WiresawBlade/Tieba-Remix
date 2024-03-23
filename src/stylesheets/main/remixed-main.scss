@@ -10,6 +10,7 @@ html {
 }
 
 body {
+    overflow: hidden auto;
     padding: 0;
     margin: 0;
     font-family: var(--code-zh);
@@ -55,7 +56,7 @@ a {
 // 图标
 %icon,
 %outline-icon {
-    font-family: "Material Symbols", monospace;
+    font-family: "Material Symbols", monospace !important;
     font-variation-settings:
         "FILL" 0,
         "wght" 400,
@@ -65,7 +66,7 @@ a {
 }
 
 %filled-icon {
-    font-family: "Material Symbols", monospace;
+    font-family: "Material Symbols", monospace !important;
     font-variation-settings:
         "FILL" 1,
         "wght" 400,

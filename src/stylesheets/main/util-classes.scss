@@ -18,14 +18,14 @@
 }
 
 .markdown {
-    font-family: sans-serif;
+    font-family: var(--code-zh);
+    font-size: 16px;
 
     code {
         padding: 2px 6px;
         border-radius: 8px;
         background-color: var(--light-border-color);
         font-family: var(--code-monospace);
-        // font-size: 14px;
         word-wrap: break-word;
     }
 
@@ -127,7 +127,16 @@
 
 .remove-default {
     font-size: 16px;
-    line-height: initial;
+    line-height: normal;
+
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+        font-family: var(--code-zh);
+        font-size: 14px;
+    }
 
     .content {
         min-height: unset;
