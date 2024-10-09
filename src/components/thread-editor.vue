@@ -340,6 +340,7 @@ body {
 </style>
 
 <style lang="scss">
+@use "@/stylesheets/main/remixed-main" as *;
 @use "@/stylesheets/components/user-button" as *;
 
 .edui-dialog-container {
