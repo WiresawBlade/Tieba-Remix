@@ -178,7 +178,7 @@ export const themeType = new UserKey<"auto" | "dark" | "light">(
 export const compactLayout = new UserKey("compactLayout", false);
 /** 宽屏设置 */
 export const wideScreen = new UserKey("wideScreen", {
-    maxPX: 1080,
+    maxWidth: 1080,
     noLimit: false,
 });
 /** 主题色 */

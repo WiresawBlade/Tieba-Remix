@@ -7,19 +7,19 @@ import { customBackground, monospaceFonts, themeColor, userFonts, wideScreen } f
 import { waitUtil } from "../utils";
 import { hexToRGBA, rgbaToHSLA } from "../utils/color";
 
+import materialSymbolsCSS from "@/stylesheets/main/material-symbols.css?inline";
 import paletteCSS from "@/stylesheets/main/palette.scss?inline";
 import mainCSS from "@/stylesheets/main/remixed-main.scss?inline";
 import utilCSS from "@/stylesheets/main/util-classes.scss?inline";
-import materialSymbolsCSS from "@/stylesheets/main/material-symbols.css?inline";
 
-import tiebaCSS from "@/stylesheets/tieba/tieba-main.scss?inline";
-import homeCSS from "@/stylesheets/tieba/tieba-home.scss?inline";
-import threadCSS from "@/stylesheets/tieba/tieba-thread.scss?inline";
-import forumCSS from "@/stylesheets/tieba/tieba-forum.scss?inline";
 import errorCSS from "@/stylesheets/tieba/tieba-error.scss?inline";
+import forumCSS from "@/stylesheets/tieba/tieba-forum.scss?inline";
+import homeCSS from "@/stylesheets/tieba/tieba-home.scss?inline";
+import tiebaCSS from "@/stylesheets/tieba/tieba-main.scss?inline";
+import threadCSS from "@/stylesheets/tieba/tieba-thread.scss?inline";
 
-import darkVarsCSS from "element-plus/theme-chalk/dark/css-vars.css?inline";
 import themePlusCSS from "@/stylesheets/main/element-plus.scss?inline";
+import darkVarsCSS from "element-plus/theme-chalk/dark/css-vars.css?inline";
 
 export const darkPrefers = matchMedia("(prefers-color-scheme: dark)");
 
@@ -47,7 +47,7 @@ export async function loadDynamicCSS() {
         ":root": {
             "--content-max": wideScreen.get().noLimit
                 ? "100vw"
-                : `${wideScreen.get().maxPX}px`,
+                : `${wideScreen.get().maxWidth}px`,
             "--code-zh": `${join(userFonts.get(), ",")}`,
             "--code-monospace": `${join(monospaceFonts.get(), ",")}`,
         },
