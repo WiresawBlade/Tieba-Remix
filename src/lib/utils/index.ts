@@ -110,24 +110,29 @@ export function requestBody(body: LiteralObject) {
 /**
  * 等待条件函数为真时再执行操作
  * @param condition 条件函数
- * @param timeout 超时时限
- * @param interval 检测频率
+ * @param timeout 超时时限，单位：毫秒，默认无限等待
  * @returns 
  */
-export function waitUtil(condition: (() => boolean), timeout = 10000, interval = 100) {
+export function waitUtil(pred: (() => boolean), timeout = Infinity) {
     return new Promise<void>((resolve, reject) => {
-        const start = Date.now();
-        const intervalId = setInterval(() => {
-            if (condition()) {
-                clearInterval(intervalId);
+        const startTime = performance.now();
+        let id = -1;
+
+        function tick() {
+            if (pred()) {
+                cancelAnimationFrame(id);
                 resolve();
-            } else if (Date.now() - start > timeout) {
-                clearInterval(intervalId);
-                reject(new Error("Timeout"));
-                console.warn("[waitUtil] 等待超时，该函数未在指定时间内得到期望值：", condition);
+            } else if (performance.now() - startTime >= timeout) {
+                cancelAnimationFrame(id);
+                reject(new Error("等待超时"));
+                console.warn("[waitUtil] 等待超时，该函数未在指定时间内得到期望值：", pred);
                 console.trace("发生错误的调用者：");
+            } else {
+                id = requestAnimationFrame(tick);
             }
-        }, interval);
+        }
+
+        id = requestAnimationFrame(tick);
     });
 }
 

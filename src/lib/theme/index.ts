@@ -110,7 +110,7 @@ export async function setCustomBackground() {
             backgroundSize: "cover !important",
         }) ?? -1;
 
-        waitUtil(() => document.body !== null, undefined, 4).then(function () {
+        waitUtil(() => document.body !== null).then(function () {
             if (customBackground.get()) {
                 document.body.classList.add("custom-background");
             } else {

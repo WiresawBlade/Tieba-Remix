@@ -17,7 +17,7 @@ export default async function () {
         },
     }));
 
-    await waitUtil(() => DOMS(true, ".wrap1") !== null, undefined, 4);
+    await waitUtil(() => DOMS(true, ".wrap1") !== null);
     renderPage(indexVue);
     DOMS(true, ".wrap1").remove();
     bodyMask.remove();
