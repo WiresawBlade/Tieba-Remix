@@ -129,7 +129,7 @@ img::before {
 
 .post-container {
     display: flex;
-    width: 320px;
+    width: 100%;
     box-sizing: border-box;
     flex-direction: column;
     padding: 16px;

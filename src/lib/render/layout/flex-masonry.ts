@@ -101,6 +101,13 @@ export class FlexMasonry {
         if (this.options.fixScrollOffset) window.scrollTo(0, originalPosition);
     }
 
+    adjustWidth() {
+        const elColumns = this.container.querySelectorAll(this.columnSelector);
+        elColumns.forEach((el) => {
+            (el as HTMLElement).style.width = `${(this.container.clientWidth - this.gap[0] * (this.columns - 1)) / this.columns}px`;
+        });
+    }
+
     /** 仅计算布局 */
     calc() {
         this.columnsHeight = Array(this.calcColumns()).fill(0);
@@ -117,6 +124,7 @@ export class FlexMasonry {
             this.columnContainers.push(
                 fragment.appendChild(createNewElement("div", {
                     class: this.columnSelector.substring(1),
+                    style: `width: ${(this.container.clientWidth - this.gap[0] * (this.columns - 1)) / this.columns}px;`,
                 }))
             );
         }

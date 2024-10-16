@@ -112,7 +112,19 @@
 
         <div ref="masonryContainer" class="masonry-container">
             <!-- 推送 -->
-            <FeedsMasonry :init-feeds="initFeeds" show-progress></FeedsMasonry>
+            <div class="block-controls feeds">
+                <p class="block-title">推送</p>
+
+                <BlockPanel
+                    v-if="feedsMasonry && feedsMasonry.feeds && (feedsMasonry.feeds.length > 0 || feedsMasonry.isFetchingFeeds)">
+                    <UserButton class="panel-button icon refresh" unset-background @click="feedsMasonry.refreshAndMove"
+                        no-border>refresh
+                    </UserButton>
+                    <UserButton class="panel-button icon settings" unset-background no-border>settings</UserButton>
+                </BlockPanel>
+            </div>
+
+            <FeedsMasonry ref="feedsMasonry" :init-feeds="initFeeds" show-progress></FeedsMasonry>
 
             <div v-if="initFeeds.length === 0" class="empty-container">
                 <p class="no-feed-content">没有更多了</p>
@@ -169,6 +181,7 @@ const profileToggle = ref(false);
 const profileMenu = ref<DropdownMenu[]>();
 const topicList = ref<TopicList[]>([]);
 const feedsIntersecting = ref(false);
+const feedsMasonry = ref<InstanceType<typeof FeedsMasonry>>({} as any);
 
 // 状态
 let signedForums = 0;
@@ -404,26 +417,27 @@ a {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
 
-    .block-controls {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+.block-controls {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 8px;
 
-        .block-title {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-        }
+    .block-title {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
     }
+}
 
-    .block-container {
-        padding: 8px;
-        border-radius: 12px;
-        background-color: var(--trans-light-background);
+.block-container {
+    padding: 8px;
+    border-radius: 12px;
+    background-color: var(--trans-light-background);
 
-        @include blur-if-custom-background;
-    }
+    @include blur-if-custom-background;
 }
 
 .block-panel {
@@ -757,7 +771,8 @@ a {
 
     .masonry-container {
         display: flex;
-        width: 100%;
+        width: calc(100% - 32px);
+        max-width: var(--content-max);
         box-sizing: border-box;
         flex-direction: column;
         align-items: center;
