@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts" setup>
+import { FrameInterval } from "@/lib/utils/frame-interval";
 import { onMounted, ref } from "vue";
 
 export interface HeaderProgressProps {
@@ -18,17 +19,13 @@ const valueRef = ref(0);
 
 onMounted(function () {
     if (headerProgress.value) {
-        requestAnimationFrame(function () {
-            calcValue();
-        });
+        new FrameInterval(calcValue)
+            .until(() => valueRef.value >= 100);
     }
 });
 
 function calcValue() {
     valueRef.value = props.calc();
-    console.log(valueRef.value);
-    if (valueRef.value < 100)
-        requestAnimationFrame(calcValue);
 }
 </script>
 

@@ -1,11 +1,5 @@
 <template>
     <div ref="masonryWrapper" class="masonry-wrapper">
-        <BlockPanel v-if="feeds.length > 0 || isFetchingFeeds">
-            <UserButton class="panel-button icon refresh" unset-background @click="refreshAndMove" no-border>refresh
-            </UserButton>
-            <UserButton class="panel-button icon settings" unset-background no-border>settings</UserButton>
-        </BlockPanel>
-
         <div ref="masonryContainer" class="masonry-container"></div>
 
         <PostContainer v-for="post in feeds" :key="post.id" :post="post" class="post-elem" dynamic shadow-border
@@ -19,14 +13,12 @@ import { FeedListResponse, parsePostsFromString, tiebaAPI } from "@/lib/api/tieb
 import { FlexMasonry } from "@/lib/render/layout/flex-masonry";
 import { toast } from "@/lib/render/toast";
 import { headerProgress, imagesViewer } from "@/lib/render/universal";
-import { unreadFeeds } from "@/lib/user-values";
-import { requestInstance, spawnOffsetTS } from "@/lib/utils";
+import { requestInstance, spawnOffsetTS, waitUtil } from "@/lib/utils";
 import { debounce, throttle } from "lodash-es";
 import { ComponentPublicInstance, nextTick, onMounted, ref, watch } from "vue";
 
-import BlockPanel from "./block-panel.vue";
+import { unreadFeeds } from "@/lib/user-values";
 import PostContainer from "./post-container.vue";
-import UserButton from "./utils/user-button.vue";
 
 interface Props {
     initFeeds?: TiebaPost[];
@@ -56,6 +48,7 @@ let flexMasonry: FlexMasonry;
 
 // 根据视图宽度修改布局
 window.addEventListener("resize", throttle(function () {
+    flexMasonry.adjustWidth();
     if (flexMasonry.columns !== flexMasonry.calcColumns()) flexMasonry.exec();
 }, 100), { passive: true });
 
@@ -117,21 +110,12 @@ async function addFeeds(newFeeds?: TiebaPost[]) {
 
     feeds.value.push(...newFeeds);
 
-    requestAnimationFrame(checkFeedsLoaded);
-
-    function checkFeedsLoaded() {
-        if (!newFeeds) return;
-
-        if (currentLoadedFeeds.length < newFeeds.length) {
-            requestAnimationFrame(checkFeedsLoaded);
-        } else {
-            renderMasonry().then(function () {
-                unreadFeeds.set(newFeeds ? newFeeds : [], spawnOffsetTS(0, 0, 0, unreadTTL));
-                currentLoadedFeeds.length = 0;
-                isFetchingFeeds = false;
-            });
-        }
-    }
+    await waitUtil(() => currentLoadedFeeds.length >= newFeeds.length);
+    renderMasonry().then(function () {
+        unreadFeeds.set(newFeeds ? newFeeds : [], spawnOffsetTS(0, 0, 0, unreadTTL));
+        currentLoadedFeeds.length = 0;
+        isFetchingFeeds = false;
+    });
 }
 
 /** 创建布局，若布局已存在则追加资源 */
@@ -178,6 +162,13 @@ function refreshAndMove() {
     window.scrollTo({ top: masonryContainer.value?.offsetTop, behavior: "smooth" });
     refresh();
 }
+
+defineExpose({
+    feeds,
+    isFetchingFeeds,
+    refresh,
+    refreshAndMove,
+});
 </script>
 
 <style lang="scss" scoped>
