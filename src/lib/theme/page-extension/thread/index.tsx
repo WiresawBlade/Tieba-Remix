@@ -13,7 +13,7 @@ import { bindFloatMessage } from "@/lib/render/universal";
 import { floatBar } from "@/lib/tieba-components/float-bar";
 import { pager } from "@/lib/tieba-components/pager";
 import { compactLayout, pageExtension } from "@/lib/user-values";
-import { waitUtil } from "@/lib/utils";
+import { waitUntil } from "@/lib/utils";
 import { find, forEach, some } from "lodash-es";
 import { VNode } from "vue";
 import compactCSS from "./compact.scss?inline";
@@ -27,14 +27,14 @@ export default async function () {
     injectCSSList(threadCSS);
     injectCSSList(compactCSS);
 
-    await waitUtil(() => document.body !== undefined).then(function () {
+    await waitUntil(() => document.body !== undefined).then(function () {
         // document.body.insertBefore(mainWrapper, document.body.firstChild);
         if (compactLayout.get()) {
             document.body.toggleAttribute("compact-layout");
         }
     });
 
-    waitUtil(() => floatBar.get() !== undefined).then(function () {
+    waitUntil(() => floatBar.get() !== undefined).then(function () {
         floatBar.add("other", function () {
             renderDialog<TogglePanelProps>(TogglePanel, {
                 toggles: [
@@ -82,7 +82,7 @@ export default async function () {
 
     createContents();
     async function createContents() {
-        const threadList = (await waitUtil(() => DOMS("#j_p_postlist").length > 0).then(() => DOMS(true, "#j_p_postlist")));
+        const threadList = (await waitUntil(() => DOMS("#j_p_postlist").length > 0).then(() => DOMS(true, "#j_p_postlist")));
 
         threadList.classList.add("content-wrapper");
 
@@ -272,8 +272,8 @@ export default async function () {
 
     createTextbox();
     async function createTextbox() {
-        await waitUtil(() => floatBar.get() !== undefined);
-        await waitUtil(() => DOMS("#ueditor_replace").length > 0);
+        await waitUntil(() => floatBar.get() !== undefined);
+        await waitUntil(() => DOMS("#ueditor_replace").length > 0);
 
         if (!some(floatBar.buttons(), { type: "post" })) {
             floatBar.add("post", showEditor, undefined, undefined, 2);

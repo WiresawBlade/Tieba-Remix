@@ -13,7 +13,7 @@ import { FeedListResponse, parsePostsFromString, tiebaAPI } from "@/lib/api/tieb
 import { FlexMasonry } from "@/lib/render/layout/flex-masonry";
 import { toast } from "@/lib/render/toast";
 import { headerProgress, imagesViewer } from "@/lib/render/universal";
-import { requestInstance, spawnOffsetTS, waitUtil } from "@/lib/utils";
+import { requestInstance, spawnOffsetTS, waitUntil } from "@/lib/utils";
 import { debounce, throttle } from "lodash-es";
 import { ComponentPublicInstance, nextTick, onMounted, ref, watch } from "vue";
 
@@ -110,7 +110,7 @@ async function addFeeds(newFeeds?: TiebaPost[]) {
 
     feeds.value.push(...newFeeds);
 
-    await waitUtil(() => currentLoadedFeeds.length >= newFeeds.length);
+    await waitUntil(() => currentLoadedFeeds.length >= newFeeds.length);
     renderMasonry().then(function () {
         unreadFeeds.set(newFeeds ? newFeeds : [], spawnOffsetTS(0, 0, 0, unreadTTL));
         currentLoadedFeeds.length = 0;

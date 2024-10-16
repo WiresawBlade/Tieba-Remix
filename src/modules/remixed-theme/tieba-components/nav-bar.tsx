@@ -3,14 +3,14 @@ import { DOMS } from "@/lib/elemental";
 import { injectCSSList } from "@/lib/elemental/styles";
 import { renderComponent } from "@/lib/render";
 import { insertJSX } from "@/lib/render/jsx-extension";
-import { waitUtil } from "@/lib/utils";
+import { waitUntil } from "@/lib/utils";
 
 import navBarCSS from "./nav-bar.scss?inline";
 
 export default function () {
     injectCSSList(navBarCSS);
 
-    waitUtil(() => DOMS("#com_userbar").length > 0).then(function () {
+    waitUntil(() => DOMS("#com_userbar").length > 0).then(function () {
         const elder = DOMS("#com_userbar")[0];
         const navWrapper = <div id="nav-wrapper" class="nav-wrapper"></div>;
 

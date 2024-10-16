@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref } from "vue";
-import UserTextbox from "./utils/user-textbox.vue";
-import UserButton from "./utils/user-button.vue";
-import { unloadDialog } from "@/lib/render";
 import { DOMS } from "@/lib/elemental";
-import { waitUtil } from "@/lib/utils";
+import { unloadDialog } from "@/lib/render";
+import { waitUntil } from "@/lib/utils";
+import { onMounted, onUnmounted, ref } from "vue";
+import UserButton from "./utils/user-button.vue";
+import UserTextbox from "./utils/user-textbox.vue";
 
 export interface ThreadEditorProps {
     ueditor: Element;
@@ -69,7 +69,7 @@ onMounted(async function () {
     originParent.value = props.ueditor.parentElement as HTMLDivElement;
     editorSlot.value.appendChild(props.ueditor);
 
-    await waitUtil(() => DOMS(".edui-editor-body").length > 0);
+    await waitUntil(() => DOMS(".edui-editor-body").length > 0);
     const toolbar = DOMS(".edui-toolbar")[0];
     const editorBody = DOMS(".edui-editor-body")[0];
     if (toolbar.compareDocumentPosition(editorBody) & Node.DOCUMENT_POSITION_FOLLOWING) {

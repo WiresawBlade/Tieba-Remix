@@ -8,7 +8,7 @@ import { darkPrefers, loadBaseCSS, loadDynamicCSS, loadExtensionCSS, loadTiebaCS
 import index from "./lib/theme/page-extension/index";
 import thread from "./lib/theme/page-extension/thread";
 import { REMIXED, pageExtension, themeType, wideScreen } from "./lib/user-values";
-import { AllModules, waitUtil } from "./lib/utils";
+import { AllModules, waitUntil } from "./lib/utils";
 
 // 尽早完成主题设置，降低闪屏概率
 setTheme(themeType.get());
@@ -55,7 +55,7 @@ window.addEventListener("load", function () {
 });
 
 // 收缩视图检测
-waitUtil(() => document.body !== null).then(function () {
+waitUntil(() => document.body !== null).then(function () {
     if (wideScreen.get().noLimit) {
         document.body.classList.add("shrink-view");
     } else {

@@ -113,7 +113,7 @@ export function requestBody(body: LiteralObject) {
  * @param timeout 超时时限，单位：毫秒，默认无限等待
  * @returns 
  */
-export function waitUtil(pred: (() => boolean), timeout = Infinity) {
+export function waitUntil(pred: (() => boolean), timeout = Infinity) {
     return new Promise<void>((resolve, reject) => {
         const startTime = performance.now();
         let id = -1;
@@ -125,7 +125,7 @@ export function waitUtil(pred: (() => boolean), timeout = Infinity) {
             } else if (performance.now() - startTime >= timeout) {
                 cancelAnimationFrame(id);
                 reject(new Error("等待超时"));
-                console.warn("[waitUtil] 等待超时，该函数未在指定时间内得到期望值：", pred);
+                console.warn("[waitUntil] 等待超时，该函数未在指定时间内得到期望值：", pred);
                 console.trace("发生错误的调用者：");
             } else {
                 id = requestAnimationFrame(tick);

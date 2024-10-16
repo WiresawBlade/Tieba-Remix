@@ -3,7 +3,7 @@ import imagesViewerVue, { ImageViewerProps } from "@/components/images-viewer.vu
 import { getFloatCoord } from "@/lib/render/layout/float";
 import { renderDialog } from ".";
 import { DOMS } from "../elemental";
-import { waitUtil } from "../utils";
+import { waitUntil } from "../utils";
 import { appendJSX, insertJSX } from "./jsx-extension";
 
 export function imagesViewer(props: ImageViewerProps) {
@@ -16,7 +16,7 @@ export function headerProgress(props: HeaderProgressProps, delay = 2000, timeout
     const timeoutTimer = setTimeout(() => {
         rendered.el.remove();
     }, timeout);
-    waitUtil(() => rendered.el.style.width === "100vw", timeout).then(function () {
+    waitUntil(() => rendered.el.style.width === "100vw", timeout).then(function () {
         setTimeout(() => {
             rendered.el.remove();
             clearTimeout(timeoutTimer);

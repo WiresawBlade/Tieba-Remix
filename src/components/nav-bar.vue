@@ -42,7 +42,7 @@ import { getFloatCoord } from "@/lib/render/layout/float";
 import { messageBox } from "@/lib/render/message-box";
 import { toast } from "@/lib/render/toast";
 import { GiteeRepo, GithubRepo } from "@/lib/user-values";
-import { waitUtil } from "@/lib/utils";
+import { waitUntil } from "@/lib/utils";
 import { forEach } from "lodash-es";
 import { onMounted, ref } from "vue";
 import Settings from "./settings.vue";
@@ -59,7 +59,7 @@ const extendMenu = ref<DropdownMenu[]>([]);
 init();
 onMounted(async function () {
     {
-        waitUtil(() => userPortrait.value !== "").then(function () {
+        waitUntil(() => userPortrait.value !== "").then(function () {
             if (navAvatar.value !== undefined)
                 navAvatar.value.src = tiebaAPI.URL_profile(userPortrait.value);
         });
@@ -67,7 +67,7 @@ onMounted(async function () {
 });
 
 async function init() {
-    await waitUtil(() => PageData !== undefined).then(() => {
+    await waitUntil(() => PageData !== undefined).then(() => {
         userPortrait.value = PageData.user.portrait;
         loadNavMenuContent();
     });

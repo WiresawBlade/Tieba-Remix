@@ -6,7 +6,7 @@
 
 import { DOMS, afterHead } from "@/lib/elemental";
 import { injectCSSRule } from "@/lib/elemental/styles";
-import { waitUtil } from "@/lib/utils";
+import { waitUntil } from "@/lib/utils";
 
 export default {
     id: "easy-jump",
@@ -30,7 +30,7 @@ function main() {
         });
     });
 
-    waitUtil(() => DOMS(".link").length > 0).then(function () {
+    waitUntil(() => DOMS(".link").length > 0).then(function () {
         const link = DOMS(".link")[0].innerText;
         location.href = link;
     });

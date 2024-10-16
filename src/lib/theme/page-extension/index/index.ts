@@ -5,7 +5,7 @@ import { DOMS } from "@/lib/elemental";
 import { parseMultiCSS } from "@/lib/elemental/styles";
 import { renderPage } from "@/lib/render";
 import { pageExtension } from "@/lib/user-values";
-import { waitUtil } from "@/lib/utils";
+import { waitUntil } from "@/lib/utils";
 
 export default async function () {
     if (currentPageType() !== "index") return;
@@ -17,7 +17,7 @@ export default async function () {
         },
     }));
 
-    await waitUtil(() => DOMS(true, ".wrap1") !== null);
+    await waitUntil(() => DOMS(true, ".wrap1") !== null);
     renderPage(indexVue);
     DOMS(true, ".wrap1").remove();
     bodyMask.remove();

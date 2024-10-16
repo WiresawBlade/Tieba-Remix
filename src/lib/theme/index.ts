@@ -4,7 +4,7 @@ import { currentPageType, getResource } from "../api/remixed";
 import { afterHead, templateCreate } from "../elemental";
 import { defaultStyle, injectCSSRule, parseMultiCSS, removeCSSRule } from "../elemental/styles";
 import { customBackground, monospaceFonts, themeColor, userFonts, wideScreen } from "../user-values";
-import { waitUtil } from "../utils";
+import { waitUntil } from "../utils";
 import { hexToRGBA, rgbaToHSLA } from "../utils/color";
 
 import materialSymbolsCSS from "@/stylesheets/main/material-symbols.css?inline";
@@ -110,7 +110,7 @@ export async function setCustomBackground() {
             backgroundSize: "cover !important",
         }) ?? -1;
 
-        waitUtil(() => document.body !== null).then(function () {
+        waitUntil(() => document.body !== null).then(function () {
             if (customBackground.get()) {
                 document.body.classList.add("custom-background");
             } else {

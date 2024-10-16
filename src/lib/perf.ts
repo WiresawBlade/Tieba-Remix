@@ -2,7 +2,7 @@ import { forEach, startsWith } from "lodash-es";
 import { currentPageType } from "./api/remixed";
 import { threadFloorsObserver } from "./observers";
 import { PerfType, perfProfile } from "./user-values";
-import { waitUtil } from "./utils";
+import { waitUntil } from "./utils";
 
 export function loadPerf() {
     setPerfAttr();
@@ -39,7 +39,7 @@ export async function setThreadLazyload() {
         saver: 500,
         performance: 9999,
     };
-    await waitUtil(() => typeof datalazyload !== "undefined");
+    await waitUntil(() => typeof datalazyload !== "undefined");
 
     threadFloorsObserver.addEvent(setDiff);
 
