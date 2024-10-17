@@ -6,7 +6,7 @@ export default {
     id: "portal",
     name: "传送门",
     author: "锯条",
-    version: "1.1",
+    version: "1.1.1",
     brief: "为贴子中的b站番号添加跳转链接",
     description: `该模块可以识别贴子中的 av/BV 号并将其转换为超链接`,
     scope: ["thread"],
@@ -61,7 +61,7 @@ function main(): void {
                             if (lowerCase) videoID = videoID.toLowerCase();
                             const linkedID =
                                 `<a href='https://www.bilibili.com/video/${videoID
-                                }/'>${videoID
+                                }' target='_blank'>${videoID
                                 }</a>`;
                             elem.innerHTML = htmlArray.join(linkedID);
                         }
