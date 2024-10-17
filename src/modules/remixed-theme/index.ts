@@ -1,6 +1,6 @@
 /**
  * Tieba Remix 主题
- * @WiresawBlade
+ * @HacksawBlade
 */
 
 import { DOMS, fadeInElems, fadeInLoad } from "@/lib/elemental";

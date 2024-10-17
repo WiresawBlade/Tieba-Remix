@@ -4,11 +4,11 @@
 
 # *Tieba Remix*
 
-<!-- ![Release](https://img.shields.io/github/v/release/WiresawBlade/Tieba-Remix?style=flat) -->
-![Downloads](https://img.shields.io/github/downloads/WiresawBlade/Tieba-Remix/total)
-![Stars](https://img.shields.io/github/stars/WiresawBlade/Tieba-Remix?style=flat)
-![Forks](https://img.shields.io/github/forks/WiresawBlade/Tieba-Remix?style=flat)
-![License](https://img.shields.io/github/license/WiresawBlade/Tieba-Remix?style=flat)
+<!-- ![Release](https://img.shields.io/github/v/release/HacksawBlade/Tieba-Remix?style=flat) -->
+![Downloads](https://img.shields.io/github/downloads/HacksawBlade/Tieba-Remix/total)
+![Stars](https://img.shields.io/github/stars/HacksawBlade/Tieba-Remix?style=flat)
+![Forks](https://img.shields.io/github/forks/HacksawBlade/Tieba-Remix?style=flat)
+![License](https://img.shields.io/github/license/HacksawBlade/Tieba-Remix?style=flat)
 
 ### “贴吧网页端重塑”
 
@@ -29,7 +29,7 @@
 
 如果你的浏览器已经成功启用油猴脚本插件，点击下面的链接可以获取 `Tieba Remix` 的最新版本：
 
-| [GitHub BETA](https://raw.githubusercontent.com/WiresawBlade/Tieba-Remix/beta/build/tieba-remix.user.js) | [Gitee BETA](https://gitee.com/WiresawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js) | [Greasy Fork (不推荐)](https://greasyfork.org/zh-CN/scripts/486367) |
+| [GitHub BETA](https://raw.githubusercontent.com/HacksawBlade/Tieba-Remix/beta/build/tieba-remix.user.js) | [Gitee BETA](https://gitee.com/HacksawBlade/Tieba-Remix/raw/beta/build/tieba-remix.user.js) | [Greasy Fork (不推荐)](https://greasyfork.org/zh-CN/scripts/486367) |
 | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 
 ## ✅ 兼容性

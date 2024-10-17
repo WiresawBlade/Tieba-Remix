@@ -1,6 +1,6 @@
 /**
  * Flex Masonry
- * @author @WiresawBlade
+ * @author @HacksawBlade
  * @version 1.1
  * @license MIT
  */

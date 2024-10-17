@@ -1,17 +1,15 @@
-import { forEach, keys, merge } from "lodash-es";
-import { isLiteralObject, spawnOffsetTS } from "./utils";
-// import meta from "/meta.json";
 import { GM_deleteValue, GM_getValue, GM_setValue } from "$";
+import { forEach, keys, merge } from "lodash-es";
 import { setTheme } from "./api/remixed";
 import { setPerfAttr } from "./perf";
 import { setCustomBackground } from "./theme";
+import { isLiteralObject, spawnOffsetTS } from "./utils";
 
-// export const META: Meta = meta;
 export const MainTitle = "Tieba Remix";
-export const Owner = "WiresawBlade";
+export const Owner = "HacksawBlade";
 export const RepoName = "Tieba-Remix";
-export const GithubRepo = "https://github.com/WiresawBlade/Tieba-Remix";
-export const GiteeRepo = "https://gitee.com/WiresawBlade/Tieba-Remix/";
+export const GithubRepo = `https://github.com/${Owner}/${RepoName}`;
+export const GiteeRepo = `https://gitee.com/${Owner}/${RepoName}`;
 export const BaiduPassport = "https://passport.baidu.com/";
 
 export const REMIXED =
@@ -155,7 +153,7 @@ export const unreadFeeds = new UserKeyTS<TiebaPost[]>("unreadFeeds", []);
 /** 实验性功能配置 */
 export const experimental = new UserKey("experimental", {});
 /** 最新发行版相关信息 */
-export const latestRelease = new UserKeyTS<GiteeRelease | undefined>("latestRelease", undefined);
+export const latestRelease = new UserKeyTS<GiteeRelease | null>("latestRelease", null);
 /** 更新配置 */
 export const updateConfig = new UserKey<UpdateConfig>("updateConfig", {
     time: "6h",
@@ -260,6 +258,10 @@ export interface GiteeRelease {
         "browser_download_url": string
         "name"?: string
     }[]
+}
+
+export interface GiteeReleaseNotFound {
+    message: string
 }
 
 /**

@@ -39,7 +39,7 @@ $check-color: color.adjust(green, $lightness: 10%);
 $error-color: color.adjust(red, $lightness: 16%);
 $warning-color: color.adjust(orange, $blackness: 10%);
 
-$iconMain: url("https://gitee.com/WiresawBlade/Tieba-Remix/raw/master/assets/images/main/icon.png");
+$iconMain: url("https://gitee.com/HacksawBlade/Tieba-Remix/raw/master/assets/images/main/icon.png");
 
 :root {
     --img-tieba-icon: #{$iconMain};

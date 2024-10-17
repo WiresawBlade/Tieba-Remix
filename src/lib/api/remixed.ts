@@ -1,7 +1,7 @@
 import { GM_getValue, GM_info, GM_listValues, GM_openInTab, GM_setValue } from "$";
 import { messageBox } from "@/lib/render/message-box";
 import { toast } from "@/lib/render/toast";
-import { GiteeRelease, GiteeRepo, Owner, RepoName, ignoredTag, latestRelease, showUpdateToday, themeType, updateConfig } from "@/lib/user-values";
+import { GiteeRelease, GiteeReleaseNotFound, GiteeRepo, Owner, RepoName, ignoredTag, latestRelease, showUpdateToday, themeType, updateConfig } from "@/lib/user-values";
 import { outputFile, selectLocalFile, spawnOffsetTS } from "@/lib/utils";
 import { filter, forEach, includes, map, zipObject } from "lodash-es";
 import { marked } from "marked";
@@ -45,7 +45,7 @@ export function currentPageType(): PageType {
     return "unhandled";
 }
 
-export async function getLatestReleaseFromGitee(owner = Owner, repo = RepoName, forceUpdate = false): Promise<GiteeRelease | undefined> {
+export async function getLatestReleaseFromGitee(forceUpdate = false): Promise<GiteeRelease | null> {
     if (latestRelease.get() && !forceUpdate) {
         return latestRelease.get();
     } else {
@@ -58,16 +58,20 @@ export async function getLatestReleaseFromGitee(owner = Owner, repo = RepoName, 
             }
         })();
 
-        if (TTL < 0) return;
+        if (TTL < 0) return null;
 
-        const response = await fetch(`https://gitee.com/api/v5/repos/${owner}/${repo}/releases/latest/`);
+        const updateUrl = `https://gitee.com/api/v5/repos/${Owner}/${RepoName}/releases/latest/`;
+
+        const response = await fetch(updateUrl);
 
         if (response.ok) {
-            const result = await response.json() as GiteeRelease;
+            const result = await response.json();
+            if ((result as GiteeReleaseNotFound).message) return null;
+
             latestRelease.set(result, spawnOffsetTS(0, 0, 0, TTL));
             return result;
         } else {
-            return undefined;
+            return null;
         }
     }
 }
