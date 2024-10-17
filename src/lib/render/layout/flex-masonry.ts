@@ -1,7 +1,7 @@
 /**
  * Flex Masonry
  * @author @WiresawBlade
- * @version 1.0
+ * @version 1.1
  * @license MIT
  */
 
@@ -20,7 +20,7 @@ export class FlexMasonry {
     private fragment: DocumentFragment | undefined;
 
     /** 当前布局的列数 */
-    public readonly columns: number;
+    private _columns: number;
 
     constructor(options: MasonryOptions) {
         options = parseOptions(options);
@@ -74,7 +74,7 @@ export class FlexMasonry {
             this.gap = [0, 0];
         }
 
-        this.columns = 0;
+        this._columns = 0;
 
         this.options = options;
 
@@ -88,6 +88,10 @@ export class FlexMasonry {
         this.container.style.alignItems = "flex-start";
         this.container.style.justifyContent = "center";
         this.container.style.gap = `${this.gap[0]}px`;
+    }
+
+    public get columns() {
+        return this._columns;
     }
 
     /** 执行布局 */
@@ -104,7 +108,7 @@ export class FlexMasonry {
     adjustWidth() {
         const elColumns = this.container.querySelectorAll(this.columnSelector);
         elColumns.forEach((el) => {
-            (el as HTMLElement).style.width = `${(this.container.clientWidth - this.gap[0] * (this.columns - 1)) / this.columns}px`;
+            (el as HTMLElement).style.width = `${(this.container.clientWidth - this.gap[0] * (this._columns - 1)) / this._columns}px`;
         });
     }
 
@@ -120,11 +124,11 @@ export class FlexMasonry {
         });
 
         this.columnContainers.length = 0;
-        for (let i = 0; i < this.columns; i++) {
+        for (let i = 0; i < this._columns; i++) {
             this.columnContainers.push(
                 fragment.appendChild(createNewElement("div", {
                     class: this.columnSelector.substring(1),
-                    style: `width: ${(this.container.clientWidth - this.gap[0] * (this.columns - 1)) / this.columns}px;`,
+                    style: `width: ${(this.container.clientWidth - this.gap[0] * (this._columns - 1)) / this._columns}px;`,
                 }))
             );
         }
@@ -174,8 +178,8 @@ export class FlexMasonry {
 
     /** 仅计算当前需要的列数 */
     public calcColumns() {
-        this.columns = Math.ceil((this.container.clientWidth - this.columnWidth) / (this.columnWidth + this.gap[0]));
-        return this.columns;
+        this._columns = Math.ceil((this.container.clientWidth - this.columnWidth) / (this.columnWidth + this.gap[0]));
+        return this._columns;
     }
 
     /**
@@ -200,6 +204,7 @@ export class FlexMasonry {
             this.columnsHeight[minIndex] += el.cachedHeight;
             this.columnContainers[minIndex].appendChild(el.element);
             el.element.style.visibility = "visible";
+            this.columnsHeight[minIndex] = this.columnContainers[minIndex].clientHeight;
         });
     }
 
