@@ -97,7 +97,7 @@ export class FlexMasonry {
     /** 执行布局 */
     public exec() {
         this.calcColumns();
-        const originalPosition = window.scrollY || window.pageYOffset;
+        const originalPosition = window.scrollY /* || window.pageYOffset */;
 
         this.calc();
         this.layout();
@@ -107,8 +107,9 @@ export class FlexMasonry {
 
     adjustWidth() {
         const elColumns = this.container.querySelectorAll(this.columnSelector);
+        const width = (this.container.clientWidth - this.gap[0] * (this._columns - 1)) / this._columns;
         elColumns.forEach((el) => {
-            (el as HTMLElement).style.width = `${(this.container.clientWidth - this.gap[0] * (this._columns - 1)) / this._columns}px`;
+            (el as HTMLElement).style.width = `${width}px`;
         });
     }
 
@@ -174,6 +175,7 @@ export class FlexMasonry {
      */
     clear() {
         this.items.length = 0;
+        this.columnsHeight = Array(this.calcColumns()).fill(0);
     }
 
     /** 仅计算当前需要的列数 */
@@ -204,7 +206,11 @@ export class FlexMasonry {
             this.columnsHeight[minIndex] += el.cachedHeight;
             this.columnContainers[minIndex].appendChild(el.element);
             el.element.style.visibility = "visible";
-            this.columnsHeight[minIndex] = this.columnContainers[minIndex].clientHeight;
+
+            const clientHeight = this.columnContainers[minIndex].clientHeight;
+            if (clientHeight !== 0) {
+                this.columnsHeight[minIndex] = this.columnContainers[minIndex].clientHeight;
+            }
         });
     }
 
