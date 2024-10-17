@@ -1,9 +1,8 @@
 import { SettingContent } from "@/components/settings.vue";
 import { UserModuleExtended } from "@/global.module";
 import { tiebaAPI } from "@/lib/api/tieba";
-import { DOMS, findParent, templateCreate } from "@/lib/elemental";
+import { DOMS, findParent } from "@/lib/elemental";
 import { threadCommentsObserver, threadFloorsObserver } from "@/lib/observers";
-import { bindFloatMessage } from "@/lib/render/universal";
 import { UserKey } from "@/lib/user-values";
 import { forEach } from "lodash-es";
 
@@ -26,18 +25,6 @@ export default {
                 init: () => toolkitToogles.get().autoExpand,
                 event() {
                     toolkitToogles.merge({ autoExpand: !toolkitToogles.get().autoExpand });
-                },
-            }],
-        },
-
-        antiFlashbomb: {
-            title: "拆除闪光弹",
-            description: `自动折叠帖子中含有的闪光弹的楼层`,
-            widgets: [{
-                type: "toggle",
-                init: () => toolkitToogles.get().antiFlashbomb,
-                event() {
-                    toolkitToogles.merge({ antiFlashbomb: !toolkitToogles.get().antiFlashbomb });
                 },
             }],
         },
@@ -68,29 +55,6 @@ const toolkitFeatures = {
         threadFloorsObserver.addEvent(() => {
             forEach(DOMS(".replace_tip"), (el) => {
                 (el as HTMLDivElement).click();
-            });
-        });
-    },
-
-    /** 折叠闪光弹 */
-    antiFlashbomb() {
-        const FlashbombThreshold = 16;
-        const FlashbombRegex = RegExp(`(?:\\n\\s*){${FlashbombThreshold}}`);
-
-        threadFloorsObserver.addEvent(function () {
-            const content = DOMS("#j_p_postlist .l_post_bright .d_post_content_main .p_content .d_post_content");
-            forEach(content, el => {
-                if (FlashbombRegex.test(el.innerText)) {
-                    const originalInnerHTML = el.innerHTML;
-                    const originalTextContent = el.textContent ?? "";
-                    el.innerHTML = "";
-                    const flashbombButton = templateCreate("a", { class: "flashbomb-anchor" }, "本楼层疑似含有闪光弹，点击展开");
-                    flashbombButton.addEventListener("click", function () {
-                        el.innerHTML = originalInnerHTML;
-                    });
-                    bindFloatMessage(el, originalTextContent);
-                    el.appendChild(flashbombButton);
-                }
             });
         });
     },
@@ -128,6 +92,5 @@ type ToolkitToogles = Record<keyof typeof toolkitFeatures, boolean>;
 
 const toolkitToogles = new UserKey<ToolkitToogles>("toolkitToogles", {
     autoExpand: true,
-    antiFlashbomb: true,
     reloadAvatars: true,
 });
