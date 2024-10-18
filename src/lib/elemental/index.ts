@@ -192,10 +192,6 @@ export function templateCreate<T extends keyof HTMLElementTagNameMap>(
     return elem;
 }
 
-/** 查找模式 */
-export enum FindParentMode {
-    Selector, ClassName, Id, TagName
-}
 /**
  * 根据特征查找父元素，若找不到则返回 `null`
  * @param el 子元素
@@ -206,26 +202,26 @@ export enum FindParentMode {
 export function findParent<T extends keyof HTMLElementTagNameMap>(
     el: Element,
     trait: string,
-    mode: FindParentMode = FindParentMode.ClassName
+    mode: "selector" | "className" | "id" | "tagName" = "className",
 ): HTMLElementTagNameMap[T] | null {
     const verifier = ((): (parent: HTMLElement) => boolean => {
         switch (mode) {
-            case FindParentMode.Selector: {
+            case "selector": {
                 const allValid = new Set(DOMS(trait));
                 return (parent: HTMLElement) => {
                     return allValid.has(parent);
                 };
             }
 
-            case FindParentMode.ClassName: {
+            case "className": {
                 return (parent: HTMLElement) => parent.classList.contains(trait) ?? false;
             }
 
-            case FindParentMode.Id: {
+            case "id": {
                 return (parent: HTMLElement) => parent.id === trait;
             }
 
-            case FindParentMode.TagName: {
+            case "tagName": {
                 return (parent: HTMLElement) => parent.tagName.toLowerCase() === trait.toLowerCase();
             }
         }
